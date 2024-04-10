@@ -6,8 +6,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Chat Applicatdion</title>
-  <link rel="stylesheet" type="text/css" href="../css/login.css">
+  <title>Login - Chat Application</title>
+  <link rel="stylesheet" type="text/css" href="../css/index.css">
 </head>
 <body>
   <div class="background"></div>
@@ -16,8 +16,17 @@
     <div>
       <input type="text" id="username" placeholder="Enter username" autofocus>
     </div>
-    <button id="login-button" onclick="chat.html">Enter Lobby</button>
+    <div>
+      <select id="colorSelector">
+        <option value="Red">Red</option>
+        <option value="Blue">Blue</option>
+        <option value="Green">Green</option>
+        <option value="Yellow">Yellow</option>
+        <option value="Black" selected>Black</option>
+      </select>
+    </div>
+    <button id="enterLobbyBtn">Enter Lobby</button>
   </div>
-  <script src="../js/login.js"></script>
+  <script src="../js/index.js"></script>
 </body>
 </html>
