@@ -1,0 +1,66 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: "Quicksand", sans-serif;
+    font-size: 0.9em;
+    text-align: left;
+  }
+  th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  th {
+    background-color: #009578;
+    color: #ffffff;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+  }
+  button.disabled {
+    background-color: red; /* dark red */
+  }
+  button.enabled {
+    background-color: #008000; /* green */
+  }
+  button.neutral {
+    background-color: grey; /* light red */
+  }
+  button[disabled] {
+    cursor: not-allowed;
+  }
+
+  button[neutral] {
+    cursor: not-allowed;
+  }
+  
+
+  #leaderboard a {
+    text-decoration: none; /* This targets the <a> inside #leaderboard specifically */
+    color: inherit; /* This makes the link color inherit from the parent, if desired */
+  }
+  
+  #leaderboard {
+    align-items: center;
+    margin: 40px;
+    text-align: center;
+    padding: 20px 30px;
+    border-radius: 30px;
+    background-color: #009578;
+  }
+
+  .leaderboard-button { /* Assuming your button is wrapped in a div with class="container" */
+
+    height: 100vh; /* Full height of the viewport */
+    margin-left: 43%; 
+    margin-right:50%;
+  }
+  
