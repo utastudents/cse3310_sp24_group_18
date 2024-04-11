@@ -1,66 +1,66 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean, and widely used font */
+  margin: 0;
+  padding: 0;
+  background: #f0f4f8; /* Light background for contrast */
+}
+
 table {
-  border-collapse: collapse;
-  width: 100%;
-  border-radius: 5px;
-  background: rgba(135, 206, 235, 0.2); /* Light blue background with transparency */
-  backdrop-filter: blur(5px); /* Frosted glass effect */
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 80%;
+  margin: 20px auto; /* Center table */
+  border-radius: 15px; /* Increased for a more rounded look */
+  overflow: hidden; /* Ensures the border-radius applies to contained cells */
+  background: rgba(135, 206, 235, 0.2);
+  backdrop-filter: blur(5px);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-family: "Quicksand", sans-serif;
-  font-size: 0.9em;
-  text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for a subtle edge */
+  font-size: 1em; /* Adjusted for better readability */
 }
 
 th, td {
-  padding: 8px;
-  border: 1px solid #ddd;
-  background: rgba(255, 255, 255, 0.5); /* Slightly transparent background for cells */
+  padding: 10px 12px; /* Increased padding for a more spacious look */
+  border-bottom: 1px solid #ddd;
+  text-align: left;
 }
 
 th {
-  background-color: #0077B6; /* A bluish background for table headers */
+  background-color: #0077B6; 
   color: #ffffff;
-  backdrop-filter: blur(3px); /* Frosted glass effect on headers */
+  font-size: 1.1em; /* Slightly larger font size for headers */
 }
 
 tr:nth-child(even) {
-  background-color: rgba(240, 248, 255, 0.3); /* Very light blue for even rows */
+  background-color: rgba(240, 248, 255, 0.3);
 }
 
 button {
-  padding: 5px 10px;
+  padding: 10px 15px; /* Increased for a more substantial look */
   border: none;
-  border-radius: 5px;
+  border-radius: 20px; /* More rounded buttons */
   color: white;
   cursor: pointer;
-  background: rgba(100, 149, 237, 0.8); /* A solid, yet slightly transparent blue */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+button:hover {
+  opacity: 0.8; /* Slight visual feedback on hover */
 }
 
 button.disabled {
-  background-color: #8B0000; /* Dark red with a more pronounced color */
+  background-color: #8B0000;
 }
 
 button.enabled {
-  background-color: #32CD32; /* Lively green */
+  background-color: #32CD32;
 }
 
 button.neutral {
-  background-color: #A9A9A9; /* Dark gray for a neutral look */
+  background-color: #A9A9A9;
 }
 
 button[disabled], button[neutral] {
   cursor: not-allowed;
-}
-
-#leaderboard {
-  align-items: center;
-  margin: 40px;
-  text-align: center;
-  padding: 20px 30px;
-  border-radius: 30px;
-  background-color: #0077B6; /* Consistent bluish theme for leaderboard */
-  color: #ffffff; /* Ensuring text is visible against the dark background */
-  backdrop-filter: blur(5px); /* Glass effect */
 }
 
 #leaderboard a {
@@ -69,7 +69,12 @@ button[disabled], button[neutral] {
 }
 
 .leaderboard-button {
-  height: 100vh;
-  margin-left: 43%;
-  margin-right: 50%;
+  text-align: center; /* Center the button */
+}
+
+#leaderboard {
+  background-color: #0077B6;
+  color: #ffffff;
+  display: inline-block; /* Adjust for button alignment */
+  margin: 0 auto; /* Center within its container */
 }
