@@ -1,0 +1,58 @@
+/* Overall body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    text-align: center; /* Center align everything */
+}
+
+/* Header styling */
+.header {
+    background-color: #007bff; /* A blue that should match the theme */
+    color: #fff; /* White color for text to stand out */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(32,33,36,0.28);
+}
+
+/* Input field styling */
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    margin: 10px auto; /* Center align the input fields */
+    display: block; /* Ensures margin auto works for centering */
+    border: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Button styling */
+.button {
+    background-color: #0056b3; /* A darker blue for buttons to match the theme */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px auto; /* Center align buttons */
+    display: block; /* Ensures margin auto works for centering */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #003366; /* Even darker blue for hover state */
+}
+
+/* Enhancements for readability and spacing */
+div, span, p {
+    margin-bottom: 20px;
+}
+
+span, p {
+    display: block;
+    color: #0056b3; /* Matching text color with the button normal state */
+}

@@ -1,66 +1,75 @@
 table {
-    border-collapse: collapse;
-    width: 100%;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: "Quicksand", sans-serif;
-    font-size: 0.9em;
-    text-align: left;
-  }
-  th, td {
-    padding: 8px;
-    border: 1px solid #ddd;
-  }
-  th {
-    background-color: #009578;
-    color: #ffffff;
-  }
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-  }
-  button.disabled {
-    background-color: red; /* dark red */
-  }
-  button.enabled {
-    background-color: #008000; /* green */
-  }
-  button.neutral {
-    background-color: grey; /* light red */
-  }
-  button[disabled] {
-    cursor: not-allowed;
-  }
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 5px;
+  background: rgba(135, 206, 235, 0.2); /* Light blue background with transparency */
+  backdrop-filter: blur(5px); /* Frosted glass effect */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: "Quicksand", sans-serif;
+  font-size: 0.9em;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for a subtle edge */
+}
 
-  button[neutral] {
-    cursor: not-allowed;
-  }
-  
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.5); /* Slightly transparent background for cells */
+}
 
-  #leaderboard a {
-    text-decoration: none; /* This targets the <a> inside #leaderboard specifically */
-    color: inherit; /* This makes the link color inherit from the parent, if desired */
-  }
-  
-  #leaderboard {
-    align-items: center;
-    margin: 40px;
-    text-align: center;
-    padding: 20px 30px;
-    border-radius: 30px;
-    background-color: #009578;
-  }
+th {
+  background-color: #0077B6; /* A bluish background for table headers */
+  color: #ffffff;
+  backdrop-filter: blur(3px); /* Frosted glass effect on headers */
+}
 
-  .leaderboard-button { /* Assuming your button is wrapped in a div with class="container" */
+tr:nth-child(even) {
+  background-color: rgba(240, 248, 255, 0.3); /* Very light blue for even rows */
+}
 
-    height: 100vh; /* Full height of the viewport */
-    margin-left: 43%; 
-    margin-right:50%;
-  }
-  
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  background: rgba(100, 149, 237, 0.8); /* A solid, yet slightly transparent blue */
+}
+
+button.disabled {
+  background-color: #8B0000; /* Dark red with a more pronounced color */
+}
+
+button.enabled {
+  background-color: #32CD32; /* Lively green */
+}
+
+button.neutral {
+  background-color: #A9A9A9; /* Dark gray for a neutral look */
+}
+
+button[disabled], button[neutral] {
+  cursor: not-allowed;
+}
+
+#leaderboard {
+  align-items: center;
+  margin: 40px;
+  text-align: center;
+  padding: 20px 30px;
+  border-radius: 30px;
+  background-color: #0077B6; /* Consistent bluish theme for leaderboard */
+  color: #ffffff; /* Ensuring text is visible against the dark background */
+  backdrop-filter: blur(5px); /* Glass effect */
+}
+
+#leaderboard a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.leaderboard-button {
+  height: 100vh;
+  margin-left: 43%;
+  margin-right: 50%;
+}
