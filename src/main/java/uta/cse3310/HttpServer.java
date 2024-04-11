@@ -15,38 +15,39 @@ import net.freeutils.httpserver.HTTPServer.VirtualHost;
 // http server include is a GPL licensed package from
 //            http://www.freeutils.net/source/jlhttp/
 
-public class HttpServer {
+public class MyHttpServer {
 
-    private static final String HTML = "./html";
-    int port = 8080;
-    String dirname = HTML;
+    private static final String DEFAULT_HTML_DIRECTORY = "./html";
+    int serverPort = 8080;
+    String directoryName = DEFAULT_HTML_DIRECTORY;
 
-    public HttpServer(int portNum, String dirName) {
-        port = portNum;
-        dirname = dirName;
+    public MyHttpServer(int portNumber, String directory) {
+        serverPort = portNumber;
+        directoryName = directory;
     }
 
-    public void start() {
+    public void startServer() {
         try {
-            File dir = new File(dirname);
-            if (!dir.canRead())
-                throw new FileNotFoundException(dir.getAbsolutePath());
+            File directory = new File(directoryName);
+            if (!directory.canRead())
+                throw new FileNotFoundException(directory.getAbsolutePath());
+
             // set up server
-            HTTPServer server = new HTTPServer(port);
+            HTTPServer server = new HTTPServer(serverPort);
             VirtualHost host = server.getVirtualHost(null); // default host
             host.setAllowGeneratedIndex(true); // with directory index pages
-            host.addContext("/", new FileContextHandler(dir));
+            host.addContext("/", new FileContextHandler(directory));
             host.addContext("/api/time", new ContextHandler() {
                 public int serve(Request req, Response resp) throws IOException {
-                    long now = System.currentTimeMillis();
+                    long currentTime = System.currentTimeMillis();
                     resp.getHeaders().add("Content-Type", "text/plain");
-                    resp.send(200, String.format("%tF %<tT", now));
+                    resp.send(200, String.format("%tF %<tT", currentTime));
                     return 0;
                 }
             });
             server.start();
         } catch (Exception e) {
-            System.err.println("error: " + e);
+            System.err.println("Error: " + e);
         }
 
     }
