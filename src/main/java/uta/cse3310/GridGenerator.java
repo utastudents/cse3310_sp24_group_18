@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GridGenerator {
-    private static final int GRID_SIZE = 30; // Adjust for different grid sizes
+    private static final int GRID_SIZE = 25; // Adjust for different grid sizes
     private static final char[][] grid = new char[GRID_SIZE][GRID_SIZE];
     private static final List<String> words = new ArrayList<>();
     private static final List<String> placedWords = new ArrayList<>();
