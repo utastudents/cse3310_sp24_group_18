@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GridGenerator {
-    private static final int GRID_SIZE = 30; // Adjust for different grid sizes
+    private static final int GRID_SIZE = 25; // Adjust for different grid sizes
     private static final char[][] grid = new char[GRID_SIZE][GRID_SIZE];
     private static final List<String> words = new ArrayList<>();
     private static final List<String> placedWords = new ArrayList<>();
@@ -18,7 +18,7 @@ public class GridGenerator {
     private static final Random random = new Random();
 
     private enum Orientation {
-        HORIZONTAL, VERTICAL_UP, VERTICAL_DOWN, DIAGONAL_DOWN, DIAGONAL_UP
+        HORIZONTAL, VERTICAL_DOWN
     }
 
     public static void main(String[] args) {
@@ -28,7 +28,7 @@ public class GridGenerator {
         fillEmptySpaces();
         saveGridAsJson(); // New method to save the grid as JSON
         displayGrid();
-      
+        savePlacedWordsToFile("placed_words.txt");
 
         long endTime = System.currentTimeMillis();
         System.out.println("\nTime taken to generate the grid: " + (endTime - startTime) / 1000.0 + " seconds");
@@ -81,19 +81,8 @@ public class GridGenerator {
                 case HORIZONTAL:
                     dx = 1;
                     break;
-                case VERTICAL_UP:
-                    dy = -1;
-                    break;
                 case VERTICAL_DOWN:
                     dy = 1;
-                    break;
-                case DIAGONAL_DOWN:
-                    dx = 1;
-                    dy = 1;
-                    break;
-                case DIAGONAL_UP:
-                    dx = 1;
-                    dy = -1;
                     break;
             }
 
@@ -170,6 +159,17 @@ public class GridGenerator {
             System.out.println("Successfully saved JSON to " + filename);
         } catch (IOException e) {
             System.err.println("Failed to save JSON to file: " + e.getMessage());
+        }
+    }
+
+    private static void savePlacedWordsToFile(String filename) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            for (String word : placedWords) {
+                writer.write(word + "\n");
+            }
+            System.out.println("\nPlaced words saved to " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
