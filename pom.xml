@@ -11,8 +11,25 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <mainClass>uta.cse3310.Server</mainClass>
+    <mainClass>uta.cse3310.HttpServer</mainClass>
   </properties>
+
+  <dependencies>
+    <!-- JLHTTP server dependency -->
+<dependency>
+    <groupId>net.freeutils</groupId>
+    <artifactId>jlhttp</artifactId>
+    <version>3.1</version>
+</dependency>
+
+
+    <!-- Tablesaw dependency -->
+    <dependency>
+      <groupId>tech.tablesaw</groupId>
+      <artifactId>tablesaw-core</artifactId>
+      <version>0.38.5</version> <!-- Ensure you use the latest version -->
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>

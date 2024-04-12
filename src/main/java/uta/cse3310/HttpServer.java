@@ -1,4 +1,3 @@
-// Taken from https://github.com/BudDavis/TicTacToe/blob/main/src/main/java/uta/cse3310/HttpServer.java
 package uta.cse3310;
 
 import java.io.File;
@@ -15,43 +14,40 @@ import net.freeutils.httpserver.HTTPServer.VirtualHost;
 // http server include is a GPL licensed package from
 //            http://www.freeutils.net/source/jlhttp/
 
-public class MyHttpServer {
+public class HttpServer {
 
-    private static final String DEFAULT_HTML_DIRECTORY = "./html";
-    int serverPort = 8080;
-    String directoryName = DEFAULT_HTML_DIRECTORY;
+    private static final String HTML = "/../../../html";
+    int port = 8080;
+    String dirname = HTML;
 
-    public MyHttpServer(int portNumber, String directory) {
-        serverPort = portNumber;
-        directoryName = directory;
+    public HttpServer(int portNum, String dirName) {
+        port = portNum;
+        dirname = dirName;
     }
 
-    public void startServer() {
+    public void start() {
         try {
-            File directory = new File(directoryName);
-            if (!directory.canRead())
-                throw new FileNotFoundException(directory.getAbsolutePath());
-
+            File dir = new File(dirname);
+            if (!dir.canRead())
+                throw new FileNotFoundException(dir.getAbsolutePath());
             // set up server
-            HTTPServer server = new HTTPServer(serverPort);
+            HTTPServer server = new HTTPServer(port);
             VirtualHost host = server.getVirtualHost(null); // default host
             host.setAllowGeneratedIndex(true); // with directory index pages
-            host.addContext("/", new FileContextHandler(directory));
+            host.addContext("/", new FileContextHandler(dir));
             host.addContext("/api/time", new ContextHandler() {
                 public int serve(Request req, Response resp) throws IOException {
-                    long currentTime = System.currentTimeMillis();
+                    long now = System.currentTimeMillis();
                     resp.getHeaders().add("Content-Type", "text/plain");
-                    resp.send(200, String.format("%tF %<tT", currentTime));
+                    resp.send(200, String.format("%tF %<tT", now));
                     return 0;
                 }
             });
             server.start();
         } catch (Exception e) {
-            System.err.println("Error: " + e);
+            System.err.println("error: " + e);
         }
 
     }
 
-} HttpServer {
-    
 }
