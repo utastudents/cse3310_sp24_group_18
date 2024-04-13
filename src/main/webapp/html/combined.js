@@ -31,7 +31,7 @@ function initializeLogin() {
 
 function saveNewPlayer(username) {
     const colorSelector = document.getElementById('colorSelector');
-    const color = colorSelector.options[colorSelector.selectedIndex].value;
+    const color = colorSelector ? colorSelector.options[colorSelector.selectedIndex].value : 'cyan'; // default color
 
     const newPlayer = {
         PlayerUsername: username,
@@ -43,22 +43,29 @@ function saveNewPlayer(username) {
         OpponentUsername: null
     };
 
-    fetch('http://localhost:9080/savePlayer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newPlayer)
-    })
-    .then(response => response.json())
-    .then(() => {
-        console.log('Player created successfully');
-        showSection('lobby-section'); // Move to lobby after saving
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    // Use WebSocket to send player data
+    const socket = new WebSocket('ws://localhost:9180/websocket');
+    socket.onopen = function() {
+        console.log('WebSocket connection established');
+        socket.send(JSON.stringify(newPlayer)); // Send the new player data as a JSON string
+    };
+
+    socket.onmessage = function(event) {
+        console.log('Message from server:', event.data);
+        if (event.data === 'Player saved') {
+            showSection('lobby-section'); // Navigate to lobby after confirmation from server
+        }
+    };
+
+    socket.onerror = function(error) {
+        console.error('WebSocket error:', error);
+    };
+
+    socket.onclose = function() {
+        console.log('WebSocket connection closed');
+    };
 }
+
 
 function initializeChat() {
     const messageInput = document.getElementById('message-input');

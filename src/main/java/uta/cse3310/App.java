@@ -23,7 +23,7 @@ public class App {
             wsPort = Integer.parseInt(wsPortEnv);
         }
 
-        final int finalWsPort = wsPort; // Make a final copy for use in the inner class
+        final int finalWsPort = wsPort;
 
         WebSocketServer webSocketServer = new WebSocketServer(new InetSocketAddress(finalWsPort)) {
             @Override
@@ -39,12 +39,18 @@ public class App {
             @Override
             public void onMessage(WebSocket conn, String message) {
                 System.out.println("Received message from client: " + message);
-                 if ("bark".equals(message)) {
-                    Game G = new Game();
-                    String test_result = G.test();
-                    conn.send(test_result);
+                if (message.startsWith("{") && message.contains("\"PlayerUsername\"")) {
+                    // Simple and very naive JSON parsing for demonstration purposes
+                    try {
+                        String username = message.split("\"PlayerUsername\":\"")[1].split("\"")[0];
+                        String color = message.split("\"GridColorChoice\":\"")[1].split("\"")[0];
+                        savePlayerData(username, color);
+                        conn.send("Player data saved successfully.");
+                    } catch (Exception e) {
+                        conn.send("Error processing player data.");
+                        System.err.println("Failed to parse or save player data: " + e.getMessage());
+                    }
                 }
-
             }
 
             @Override
@@ -61,5 +67,11 @@ public class App {
 
         webSocketServer.start();
         System.out.println("WebSocket Server started on port: " + finalWsPort);
+    }
+
+    private static void savePlayerData(String username, String color) {
+        // Simulate saving the data
+        System.out.println("Simulating saving player data: Username = " + username + ", Color = " + color);
+        // Here you would write the logic to save to a file or database
     }
 }
