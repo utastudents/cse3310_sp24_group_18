@@ -1,80 +1,66 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean, and widely used font */
-  margin: 0;
-  padding: 0;
-  background: #f0f4f8; /* Light background for contrast */
-}
-
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 80%;
-  margin: 20px auto; /* Center table */
-  border-radius: 15px; /* Increased for a more rounded look */
-  overflow: hidden; /* Ensures the border-radius applies to contained cells */
-  background: rgba(135, 206, 235, 0.2);
-  backdrop-filter: blur(5px);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-size: 1em; /* Adjusted for better readability */
-}
-
-th, td {
-  padding: 10px 12px; /* Increased padding for a more spacious look */
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-}
-
-th {
-  background-color: #0077B6; 
+  background-color: #121212;
   color: #ffffff;
-  font-size: 1.1em; /* Slightly larger font size for headers */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
 }
 
-tr:nth-child(even) {
-  background-color: rgba(240, 248, 255, 0.3);
+h1 {
+  color: #00ff00;
 }
 
 button {
-  padding: 10px 15px; /* Increased for a more substantial look */
+  background-color: #333333;
+  color: #ffffff;
   border: none;
-  border-radius: 20px; /* More rounded buttons */
-  color: white;
+  border-radius: 5px;
+  padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+  margin-bottom: 10px;
 }
 
 button:hover {
-  opacity: 0.8; /* Slight visual feedback on hover */
+  background-color: #555555;
 }
 
-button.disabled {
-  background-color: #8B0000;
+#playerData {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-button.enabled {
-  background-color: #32CD32;
+#playerData th, #playerData td {
+  border: 1px solid #ffffff;
+  padding: 10px;
 }
 
-button.neutral {
-  background-color: #A9A9A9;
+#playerData thead {
+  background-color: #222222;
 }
 
-button[disabled], button[neutral] {
+#playerData tbody tr:nth-child(odd) {
+  background-color: #333333;
+}
+
+#playerData tbody tr:nth-child(even) {
+  background-color: #222222;
+}
+
+.enabled {
+  background-color: #00ff00;
+}
+
+.enabled:hover {
+  background-color: #00dd00;
+}
+
+.disabled {
+  background-color: #ff0000;
   cursor: not-allowed;
 }
 
-#leaderboard a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .leaderboard-button {
-  text-align: center; /* Center the button */
-}
-
-#leaderboard {
-  background-color: #0077B6;
-  color: #ffffff;
-  display: inline-block; /* Adjust for button alignment */
-  margin: 0 auto; /* Center within its container */
+  margin-top: 20px;
 }

@@ -1,74 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const csvPath = '../data/main.csv'; // Path to your CSV file
-
-  const table = document.getElementById('csvRoot');
   const refreshBtn = document.getElementById('refreshBtn');
+  const playerData = document.getElementById('playerData').querySelector('tbody');
 
   refreshBtn.addEventListener('click', function() {
-    loadCSV(csvPath);
+    loadPlayerData();
   });
 
-  function loadCSV(filePath) {
-    fetch(filePath)
-      .then(response => response.text())
-      .then(text => {
-        const rows = text.split('\n')
-          .map(row => row.split(','))
-          .filter(row => row.length > 1 && row.join('').trim() !== ''); // Filter out empty rows
-        displayCSV(rows);
+  function loadPlayerData() {
+    fetch('../data/players.json')
+      .then(response => response.json())
+      .then(data => {
+        displayPlayerData(data);
       })
-      .catch(error => console.error('Error loading the CSV file:', error));
+      .catch(error => console.error('Error loading player data:', error));
   }
 
-  function displayCSV(rows) {
-    table.innerHTML = ''; // Clear the table
-
-    // Manually generate HTML for table headers
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    const headers = ['Player Username', 'Online', 'Game Won', 'Game Lost', 'In-game Points', 'Opponent Username', 'Grid Color Choice', 'Create Game'];
-    headers.forEach(headerText => {
-      const th = document.createElement('th');
-      th.textContent = headerText;
-      headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    // Generate HTML for table body
-    const tbody = document.createElement('tbody');
-    rows.forEach(row => {
+  function displayPlayerData(players) {
+    playerData.innerHTML = ''; // Clear existing data
+    players.forEach(player => {
       const tr = document.createElement('tr');
-      row.forEach(cell => {
-        const td = document.createElement('td');
-        td.textContent = cell;
-        tr.appendChild(td);
-      });
-
-      // Create the "Create Game" button
-      const buttonTd = document.createElement('td');
-      const createGameBtn = document.createElement('button');
-      createGameBtn.textContent = 'Create Game';
-
-      // Determine button state based on conditions
-      const online = row[1].trim().toLowerCase() === 'true';
-      const opponentUsername = row[5].trim();
-
-      if (online && opponentUsername !== 'null') {
-        createGameBtn.classList.add('enabled');
-        createGameBtn.disabled = false;
-      } else {
-        createGameBtn.classList.add('disabled');
-        createGameBtn.disabled = true;
-      }
-
-      buttonTd.appendChild(createGameBtn);
-      tr.appendChild(buttonTd);
-      tbody.appendChild(tr);
+      tr.innerHTML = `
+        <td>${player.PlayerUsername}</td>
+        <td>${player.Online ? 'Yes' : 'No'}</td>
+        <td>${player.GameWon}</td>
+        <td>${player.GameLost}</td>
+        <td>${player.InGamePoints}</td>
+        <td>${player.OpponentUsername || 'None'}</td>
+        <td>
+          <span style="display:inline-block;width:20px;height:20px;background-color:${player.GridColorChoice};"></span>
+        </td>
+        <td>
+          <button class="${player.Online && player.OpponentUsername ? 'enabled' : 'disabled'}">
+            Create Game
+          </button>
+        </td>
+      `;
+      playerData.appendChild(tr);
     });
-    table.appendChild(tbody);
   }
 
-  // Load the CSV data initially
-  loadCSV(csvPath);
+  loadPlayerData();
 });

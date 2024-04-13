@@ -1,0 +1,48 @@
+[
+    {
+      "PlayerUsername": "Player1",
+      "Online": true,
+      "GameWon": 10,
+      "GameLost": 5,
+      "InGamePoints": 1500,
+      "OpponentUsername": "Player2",
+      "GridColorChoice": "#FF0000"
+    },
+    {
+      "PlayerUsername": "Player2",
+      "Online": false,
+      "GameWon": 3,
+      "GameLost": 7,
+      "InGamePoints": 500,
+      "OpponentUsername": "Player1",
+      "GridColorChoice": "#00FF00"
+    },
+    {
+        "PlayerUsername": "Player3",
+        "Online": true,
+        "GameWon": 10,
+        "GameLost": 5,
+        "InGamePoints": 1500,
+        "OpponentUsername": null,
+        "GridColorChoice": "blue"
+      },
+      {
+        "PlayerUsername": "Player4",
+        "Online": false,
+        "GameWon": 10,
+        "GameLost": 5,
+        "InGamePoints": 1500,
+        "OpponentUsername": null,
+        "GridColorChoice": "cyan"
+      },
+      {
+        "PlayerUsername": "Player4",
+        "Online": true,
+        "GameWon": 10,
+        "GameLost": 5,
+        "InGamePoints": 1500,
+        "OpponentUsername": "Player2",
+        "GridColorChoice": "yellow"
+      }
+  ]
+  
