@@ -14,9 +14,9 @@ public class App {
         }
 
         // Set up the HTTP server (assuming HttpServer is a valid class you have)
-        // HttpServer httpServer = new HttpServer(httpPort, "./html");
-        // httpServer.start();
-        // System.out.println("HTTP Server started on port: " + httpPort);
+        HttpServer httpServer = new HttpServer(httpPort, "/Users/axjh03/cse3310_sp24_group_18/src/main/webapp/html");
+        httpServer.start();
+        System.out.println("[App.java] HTTP Server started on port: " + httpPort);
 
         int wsPort = 9180;
         String wsPortEnv = System.getenv("WEBSOCKET_PORT");
