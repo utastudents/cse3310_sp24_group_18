@@ -3,16 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaderboard</title>
-  <link rel="stylesheet" href="../js/Leaderboard.css">
+  <title>Lobby</title>
+  <link rel="stylesheet" href="../css/leaderboard.css">
 </head>
 <body>
 
   <button id="refreshBtn">Refresh</button>
   <h1 style="text-align: center;">Leaderboard</h1>
-  <table id="csvRoot"></table>
+  <table id="playerData">
+    <thead>
+      <tr>
+        <th>Player Username</th>
+        <th>Game Won</th>
+        <th>Game Lost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Player data will be loaded here -->
+    </tbody>
+  </table>
 
-  <script src="../js/Leaderboard.js"></script>
 
+  <script src="../js/leaderboard.js"></script>
 </body>
 </html>

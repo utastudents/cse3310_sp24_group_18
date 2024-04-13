@@ -13,8 +13,7 @@ public class App {
             httpPort = Integer.parseInt(httpPortEnv);
         }
 
-        // Set up the HTTP server (assuming HttpServer is a valid class you have)
-        HttpServer httpServer = new HttpServer(httpPort, "/Users/axjh03/cse3310_sp24_group_18/src/main/webapp/html");
+        HttpServer httpServer = new HttpServer(httpPort, "src/main/webapp/html");
         httpServer.start();
         System.out.println("[App.java] HTTP Server started on port: " + httpPort);
 
@@ -40,7 +39,6 @@ public class App {
             @Override
             public void onMessage(WebSocket conn, String message) {
                 System.out.println("Received message from client: " + message);
-                 // If the received message is "bark", create a Dog object and send back a response
                  if ("bark".equals(message)) {
                     Game G = new Game();
                     String test_result = G.test();
