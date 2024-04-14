@@ -128,20 +128,31 @@ function handleWebSocketMessage(message) {
 }
 
 function loadPlayerData(tableId) {
-    fetch('../../java/uta/cse3310/players.json')
-        .then(response => response.json())
+    // Correct path to 'players.json' assuming it is in the same directory as the HTML and JS files
+    fetch('players.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Data loaded successfully: ", data);
             displayPlayerData(data, tableId);
         })
-        .catch(error => console.error('Error loading player data:', error));
+        .catch(error => {
+            console.error('Failed to load player data:', error);
+        });
 }
 
+
+
 function displayPlayerData(players, tableId) {
-    const playerData = document.getElementById(tableId).querySelector('tbody');
-    playerData.innerHTML = ''; // Clear existing data
+    const tableBody = document.getElementById(tableId).querySelector('tbody');
+    tableBody.innerHTML = ''; // Clear existing data before adding new
+
     players.forEach(player => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+        let row = `<tr>
             <td>${player.PlayerUsername}</td>
             <td>${player.Online ? 'Yes' : 'No'}</td>
             <td>${player.GameWon}</td>
@@ -152,14 +163,16 @@ function displayPlayerData(players, tableId) {
                 <span style="display:inline-block;width:20px;height:20px;background-color:${player.GridColorChoice};"></span>
             </td>
             <td>
-                <button class="${player.Online && player.OpponentUsername ? 'enabled' : 'disabled'}">
+                <!-- Assuming you have logic to determine if game creation is allowed -->
+                <button ${player.Online ? '' : 'disabled'}>
                     Create Game
                 </button>
             </td>
-        `;
-        playerData.appendChild(tr);
+        </tr>`;
+        tableBody.insertAdjacentHTML('beforeend', row);
     });
 }
+
 
 function showSection(sectionId) {
     // Hide all sections

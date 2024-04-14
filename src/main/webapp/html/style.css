@@ -47,6 +47,12 @@ input[type="text"] {
     background-color: #003366; /* Even darker blue for hover state */
 }
 
+#enter-username{
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Enhancements for readability and spacing */
 div, span, p {
     margin-bottom: 20px;

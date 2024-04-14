@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Word Search Game (TWSG)</title>
     <!-- Combined CSS -->
-    <link rel="stylesheet" href="combined.css">
+    <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         <div class="background"></div>
         <div class="login-container">
           <h1>The Word Search Game (TWSG)</h1>
-          <div>
+          <div id="enter-username">
             <input type="text" id="username" placeholder="Enter username" autofocus>
           </div>
           <p style="color: black;">Select your color</p>
@@ -38,7 +38,6 @@
     
     <!-- Lobby Section -->
 <div id="lobby-section" class="section" style="display:none;">
-    <button id="lobbyRefreshBtn">Refresh</button>
     <h1 style="text-align: center;">Lobby</h1>
     <table id="lobbyPlayerData">
       <thead>
@@ -140,7 +139,6 @@
   
 
     <!-- Scripts -->
-    <!-- Combined JavaScript -->
-    <script src="combined.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
