@@ -18,7 +18,7 @@ function initializeLogin() {
             const usernameInput = document.getElementById('username');
             const username = usernameInput ? usernameInput.value.trim() : '';
             if (username) {
-                saveNewPlayer(username); // Save the new player and move to lobby
+                saveNewPlayer(username); // Save the new pxlayer and move to lobby
             } else {
                 alert('Please enter a username.');
             }
@@ -128,7 +128,7 @@ function handleWebSocketMessage(message) {
 }
 
 function loadPlayerData(tableId) {
-    fetch('../data/players.json')
+    fetch('src/main/java/uta/cse3310/players.json')
         .then(response => response.json())
         .then(data => {
             displayPlayerData(data, tableId);

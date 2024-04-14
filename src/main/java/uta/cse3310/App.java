@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.nio.file.StandardOpenOption;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -50,6 +49,7 @@ public class App {
                     String color = message.split("\"GridColorChoice\":\"")[1].split("\"")[0];
                     savePlayerData(username, color);
                     conn.send("Player data saved successfully.");
+                    conn.send("Player saved");
                 }
             }
 
@@ -96,6 +96,7 @@ public class App {
             Files.write(filePath, content.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 
             System.out.println("Player data appended to file.");
+            
         } catch (Exception e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
