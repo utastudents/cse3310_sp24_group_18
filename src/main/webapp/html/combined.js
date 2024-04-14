@@ -128,7 +128,7 @@ function handleWebSocketMessage(message) {
 }
 
 function loadPlayerData(tableId) {
-    fetch('src/main/java/uta/cse3310/players.json')
+    fetch('../../java/uta/cse3310/players.json')
         .then(response => response.json())
         .then(data => {
             displayPlayerData(data, tableId);
