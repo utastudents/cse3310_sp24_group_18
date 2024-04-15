@@ -5,10 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeApp() {
     initializeLogin();
     initializeChat();
-    initializeLeaderboard();
+    // Removed initializeLeaderboard to prevent conflict with new lobby initialization
     initializeLobby();
     setupWebSocket();
 }
+
+
 
 function initializeLogin() {
     const loginButton = document.getElementById('enterLobbyBtn'); // Corrected ID from 'login-button'
@@ -86,11 +88,8 @@ function initializeLeaderboard() {
         loadPlayerData('playerData'); // Load player data into the leaderboard
     });
 }
-
 function initializeLobby() {
-    // Assuming similar structure to the leaderboard
-    // Load initial data for the lobby
-    loadPlayerData('lobbyPlayerData'); // Ensure this ID is correct in your HTML
+    loadPlayerData('lobbyPlayerData');
 }
 
 function setupWebSocket() {
@@ -126,25 +125,16 @@ function handleWebSocketMessage(message) {
     // Handle different message types here
     console.log('Processing message:', message);
 }
-
 function loadPlayerData(tableId) {
-    // Correct path to 'players.json' assuming it is in the same directory as the HTML and JS files
-    fetch('players.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+    fetch('players.json') // Update the fetch path if your JSON file is located elsewhere
+        .then(response => response.json())
         .then(data => {
-            console.log("Data loaded successfully: ", data);
             displayPlayerData(data, tableId);
         })
         .catch(error => {
             console.error('Failed to load player data:', error);
         });
 }
-
 
 
 function displayPlayerData(players, tableId) {
@@ -163,7 +153,6 @@ function displayPlayerData(players, tableId) {
                 <span style="display:inline-block;width:20px;height:20px;background-color:${player.GridColorChoice};"></span>
             </td>
             <td>
-                <!-- Assuming you have logic to determine if game creation is allowed -->
                 <button ${player.Online ? '' : 'disabled'}>
                     Create Game
                 </button>
