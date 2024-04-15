@@ -70,7 +70,7 @@ public class App {
     }
 
     private static void savePlayerData(String username, String color) {
-        Path filePath = Paths.get("src/main/java/uta/cse3310/players.json");
+        Path filePath = Paths.get("src/main/webapp/html/new_players.json");
         
         try {
             // Read the entire file content as a single string
