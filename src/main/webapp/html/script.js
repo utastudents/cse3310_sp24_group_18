@@ -4,23 +4,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
     initializeLogin();
-    initializeChat();
-    // Removed initializeLeaderboard to prevent conflict with new lobby initialization
-    initializeLobby();
+    if (document.getElementById('lobby-section').style.display !== 'none') {
+        initializeLobby();
+    }
     setupWebSocket();
 }
 
-
-
 function initializeLogin() {
-    const loginButton = document.getElementById('enterLobbyBtn'); // Corrected ID from 'login-button'
-
+    const loginButton = document.getElementById('enterLobbyBtn');
     if (loginButton) {
         loginButton.addEventListener('click', function() {
             const usernameInput = document.getElementById('username');
             const username = usernameInput ? usernameInput.value.trim() : '';
             if (username) {
-                saveNewPlayer(username); // Save the new pxlayer and move to lobby
+                saveNewPlayer(username);
             } else {
                 alert('Please enter a username.');
             }
@@ -30,11 +27,9 @@ function initializeLogin() {
     }
 }
 
-
 function saveNewPlayer(username) {
     const colorSelector = document.getElementById('colorSelector');
-    const color = colorSelector ? colorSelector.options[colorSelector.selectedIndex].value : 'cyan'; // default color
-
+    const color = colorSelector ? colorSelector.options[colorSelector.selectedIndex].value : 'cyan';
     const newPlayer = {
         PlayerUsername: username,
         GridColorChoice: color,
@@ -45,17 +40,16 @@ function saveNewPlayer(username) {
         OpponentUsername: null
     };
 
-    // Use WebSocket to send player data
     const socket = new WebSocket('ws://localhost:9180/websocket');
     socket.onopen = function() {
         console.log('WebSocket connection established');
-        socket.send(JSON.stringify(newPlayer)); // Send the new player data as a JSON string
+        socket.send(JSON.stringify(newPlayer));
     };
 
     socket.onmessage = function(event) {
         console.log('Message from server:', event.data);
         if (event.data === 'Player saved') {
-            showSection('lobby-section'); // Navigate to lobby after confirmation from server
+            showSection('lobby-section');
         }
     };
 
@@ -68,40 +62,26 @@ function saveNewPlayer(username) {
     };
 }
 
-
-function initializeChat() {
-    const messageInput = document.getElementById('message-input');
-    const sendBtn = document.getElementById('send-btn');
-
-    sendBtn.addEventListener('click', function() {
-        const message = messageInput.value.trim();
-        if (message) {
-            sendMessage(message);
-            messageInput.value = '';
-        }
-    });
-}
-
-function initializeLeaderboard() {
+function initializeLobby() {
     const refreshBtn = document.getElementById('refreshBtn');
     refreshBtn.addEventListener('click', function() {
-        loadPlayerData('playerData'); // Load player data into the leaderboard
+        loadPlayerData('lobbyPlayerData');
     });
-}
-function initializeLobby() {
     loadPlayerData('lobbyPlayerData');
 }
 
 function setupWebSocket() {
-    const socket = new WebSocket(`ws://${window.location.host}/ws`);
-
+    const socket = new WebSocket('ws://localhost:9180/websocket');
     socket.onopen = function() {
         console.log('WebSocket connection established');
     };
 
     socket.onmessage = function(event) {
         console.log('Message received:', event.data);
-        handleWebSocketMessage(event.data);
+        const data = JSON.parse(event.data);
+        if (data.type === 'playerDataUpdate') {
+            loadPlayerData('lobbyPlayerData');
+        }
     };
 
     socket.onerror = function(event) {
@@ -115,20 +95,19 @@ function setupWebSocket() {
     window.sendMessage = function(message) {
         if (socket.readyState === WebSocket.OPEN) {
             socket.send(message);
+            console.log('Message sent:', message);
         } else {
             console.error('WebSocket is not open.');
         }
     };
 }
 
-function handleWebSocketMessage(message) {
-    // Handle different message types here
-    console.log('Processing message:', message);
-}
 function loadPlayerData(tableId) {
-    fetch('players.json') // Update the fetch path if your JSON file is located elsewhere
+    console.log('Attempting to fetch player data');
+    fetch('players.json') // Adjust the path if needed
         .then(response => response.json())
         .then(data => {
+            console.log('Player data loaded', data);
             displayPlayerData(data, tableId);
         })
         .catch(error => {
@@ -138,10 +117,18 @@ function loadPlayerData(tableId) {
 
 
 function displayPlayerData(players, tableId) {
-    const tableBody = document.getElementById(tableId).querySelector('tbody');
-    tableBody.innerHTML = ''; // Clear existing data before adding new
-
-    players.forEach(player => {
+    const table = document.getElementById(tableId);
+    if (!table) {
+        console.error(`Table with id ${tableId} not found.`);
+        return;
+    }
+    const tableBody = table.querySelector('tbody');
+    if (!tableBody) {
+        console.error(`Tbody for table with id ${tableId} not found.`);
+        return;
+    }
+    tableBody.innerHTML = '';
+    players.forEach((player, index) => {
         let row = `<tr>
             <td>${player.PlayerUsername}</td>
             <td>${player.Online ? 'Yes' : 'No'}</td>
@@ -153,7 +140,7 @@ function displayPlayerData(players, tableId) {
                 <span style="display:inline-block;width:20px;height:20px;background-color:${player.GridColorChoice};"></span>
             </td>
             <td>
-                <button ${player.Online ? '' : 'disabled'}>
+                <button ${player.Online ? '' : 'disabled'} onclick="createGame(${index})">
                     Create Game
                 </button>
             </td>
@@ -162,13 +149,9 @@ function displayPlayerData(players, tableId) {
     });
 }
 
-
 function showSection(sectionId) {
-    // Hide all sections
     document.querySelectorAll('.section').forEach(section => {
         section.style.display = 'none';
     });
-
-    // Show the requested section
     document.getElementById(sectionId).style.display = 'block';
 }

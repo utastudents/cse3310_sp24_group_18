@@ -36,37 +36,101 @@
         
     </div>
     
-    <!-- Lobby Section -->
+<!-- Lobby Section -->
 <div id="lobby-section" class="section" style="display:none;">
   <button id="refreshBtn">Refresh</button>
-    <h1 style="text-align: center;">Lobby</h1>
-    <table id="lobbyPlayerData">
-      <thead>
-        <tr>
-          <th>Player Username</th>
-          <th>Online</th>
-          <th>Game Won</th>
-          <th>Game Lost</th>
-          <th>In-game Points</th>
-          <th>Opponent Username</th>
-          <th>Grid Color Choice</th>
-          <th>Create Game</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Player data will be loaded here -->
-      </tbody>
-    </table>
-  
-    <div class="leaderboard-button">
-      <button id="lobbyLeaderboardButton">
-        LeaderBoard
-      </button>
-    </div>
+  <h1 style="text-align: center;">Lobby</h1>
+  <table id="lobbyPlayerData">
+    <thead>
+      <tr>
+        <th>Player Username</th>
+        <th>Online</th>
+        <th>Game Won</th>
+        <th>Game Lost</th>
+        <th>In-game Points</th>
+        <th>Opponent Username</th>
+        <th>Grid Color Choice</th>
+        <th>Create Game</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Player data will be loaded here -->
+    </tbody>
+  </table>
+  <div class="leaderboard-button">
+    <button id="lobbyLeaderboardButton">
+      LeaderBoard
+    </button>
   </div>
-  
-    
 
+  <script>
+    function loadPlayerData(tableId) {
+      console.log('Attempting to fetch player data');
+      fetch('players.json') // Adjust the path if needed
+        .then(response => response.json())
+        .then(data => {
+          console.log('Player data loaded', data);
+          displayPlayerData(data, tableId);
+        })
+        .catch(error => {
+          console.error('Failed to load player data:', error);
+        });
+    }
+
+    function displayPlayerData(players, tableId) {
+      const table = document.getElementById(tableId);
+      if (!table) {
+        console.error(`Table with id ${tableId} not found.`);
+        return;
+      }
+      const tableBody = table.querySelector('tbody');
+      if (!tableBody) {
+        console.error(`Tbody for table with id ${tableId} not found.`);
+        return;
+      }
+      tableBody.innerHTML = '';
+      players.forEach((player, index) => {
+        let row = `<tr>
+            <td>${player.PlayerUsername}</td>
+            <td>${player.Online ? 'Yes' : 'No'}</td>
+            <td>${player.GameWon}</td>
+            <td>${player.GameLost}</td>
+            <td>${player.InGamePoints}</td>
+            <td>${player.OpponentUsername || 'None'}</td>
+            <td>
+                <span style="display:inline-block;width:20px;height:20px;background-color:${player.GridColorChoice};"></span>
+            </td>
+            <td>
+                <button ${player.Online ? '' : 'disabled'} onclick="createGame(${index})">
+                    Create Game
+                </button>
+            </td>
+        </tr>`;
+        tableBody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+
+    function createGame(playerIndex) {
+      // Implement the logic to create a game with the selected player
+      const players = JSON.parse(localStorage.getItem('players'));
+      const selectedPlayer = players[playerIndex];
+      console.log(`Creating game for player: ${selectedPlayer.PlayerUsername}`);
+      // Add your game creation logic here
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initializeLobby();
+    });
+
+    function initializeLobby() {
+      const refreshBtn = document.getElementById('refreshBtn');
+      refreshBtn.addEventListener('click', function () {
+        loadPlayerData('lobbyPlayerData');
+      });
+      loadPlayerData('lobbyPlayerData');
+    }
+  </script>
+</div>
     <!-- Leaderboard Section -->
 <div id="leaderboard-section" class="section" style="display:none;">
     <button id="refreshBtn">Refresh</button>
