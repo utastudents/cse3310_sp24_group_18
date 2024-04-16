@@ -9,7 +9,12 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import java.util.Map;        // Import for using Map
+import java.util.HashMap;    // Import for using HashMap
+
 public class App {
+    private static Map<WebSocket, Game> games = new HashMap<>(); // Static variable to hold game instances
+
     public static void main(String[] args) {
         int httpPort = 9080;
         String httpPortEnv = System.getenv("HTTP_PORT");
@@ -33,11 +38,19 @@ public class App {
             @Override
             public void onOpen(WebSocket conn, ClientHandshake handshake) {
                 System.out.println("Client connected: " + conn.getRemoteSocketAddress());
+
+                ////////////////////////////////////////////////////////////////////////
+                Game game = new Game();
+                games.put(conn, game);
+                game.printGrid(); // Assuming printGrid() method prints the grid for debug purposes
+                String initialData = "{\"action\":\"new_game_created\",\"grid\":" + game.getGridAsJson() + ",\"placedWords\":" + game.getPlacedWordsAsJson() + "}";
+                conn.send(initialData);
             }
 
             @Override
             public void onClose(WebSocket conn, int code, String reason, boolean remote) {
                 System.out.println("Client disconnected: " + conn.getRemoteSocketAddress());
+                games.remove(conn);
             }
 
             @Override
@@ -51,12 +64,18 @@ public class App {
                     conn.send("Player data saved successfully.");
                     conn.send("Player saved");
                 }
+                Game game = games.get(conn);
+                if (game != null) {
+                    game.handleMessage(message, conn);
+                }
+
             }
 
             @Override
             public void onError(WebSocket conn, Exception ex) {
                 System.err.println("WebSocket error with connection: " + conn + "\nError: " + ex.getMessage());
                 ex.printStackTrace();
+                games.remove(conn);
             }
 
             @Override

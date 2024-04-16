@@ -6,8 +6,23 @@ function initializeApp() {
     initializeLogin();
     setupWebSocket();
     loadPlayerData('lobbyPlayerData');
-    // Initialize the grid debug button event listener
     setupGridDebugButton();
+    setupLeaderboard();
+    document.getElementById('refreshBtn').addEventListener('click', function() {
+        fetch('new_players.json') // Adjust the URL as needed
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayPlayerData(data);
+            })
+            .catch(error => {
+                console.error('Failed to load player data:', error);
+            });
+    });
 }
 
 function setupGridDebugButton() {
@@ -81,22 +96,6 @@ function setupLeaderboard() {
     });
 }
 
-document.getElementById('refreshBtn').addEventListener('click', function() {
-    fetch('new_players.json') // Adjust the URL as needed
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayPlayerData(data);
-        })
-        .catch(error => {
-            console.error('Failed to load player data:', error);
-        });
-});
-
 function displayPlayerData(players) {
     const table = document.getElementById('lobbyPlayerData');
     const tbody = table.querySelector('tbody');
@@ -117,7 +116,6 @@ function displayPlayerData(players) {
 }
 
 function loadLeaderboardData() {
-    // Optional: Change 'players.json' if leaderboard data is different
     fetch('players.json')
         .then(response => response.json())
         .then(data => {
@@ -140,24 +138,24 @@ function displayLeaderboardData(data, tableId) {
         </tr>`;
         tbody.insertAdjacentHTML('beforeend', row);
     });
-    showSection('leaderboard-section');  // Display the leaderboard section
+    showSection('leaderboard-section');
 }
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
-    sections.forEach(section => section.style.display = 'none'); // Hide all sections
-
+    sections.forEach(section => section.style.display = 'none');
     const activeSection = document.getElementById(sectionId);
     if (activeSection) {
         if (sectionId === 'game-container') {
-            activeSection.style.display = 'grid'; // Assuming the grid section should be a grid
+            activeSection.style.display = 'grid';
         } else {
-            activeSection.style.display = 'block'; // For other sections use 'block' or 'flex' as needed
+            activeSection.style.display = 'block';
         }
     } else {
         console.error('No section found with ID:', sectionId);
     }
 }
+
 function createGame(username) {
-    console.log(`Creating game with ${username}`); // Logic for game creation
+    console.log(`Creating game with ${username}`);
 }

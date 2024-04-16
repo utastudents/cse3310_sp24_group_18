@@ -1,46 +1,69 @@
-/* Overall game container styling */
 #game-container {
-    width: 100%; /* Full width of the container */
-    height: 100vh; /* Full height of the viewport */
-  }
-  
-  /* Main content area for the word grid */
-  #word-grid {
-    width: 70%; /* Takes up 70% of the container's width */
-    height: 70%; /* Takes up 70% of the container's height */
-    float: left; /* Aligns to the left */
-    background-color: cyan; /* Cyan background for visibility */
-  }
-  
-  /* Sidebar for scores */
-  #score-section {
-    width: 30%; /* Takes up 30% of the container's width */
-    height: 35%; /* Half of the remaining height */
-    float: right; /* Aligns to the right */
-    background-color: yellow; /* Yellow background for visibility */
-  }
-  
-  /* Sidebar for chat */
-  #chat-section {
-    width: 30%; /* Takes up 30% of the container's width */
-    height: 35%; /* Half of the remaining height */
-    float: right; /* Aligns to the right */
-    background-color: pink; /* Pink background for visibility */
-  }
-  
-  /* Bottom content area for placed words */
-  #placed-words-section {
-    width: 100%; /* Takes up the same width as the word grid */
-    height: 30%; /* Takes up the remaining 30% of the container's height */
-    float: left; /* Aligns to the left */
-    background-color: lightgreen; /* Light green background for visibility */
-    clear: both; /* Ensures this section doesn't float next to the previous elements */
-  }
-  
-  /* Clear floats after the container if necessary */
-  .clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+        "grid sidebar"
+        "placedwords sidebar";
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+#word-grid {
+    grid-area: grid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+#score-section {
+    grid-area: sidebar;
+    padding: 20px;
+    background-color: #e9e9ff;
+    border-left: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+#chat-section {
+    grid-area: sidebar;
+    padding: 20px;
+    background-color: #e0e9ff;
+    border-left: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+#placed-words-section {
+    grid-area: placedwords;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
   

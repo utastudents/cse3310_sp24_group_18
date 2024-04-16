@@ -285,35 +285,48 @@ body {
 
 
 /* FOR THE GAME */
+/* Overall game container styling */
 #game-container {
-  display: grid;
-  grid-template-columns: 70% 30%; /* Main content to sidebar ratio */
-  grid-template-rows: auto 1fr auto; /* Auto for top, 1fr for middle content, auto for bottom */
+  width: 100%; /* Full width of the container */
   height: 100vh; /* Full height of the viewport */
 }
 
-.main-content {
-  grid-row: 1 / span 2; /* div1 spans the first two rows */
-  background-color: #f0f0f0; /* Just an example, set to your preference */
+/* Main content area for the word grid */
+#word-grid {
+  width: 70%; /* Takes up 70% of the container's width */
+  height: 70%; /* Takes up 70% of the container's height */
+  float: left; /* Aligns to the left */
+  background-color: cyan; /* Cyan background for visibility */
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
+/* Sidebar for scores */
 #score-section {
-  grid-row: 1; /* div2 takes the first row on the sidebar */
-  background-color: #ddd; /* Just an example, set to your preference */
+  width: 30%; /* Takes up 30% of the container's width */
+  height: 35%; /* Half of the remaining height */
+  float: right; /* Aligns to the right */
+  background-color: yellow; /* Yellow background for visibility */
 }
 
+/* Sidebar for chat */
 #chat-section {
-  grid-row: 2; /* div3 takes the second row on the sidebar */
-  background-color: #ccc; /* Just an example, set to your preference */
+  width: 30%; /* Takes up 30% of the container's width */
+  height: 35%; /* Half of the remaining height */
+  float: right; /* Aligns to the right */
+  background-color: pink; /* Pink background for visibility */
 }
 
-.bottom-content {
-  grid-column: 1 / -1; /* div4 spans all columns at the bottom */
-  background-color: #bbb; /* Just an example, set to your preference */
+/* Bottom content area for placed words */
+#placed-words-section {
+  width: 100%; /* Takes up the same width as the word grid */
+  height: 30%; /* Takes up the remaining 30% of the container's height */
+  float: left; /* Aligns to the left */
+  background-color: lightgreen; /* Light green background for visibility */
+  clear: both; /* Ensures this section doesn't float next to the previous elements */
+}
+
+/* Clear floats after the container if necessary */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
 }
