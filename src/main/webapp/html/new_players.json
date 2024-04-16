@@ -44,9 +44,27 @@
     "OpponentUsername": "Player2",
     "GridColorChoice": "yellow"
   },
-    {"PlayerUsername": "ityukg", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+  {
+    "PlayerUsername": "ityukg",
+    "Online": true,
+    "GameWon": 0,
+    "GameLost": 0,
+    "InGamePoints": 0,
+    "OpponentUsername": null,
+    "GridColorChoice": "cyan"
+  }
 ,
-    {"PlayerUsername": "UJJJWALLLL", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+    {"PlayerUsername": "eEDF", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
 ,
-    {"PlayerUsername": "DANIELLL", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+    {"PlayerUsername": "ewfdsc", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+,
+    {"PlayerUsername": "fedwsc", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+,
+    {"PlayerUsername": "rfxc", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+,
+    {"PlayerUsername": "redf", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+,
+    {"PlayerUsername": "wdcsz", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
+,
+    {"PlayerUsername": "rfedc", "Online": true, "GameWon": 0, "GameLost": 0, "InGamePoints": 0, "OpponentUsername": null, "GridColorChoice": "cyan"}
 ]

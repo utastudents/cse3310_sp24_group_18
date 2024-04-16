@@ -7,7 +7,7 @@ function initializeApp() {
     setupWebSocket();
     loadPlayerData('lobbyPlayerData');
 
-    
+
 }
 
 function initializeLogin() {
@@ -75,6 +75,7 @@ function setupLeaderboard() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', function() {
+    console.log("Data Loaded")
     fetch('new_players.json') // Adjust the URL as needed
         .then(response => {
             if (!response.ok) {
@@ -84,6 +85,7 @@ document.getElementById('refreshBtn').addEventListener('click', function() {
         })
         .then(data => {
             displayPlayerData(data);
+            console.log("Data Loaded")
         })
         .catch(error => {
             console.error('Failed to load player data:', error);
