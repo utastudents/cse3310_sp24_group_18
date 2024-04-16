@@ -6,15 +6,8 @@ function initializeApp() {
     initializeLogin();
     setupWebSocket();
     loadPlayerData('lobbyPlayerData');
-    // Initialize the grid debug button event listener
-    setupGridDebugButton();
-}
 
-function setupGridDebugButton() {
-    const gridDebugButton = document.getElementById('game_section_debug');
-    gridDebugButton.addEventListener('click', function() {
-        showSection('game-container'); // Use the correct ID for your grid section
-    });
+
 }
 
 function initializeLogin() {
@@ -145,19 +138,10 @@ function displayLeaderboardData(data, tableId) {
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
-    sections.forEach(section => section.style.display = 'none'); // Hide all sections
-
-    const activeSection = document.getElementById(sectionId);
-    if (activeSection) {
-        if (sectionId === 'game-container') {
-            activeSection.style.display = 'grid'; // Assuming the grid section should be a grid
-        } else {
-            activeSection.style.display = 'block'; // For other sections use 'block' or 'flex' as needed
-        }
-    } else {
-        console.error('No section found with ID:', sectionId);
-    }
+    sections.forEach(section => section.style.display = 'none');
+    document.getElementById(sectionId).style.display = 'block';
 }
+
 function createGame(username) {
     console.log(`Creating game with ${username}`); // Logic for game creation
 }

@@ -18,7 +18,6 @@ body {
   box-shadow: 0 4px 6px rgba(32,33,36,0.28);
 }
 .section {
-  display: none; /* Hide all sections by default */
   flex-direction: column;
   align-items: center;
   justify-content: center;
