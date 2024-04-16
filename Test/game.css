@@ -1,0 +1,46 @@
+/* Overall game container styling */
+#game-container {
+    width: 100%; /* Full width of the container */
+    height: 100vh; /* Full height of the viewport */
+  }
+  
+  /* Main content area for the word grid */
+  #word-grid {
+    width: 70%; /* Takes up 70% of the container's width */
+    height: 70%; /* Takes up 70% of the container's height */
+    float: left; /* Aligns to the left */
+    background-color: cyan; /* Cyan background for visibility */
+  }
+  
+  /* Sidebar for scores */
+  #score-section {
+    width: 30%; /* Takes up 30% of the container's width */
+    height: 35%; /* Half of the remaining height */
+    float: right; /* Aligns to the right */
+    background-color: yellow; /* Yellow background for visibility */
+  }
+  
+  /* Sidebar for chat */
+  #chat-section {
+    width: 30%; /* Takes up 30% of the container's width */
+    height: 35%; /* Half of the remaining height */
+    float: right; /* Aligns to the right */
+    background-color: pink; /* Pink background for visibility */
+  }
+  
+  /* Bottom content area for placed words */
+  #placed-words-section {
+    width: 100%; /* Takes up the same width as the word grid */
+    height: 30%; /* Takes up the remaining 30% of the container's height */
+    float: left; /* Aligns to the left */
+    background-color: lightgreen; /* Light green background for visibility */
+    clear: both; /* Ensures this section doesn't float next to the previous elements */
+  }
+  
+  /* Clear floats after the container if necessary */
+  .clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
