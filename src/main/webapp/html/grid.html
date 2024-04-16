@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Word Search Game</title>
+    <style>
+            #wordSearchGrid {
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(50, 30px); /*Adjust column count based on GRID_SIZE */ 
+            gap: 5px;
+        }
+        .gridCell {
+            display: grid;
+            text-align: center;
+            width: 20px;
+            border-radius: 5px;
+            height: 20px;
+            border: 1px solid #000;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .gridCell:focus{
+            background-color: grey;
+        }
+
+        .Frame1{
+            width: 200px;
+            height: 200px;
+            position: relative;
+            left: 0;
+            top: 0;
+            border: 1px solid black;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: wheat;
+            border-radius: 10px;
+
+        }
+        .Frame2{
+            width: 200px;
+            position: absolute;
+            right:0;
+            top:0;
+            border: 1px solid black;
+            padding: 10px;
+            height: 200px;
+            box-sizing: border-box;
+            background-color: wheat;
+            border-radius: 10px;
+        }
+        .wordFrame {
+            width: 1000px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-left: 420px;
+            align-items: center;
+            text-align: center;
+            border: 2px solid black;
+            padding: 10px;
+            height: 300px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: wheat;
+
+        }
+        .wordCell{
+            justify-content: center;
+            padding: 4px;
+            font-size: 9px;
+            text-transform: uppercase;
+            text-align:justify;
+        }
+    </style>
+</head>
+<body>
+
+!-- player frames -->
+<div class="Frame1"> 
+<h1>Player1name</h1>
+<p>Player info goes here</p>
+</div>
+<div class="Frame2">
+<h1>Player2name</h1>
+<p>Player info goes here</p>
+</div>
+
+<!-- grid -->
+<div id="wordSearchGrid"></div>
+<!-- word bank -->
+<div class="wordFrame">
+</div>
+
+<script>
+     fetch('../src/main/java/uta/cse3310/grid.json') //loading in the generated JSON grid
+        .then(response => response.json())
+        .then(grid => {
+            const gridContainer = document.getElementById('wordSearchGrid');
+            grid.forEach(row => {
+                row.forEach(cell => {
+                    const cellElement = document.createElement('button');
+                    cellElement.textContent = cell; // Display each character
+                    cellElement.className = 'gridCell';
+                    cellElement.addEventListener("click", function()   {
+                            // click handling will happen here
+                    });
+                    gridContainer.appendChild(cellElement);
+                });
+            });
+        })
+        .catch(error => console.error('Error loading the grid:', error));
+        fetch('../src/main/java/uta/cse3310/placed_words.txt') // loading in placed words into the word bank
+        .then(response => response.text())
+            .then(data =>{
+                const wordContainer = document.querySelector('.wordFrame');
+                const lines = data.split('\n');
+                    lines.forEach(word => {
+                            const words = document.createElement('div');
+                            words.textContent = word;
+                            words.className = 'wordCell';
+                            wordContainer.appendChild(words);
+                        });
+                    })
+            .catch(error => console.error('Error loading the placed words', error));
+
+    </script>
+</body>
+</html>

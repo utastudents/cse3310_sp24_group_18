@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeApp() {
-    initializeLogin();
+    initializeLogin()
+    showSection('login-section'); 
     setupWebSocket();
     loadPlayerData('lobbyPlayerData');
-
-
 }
+
 
 function initializeLogin() {
     const loginButton = document.getElementById('enterLobbyBtn');
@@ -29,8 +29,8 @@ function saveNewPlayer(username) {
     const color = colorSelector.value;
     const newPlayer = {
         PlayerUsername: username,
-        GridColorChoice: color,
         Online: true,
+        GridColorChoice: color,
         GameWon: 0,
         GameLost: 0,
         InGamePoints: 0,
@@ -75,7 +75,6 @@ function setupLeaderboard() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', function() {
-    console.log("Data Loaded")
     fetch('new_players.json') // Adjust the URL as needed
         .then(response => {
             if (!response.ok) {
@@ -85,7 +84,6 @@ document.getElementById('refreshBtn').addEventListener('click', function() {
         })
         .then(data => {
             displayPlayerData(data);
-            console.log("Data Loaded")
         })
         .catch(error => {
             console.error('Failed to load player data:', error);
@@ -140,8 +138,15 @@ function displayLeaderboardData(data, tableId) {
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
-    sections.forEach(section => section.style.display = 'none');
-    document.getElementById(sectionId).style.display = 'block';
+    sections.forEach(section => {
+        section.style.display = 'none'; // Hide all sections
+    });
+    const activeSection = document.getElementById(sectionId);
+    if (activeSection) {
+        activeSection.style.display = 'flex'; // Set the active section to flex
+        activeSection.style.flexDirection = 'column'; // Stack children vertically
+        activeSection.style.height = '100vh'; // Full viewport height
+    }
 }
 
 function createGame(username) {
