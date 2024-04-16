@@ -283,3 +283,38 @@ body {
   background-color: lightgray;
   border-radius: 5px;
 }
+
+
+/* FOR THE GAME */
+#game-container {
+  display: grid;
+  grid-template-columns: 70% 30%; /* Main content to sidebar ratio */
+  grid-template-rows: auto 1fr auto; /* Auto for top, 1fr for middle content, auto for bottom */
+  height: 100vh; /* Full height of the viewport */
+}
+
+.main-content {
+  grid-row: 1 / span 2; /* div1 spans the first two rows */
+  background-color: #f0f0f0; /* Just an example, set to your preference */
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#score-section {
+  grid-row: 1; /* div2 takes the first row on the sidebar */
+  background-color: #ddd; /* Just an example, set to your preference */
+}
+
+#chat-section {
+  grid-row: 2; /* div3 takes the second row on the sidebar */
+  background-color: #ccc; /* Just an example, set to your preference */
+}
+
+.bottom-content {
+  grid-column: 1 / -1; /* div4 spans all columns at the bottom */
+  background-color: #bbb; /* Just an example, set to your preference */
+}
