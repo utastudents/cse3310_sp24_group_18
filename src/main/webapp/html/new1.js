@@ -2,14 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
-
 function initializeApp() {
+    showSection('login-section'); // Show the login section initially
     initializeLogin();
     setupWebSocket();
     loadPlayerData('lobbyPlayerData');
-    // Initialize the grid debug button event listener
     setupGridDebugButton();
 }
+
 
 function setupGridDebugButton() {
     const gridDebugButton = document.getElementById('game_section_debug');
@@ -25,12 +25,14 @@ function initializeLogin() {
         const username = usernameInput.value.trim();
         if (username) {
             saveNewPlayer(username);
-            showSection('lobby-section');
+            showSection('lobby-section'); // Make sure this matches the ID of your lobby section
+            // Possibly add additional logic here if needed, such as hiding the login section explicitly
         } else {
             alert('Please enter a username.');
         }
     });
 }
+
 
 function saveNewPlayer(username) {
     const colorSelector = document.getElementById('colorSelector');
@@ -141,7 +143,18 @@ function displayPlayerData(players) {
     const table = document.getElementById('lobbyPlayerData');
     const tbody = table.querySelector('tbody');
     tbody.innerHTML = ''; // Clear existing entries
+
     players.forEach(player => {
+        // Log player data to ensure it's being read correctly
+        console.log(`Player: ${player.PlayerUsername}, Online: ${player.Online}, Opponent: ${player.OpponentUsername}`);
+
+        // Determine if the button should be disabled based on player's online status and opponent username
+        let buttonDisabled = !player.Online || player.OpponentUsername !== null;
+        const buttonStatus = buttonDisabled ? 'disabled' : '';
+
+        // Log the button status to debug
+        console.log(`Button for ${player.PlayerUsername} is ${buttonStatus}`);
+
         const row = `<tr>
             <td>${player.PlayerUsername}</td>
             <td>${player.Online ? 'Yes' : 'No'}</td>
@@ -150,11 +163,12 @@ function displayPlayerData(players) {
             <td>${player.InGamePoints}</td>
             <td>${player.OpponentUsername || 'None'}</td>
             <td style="background-color: ${player.GridColorChoice}; width: 20px; height: 20px;"></td>
-            <td><button ${player.Online ? '' : 'disabled'}>Create Game</button></td>
+            <td><button ${buttonStatus}>Create Game</button></td>
         </tr>`;
         tbody.insertAdjacentHTML('beforeend', row);
     });
 }
+
 
 function loadLeaderboardData() {
     // Optional: Change 'players.json' if leaderboard data is different
@@ -185,19 +199,22 @@ function displayLeaderboardData(data, tableId) {
 
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
-    sections.forEach(section => section.style.display = 'none'); // Hide all sections
+    // Hide all sections
+    sections.forEach(section => {
+        section.style.display = 'none';
+    });
 
+    // Show the requested section
     const activeSection = document.getElementById(sectionId);
     if (activeSection) {
-        if (sectionId === 'game-container') {
-            activeSection.style.display = 'grid'; // Assuming the grid section should be a grid
-        } else {
-            activeSection.style.display = 'block'; // For other sections use 'block' or 'flex' as needed
-        }
+        activeSection.style.display = 'block'; // Use 'flex' or 'grid' as needed
     } else {
         console.error('No section found with ID:', sectionId);
     }
 }
+
+
+
 function createGame(username) {
     console.log(`Creating game with ${username}`); // Logic for game creation
 }

@@ -37,22 +37,30 @@ input[type="text"] {
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Button styling */
-.button {
-  background-color: #0056b3; /* A darker blue for buttons to match the theme */
-  color: white;
+/* Style for enabled button */
+button {
+  padding: 14px 20px;
   border: none;
-  padding: 10px 20px;
-  margin: 10px auto; /* Center align buttons */
-  display: block; /* Ensures margin auto works for centering */
-  border-radius: 5px;
+  background-color: #2196F3; /* Material Design Blue */
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.button:hover {
-  background-color: #003366; /* Even darker blue for hover state */
+/* Style for disabled button */
+button:disabled {
+  background-color: #E0E0E0; /* Material Design Grey */
+  color: #9E9E9E; /* Material Design Grey for text */
+  cursor: not-allowed; /* Cursor indicates the button is not clickable */
+  box-shadow: none; /* No shadow for disabled state */
 }
+
+/* Additional style to remove hover effects for disabled buttons */
+button:disabled:hover {
+  background-color: #E0E0E0; /* Keep the background color the same as disabled state */
+}
+
 
 #enter-username{
 max-width: fit-content;
@@ -74,6 +82,12 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .background {
@@ -103,12 +117,9 @@ h1 {
 
 /* Scroll function for lobby section */
 #lobby-section {
-  margin: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  max-height: 900px;
-  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* Allows vertical scrolling if content is taller than the screen */
 }
 
 input[type="text"] {
