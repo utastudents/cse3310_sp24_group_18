@@ -48,8 +48,9 @@ public class Game {
 
     // Load words from file into allWords list
     public static void loadWords() {
+        System.out.println("Loading words from file...");
         try {
-            allWords = Files.readAllLines("words.txt");
+            allWords = Files.readAllLines(Paths.get("words.txt"));
         } catch (IOException e) {
             System.err.println("Error reading words.txt: " + e.getMessage());
         }
@@ -114,9 +115,8 @@ public class Game {
             System.out.println();
         }
     }
-
     public static void main(String[] args) {
-        loadWords();
+        loadWords(); // Load words before creating a new Game instance
         Game game = new Game();
         game.printGrid();
     }
