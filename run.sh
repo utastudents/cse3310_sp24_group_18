@@ -1,2 +1,2 @@
-mvn clean package compile
+mvn clean install package compile
 mvn exec:java

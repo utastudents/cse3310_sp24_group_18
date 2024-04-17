@@ -1,6 +1,9 @@
 uta/cse3310/GridGenerator$1.class
 uta/cse3310/App.class
 uta/cse3310/HttpServer.class
-uta/cse3310/GridGenerator.class
 uta/cse3310/HttpServer$1.class
+uta/cse3310/PlayerStats.class
+uta/cse3310/GridGenerator.class
+uta/cse3310/PlayerType.class
 uta/cse3310/GridGenerator$Orientation.class
+uta/cse3310/Game.class

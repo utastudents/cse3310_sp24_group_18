@@ -11,14 +11,10 @@ import net.freeutils.httpserver.HTTPServer.Request;
 import net.freeutils.httpserver.HTTPServer.Response;
 import net.freeutils.httpserver.HTTPServer.VirtualHost;
 
-// http server include is a GPL licensed package from
-//            http://www.freeutils.net/source/jlhttp/
-
 public class HttpServer {
 
-    private static final String HTML = "/../../../html";
     int port = 8080;
-    String dirname = HTML;
+    String dirname = "src/main/webapp/html"; // Replace with the actual absolute path to the html folder.
 
     public HttpServer(int portNum, String dirName) {
         port = portNum;
@@ -28,8 +24,9 @@ public class HttpServer {
     public void start() {
         try {
             File dir = new File(dirname);
-            if (!dir.canRead())
-                throw new FileNotFoundException(dir.getAbsolutePath());
+            if (!dir.canRead()) {
+                throw new FileNotFoundException("Cannot read directory: " + dir.getAbsolutePath());
+            }
             // set up server
             HTTPServer server = new HTTPServer(port);
             VirtualHost host = server.getVirtualHost(null); // default host
@@ -44,10 +41,9 @@ public class HttpServer {
                 }
             });
             server.start();
+            System.out.println("Server started on port " + port);
         } catch (Exception e) {
             System.err.println("error: " + e);
         }
-
     }
-
 }
