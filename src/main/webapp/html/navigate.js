@@ -17,6 +17,8 @@ document.getElementById('btnSection0_sec3').addEventListener('click', () => { na
 document.getElementById('btnSection1_sec3').addEventListener('click', () => { navigate('section1'); });
 document.getElementById('btnSection2_sec3').addEventListener('click', () => { navigate('section2'); });
 document.getElementById('btnSection3_sec3').addEventListener('click', () => { navigate('section3'); });
+
+
 function navigate(sectionId) {
     socket.send(sectionId); // Send section ID to the server
 }

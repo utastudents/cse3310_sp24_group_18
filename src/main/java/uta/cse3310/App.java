@@ -1,14 +1,80 @@
 package uta.cse3310;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 public class App extends WebSocketServer {
 
+    // Create an appendable map to store players
+    private Map<String, Player> playerMap = new HashMap<>();
+
     public App(int port) {
         super(new InetSocketAddress(port));
+    }
+
+    // add to playermap
+    private void addPlayer(Player player){
+        playerMap.put(player.getUsername(), player);
+    }
+
+    private void handleMessage(WebSocket conn, String message){
+        
+        if (message.startsWith("new_player:")){
+            String username = message.substring(11);
+            Player player = new Player(username);
+            
+            // append to playerMap with try catch
+            try{
+                addPlayer(player);
+                conn.send("player_added");
+                System.out.println("New player added: " + player.getUsername());
+            } catch (Exception e){
+                conn.send("player_not_added");
+                System.out.println("Player not added: " + player.getUsername());
+            }
+        }
+        else if (message.startsWith("color_choice:")){
+            String[] parts = message.split(":");
+            String username = parts[1];
+            String colorChoice = parts[2];
+            Player player = playerMap.get(username);
+            player.setColorChoice(colorChoice);
+            conn.send("color_set");
+        }
+        else if (message.startsWith("game_start:")){
+            String[] parts = message.split(":");
+            String player1Username = parts[1];
+            String player2Username = parts[2];
+            Player player1 = playerMap.get(player1Username);
+            Player player2 = playerMap.get(player2Username);
+            Game game = new Game(player1, player2);
+            // Start the game
+            conn.send("game_started");
+        }
+        else if (message.startsWith("game_end:")){
+            String[] parts = message.split(":");
+            String winnerUsername = parts[1];
+            String loserUsername = parts[2];
+            Player winner = playerMap.get(winnerUsername);
+            Player loser = playerMap.get(loserUsername);
+            winner.setGamesWon(winner.getGamesWon() + 1);
+            loser.setGamesLost(loser.getGamesLost() + 1);
+            // End the game
+            conn.send("game_ended");
+        }
+        else if (message.startsWith("score_update:")){
+            String[] parts = message.split(":");
+            String username = parts[1];
+            int score = Integer.parseInt(parts[2]);
+            Player player = playerMap.get(username);
+            player.setInGameScore(score);
+            conn.send("score_updated");
+        }
     }
 
     @Override
@@ -25,6 +91,7 @@ public class App extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from WebSocket client: " + message);
+        handleMessage(conn, message);
         conn.send(message); // This will send message to websocket.js socket.onmessage and it will show screen accordingly
     }
 
