@@ -26,10 +26,23 @@
 
 <div id="section1" class="hidden">
     <p>This is the lobby page</p>
+    <p>Here you can Create game objects called as lobby and each game can take 2 players</p>
+
+    <form id="gameLobby">
+        <label for="lobbyName">Lobby Name:</label>
+        <input type="text" id="lobbyName" name="lobbyName" required>
+        <button type="submit" id="LobbyNameInput">Create Lobby</button>
+    </form>
+    
+
     <button id="btnSection0_sec1">New Class</button>
     <button id="btnSection1_sec1">Section 1</button>
     <button id="btnSection2_sec1">Section 2</button>
     <button id="btnSection3_sec1">Section 3</button>
+
+
+    <h3>Player's Online List :</h3>
+    <ul id="playerList"></ul> <!-- Player list container -->
 </div>
 
 <div id="section2" class="hidden">

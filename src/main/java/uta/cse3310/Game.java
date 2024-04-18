@@ -3,12 +3,16 @@ public class Game {
     private Player player1;
     private Player player2;
     private boolean isFinished;
+    private String lobbyName;
 
-    public Game(Player player1, Player player2) {
+    public Game(Player player1, Player player2, String lobbyName) {
+        this.lobbyName = lobbyName;
         this.player1 = player1;
         this.player2 = player2;
         this.isFinished = false;
     }
+
+    
 
     // Getters and setters
     public Player getPlayer1() {
@@ -33,6 +37,12 @@ public class Game {
 
     public void setFinished(boolean finished) {
         isFinished = finished;
+    }
+
+
+
+    public String getLobbyName() {
+        return lobbyName;
     }
 
     // Other methods as needed...

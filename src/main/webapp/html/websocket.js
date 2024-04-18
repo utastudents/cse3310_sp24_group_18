@@ -7,6 +7,40 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
   connectWebSocket(username);
 });
 
+
+document.getElementById("gameLobby").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent form submission
+
+    const lobbyName = document.getElementById("lobbyName").value;
+    createGameLobby(lobbyName);
+});
+
+function createGameLobby(lobbyName) {
+    console.log("Attempting to create a new game lobby");
+    // Send the lobby name to the server
+    try {
+        socket.send("new_lobby:" + lobbyName);
+        console.log("New lobby created: ", lobbyName);
+    }
+    catch (error) {
+        console.log("Error creating new lobby: ", error);
+    }
+}
+
+function updatePlayerList(playerNamesJSON) {
+    const playerNames = JSON.parse(playerNamesJSON);
+    const playerList = document.getElementById("playerList");
+    playerList.innerHTML = ''; // Clear the current list
+
+    playerNames.forEach(player => {
+        let playerItem = document.createElement("li");
+        playerItem.textContent = player; // Set the text to the player's name
+        playerList.appendChild(playerItem);
+        console.log("Received message:", event.data);
+    });
+}
+
+
 // connect and send the username to the server
 function connectWebSocket(username) {
     console.log("Attempting to add new player");
@@ -27,6 +61,20 @@ socket.onopen = function (event) {
 socket.onmessage = function (event) {
   const sectionToShow = event.data;
   // Use a switch case to determine which section to show
+
+  const data = event.data.split(':');
+  const command = data[0];
+  const content = data[1];
+
+  switch (command) {
+    case "update_players":
+        updatePlayerList(content); // Handle updated player list
+        break;
+    default:
+        console.log("no such command [update_players]", command);
+        break;
+  }
+
   switch (sectionToShow) {
     case "section0":
       showSection("section0");
