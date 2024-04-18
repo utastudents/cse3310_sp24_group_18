@@ -20,6 +20,23 @@ public class App extends WebSocketServer {
     // add to playermap
     private void addPlayer(Player player){
         playerMap.put(player.getUsername(), player);
+
+        // print out the playerMap
+        System.out.println("Player Map:");
+        for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
+            System.out.println("Username : " + entry.getKey());
+        }
+    }
+
+    // send the username keys of players as json
+    private void sendPlayerList(WebSocket conn){
+        String playerList = "{";
+        for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
+            playerList += "\"" + entry.getKey() + "\":\"" + entry.getValue().getColorChoice() + "\",";
+        }
+        playerList = playerList.substring(0, playerList.length() - 1);
+        playerList += "}";
+        conn.send("player_list:" + playerList);
     }
 
     private void handleMessage(WebSocket conn, String message){
@@ -27,7 +44,6 @@ public class App extends WebSocketServer {
         if (message.startsWith("new_player:")){
             String username = message.substring(11);
             Player player = new Player(username);
-            
             // append to playerMap with try catch
             try{
                 addPlayer(player);
@@ -74,6 +90,13 @@ public class App extends WebSocketServer {
             Player player = playerMap.get(username);
             player.setInGameScore(score);
             conn.send("score_updated");
+        }
+
+        // socket.send("user_left:" + username);  // This will send message to websocket.js socket.onmessage and it will show screen accordingly
+        else if (message.startsWith("user_left:")){
+            String username = message.substring(10);
+            playerMap.remove(username);
+            conn.send("user_removed");
         }
     }
 

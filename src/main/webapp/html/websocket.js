@@ -67,7 +67,11 @@ socket.onerror = function (error) {
 };
 
 socket.onclose = function (event) {
-  console.log("WebSocket connection closed", event);
+    console.log("WebSocket connection closed", event);
+    // Send a message that the user left, including the username
+    if (username) {
+        socket.send("user_left:" + username);
+    }
 };
 
 function showSection(sectionId) {
