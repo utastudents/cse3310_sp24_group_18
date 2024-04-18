@@ -1,85 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Word Search Game (TWSG)</title>
-    <!-- Combined CSS -->
-    <link rel="stylesheet" href="new.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-    
+    <meta charset="UTF-8" />
+    <title>Dynamic Sections by WebSocket</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
-<body>    
-    <!-- Login Section -->
-    <div id="login-section" class="section">
-        <div class="background"></div>
-        <div class="login-container">
-          <h1>The Word Search Game (TWSG)</h1>
-          <div id="enter-username">
-            <input type="text" id="username" placeholder="Enter username" autofocus>
-          </div>
-          <p style="color: black;">Select your color</p>
-          <div>
-            <select id="colorSelector">
-              <option value="red">Red</option>
-              <option value="blue">Blue</option>
-              <option value="green">Green</option>
-              <option value="yellow">Yellow</option>
-              <option value="cyan" selected>Cyan</option>
-            </select>
-          </div>
-          <button id="enterLobbyBtn">Enter Lobby</button>
-          <button id="game_section_debug">View_Grid_Debug</button>
-        </div>
-        
-    </div>
-
-    <!-- Lobby Section -->
-    <div id="lobby-section">
-      <h1>Lobby</h1>
-      <button id="refreshBtn">Refresh Data</button>
-      <table id="lobbyPlayerData">
-          <thead>
-              <tr>
-                  <th>Player Username</th>
-                  <th>Online</th>
-                  <th>Game Won</th>
-                  <th>Game Lost</th>
-                  <th>In-game Points</th>
-                  <th>Opponent Username</th>
-                  <th>Grid Color Choice</th>
-                  <th>Create Game</th>
-              </tr>
-          </thead>
-          <tbody>
-              <!-- Dynamic player data will be loaded here -->
-          </tbody>
-      </table>
-    </div>
-
-<!-- GRID, CHAT and STATS-->
-  <div id="game-container">
-    <div id="word-grid" class="main-content"> <!-- div1: Main content area for word grid -->
-        <!-- Word grid content will go here -->
-    </div>
-    <div id="score-section" class="sidebar"> <!-- div2: Sidebar top for scores -->
-        <!-- Scores content will go here -->
-    </div>
-    <div id="chat-section" class="sidebar"> <!-- div3: Sidebar bottom for chat -->
-        <!-- Chat content will go here -->
-    </div>
-    <div id="placed-words-section" class="bottom-content"> <!-- div4: Bottom content area for placed words -->
-        <!-- Placed words content will go here -->
-    </div>
-</div>
+<body>
+<div id="section0">
+    <p>This is the Login Page<p>
+    <!-- Keep buttons for navigation now -->
+    <button id="btnSection0">New Class</button>
+    <button id="btnSection1">Section 1</button>
+    <button id="btnSection2">Section 2</button>
+    <button id="btnSection3">Section 3</button>
 </div>
 
-  
+<div id="section1" class="hidden">
+    <p>Section 1 Content</p>
+    <button id="btnSection0_sec1">New Class</button>
+    <button id="btnSection1_sec1">Section 1</button>
+    <button id="btnSection2_sec1">Section 2</button>
+    <button id="btnSection3_sec1">Section 3</button>
+</div>
 
-    <!-- Scripts -->
-    <script src="new1.js"></script>
+<div id="section2" class="hidden">
+    <p>Section 2 Content</p>
+    <button id="btnSection0_sec2">New Class</button>
+    <button id="btnSection1_sec2">Section 1</button>
+    <button id="btnSection2_sec2">Section 2</button>
+    <button id="btnSection3_sec2">Section 3</button>
+</div>
+
+<div id="section3" class="hidden">
+    <p>Section 3 Content</p>
+    <button id="btnSection0_sec3">New Class</button>
+    <button id="btnSection1_sec3">Section 1</button>
+    <button id="btnSection2_sec3">Section 2</button>
+    <button id="btnSection3_sec3">Section 3</button>
+</div>
+
+<script src="websocket.js"></script>
+<script src="navigate.js"></script>
 </body>
 </html>

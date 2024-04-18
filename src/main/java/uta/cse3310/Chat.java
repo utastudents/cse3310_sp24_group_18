@@ -1,4 +1,5 @@
 package uta.cse3310;
-public class PlayerStats {
+
+public class Chat {
     
 }
