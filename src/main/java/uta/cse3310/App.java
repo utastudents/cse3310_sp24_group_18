@@ -23,7 +23,7 @@ public class App extends WebSocketServer {
     }
 
     // add to playermap
-    private void addPlayer(Player player){
+    private void addPlayer(Player player) {
         playerMap.put(player.getUsername(), player);
         // print out the playerMap
         System.out.println("Player Map:");
@@ -32,33 +32,32 @@ public class App extends WebSocketServer {
         }
     }
 
-    
     private void broadcastPlayerList() {
         List<String> playerNames = new ArrayList<>();
         for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
             playerNames.add(entry.getKey()); // Add the player's name to the list
         }
-    
+
         Gson gson = new Gson();
         String playerNamesJson = gson.toJson(playerNames); // Convert list to JSON
-    
+
         // Broadcast to all connected clients
         for (WebSocket conn : this.getConnections()) {
             conn.send("update_players:" + playerNamesJson);
         }
     }
-    
 
-    private void handleMessage(WebSocket conn, String message){
-        
-        if (message.startsWith("new_player:")){
+    private void handleMessage(WebSocket conn, String message) {
+
+        if (message.startsWith("new_player:")) {
             String username = message.substring(11);
-            Player player = new Player(username);
+            Player player = new Player(username, conn);
             // append to playerMap with try catch
-            try{
+            try {
                 addPlayer(player);
                 // conn.send("player_added");
-               // conn.send("player_added:" + username); // This will send message to websocket.js socket.onmessage and it will show screen accordingly
+                // conn.send("player_added:" + username); // This will send message to
+                // websocket.js socket.onmessage and it will show screen accordingly
 
                 // send updated player list to all clients
                 broadcastPlayerList();
@@ -69,15 +68,15 @@ public class App extends WebSocketServer {
                 conn.send("player_added:" + username);
                 System.out.println("[from conn.send] New player added: " + player.getUsername());
 
-
-            } catch (Exception e){
+            } catch (Exception e) {
                 conn.send("player_not_added");
                 System.out.println("Player not added: " + username);
             }
         }
 
-        // socket.send("user_left:" + username);  // This will send message to websocket.js socket.onmessage and it will show screen accordingly
-        else if (message.startsWith("user_left:")){
+        // socket.send("user_left:" + username); // This will send message to
+        // websocket.js socket.onmessage and it will show screen accordingly
+        else if (message.startsWith("user_left:")) {
             String username = message.substring(10);
             playerMap.remove(username);
             conn.send("user_removed");
@@ -93,19 +92,55 @@ public class App extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         System.out.println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+    
+        // // Find the username associated with the closing connection
+        // String disconnectedUsername = null;
+        // for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
+        //     Player player = entry.getValue();
+        //     if (player.getWebSocket() != null && player.getWebSocket().equals(conn)) {
+        //         disconnectedUsername = entry.getKey();
+        //         break;
+        //     }
+        // }
+    
+        // // If a username was found, remove that player from the map
+        // if (disconnectedUsername != null) {
+        //     playerMap.remove(disconnectedUsername);
+        //     System.out.println("Player removed: " + disconnectedUsername);
+        //     // Optionally broadcast the updated player list after removal
+        //     broadcastPlayerList();
+        // }
     }
-
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from WebSocket client: " + message);
         handleMessage(conn, message);
-        conn.send(message); // This will send message to websocket.js socket.onmessage and it will show screen accordingly
+        conn.send(message); // This will send message to websocket.js socket.onmessage and it will show
+                            // screen accordingly
     }
 
     @Override
-    public void onError(WebSocket conn, Exception ex) {
-        System.err.println("WebSocket error: " + ex.getMessage());
+public void onError(WebSocket conn, Exception ex) {
+    System.err.println("WebSocket error: " + ex.getMessage());
+
+    // Find the username associated with the connection that caused the error
+    String errorUsername = null;
+    for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
+        Player player = entry.getValue();
+        if (player.getWebSocket() != null && player.getWebSocket().equals(conn)) {
+            errorUsername = entry.getKey();
+            break;
+        }
     }
+
+    // If a username was found, remove that player from the map
+    if (errorUsername != null) {
+        playerMap.remove(errorUsername);
+        System.out.println("Player removed (Tab Closed): " + errorUsername);
+        // Optionally broadcast the updated player list after removal
+        broadcastPlayerList();
+    }
+}
 
     @Override
     public void onStart() {

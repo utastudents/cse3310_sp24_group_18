@@ -133,17 +133,13 @@ socket.onmessage = function (event) {
   }
 };
 
-socket.onerror = function (error) {
-  console.log("WebSocket Error: ", error);
-};
+socket.onerror = function(event) {
+    console.error("WebSocket error observed:", event);
+  };
 
-socket.onclose = function (event) {
-  console.log("WebSocket connection closed", event);
-  // Send a message that the user left, including the username
-  if (username) {
-    socket.send("user_left:" + username);
-  }
-};
+  socket.onclose = function(event) {
+    console.log("WebSocket connection closed", event.code, event.reason);
+  };
 
 function showSection(sectionId) {
   // Hide all sections

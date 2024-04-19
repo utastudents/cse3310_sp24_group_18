@@ -1,20 +1,34 @@
 package uta.cse3310;
 
+import org.java_websocket.WebSocket; // Use the correct import
+
+
 public class Player {
     private String username;
     private String colorChoice; // Default or chosen color
     private int gamesWon;
     private int gamesLost;
     private int inGameScore;
+    private WebSocket webSocket;
 
-    public Player(String username) {
+    public Player(String username, WebSocket webSocket) {
         this.username = username;
         this.colorChoice = "Default"; // Default color, can be set later
         this.gamesWon = 0;
         this.gamesLost = 0;
         this.inGameScore = 0;
+        this.webSocket = webSocket;
+
     }
 
+    // Getters and Setters for the webSocket...
+    public WebSocket getWebSocket() {
+        return webSocket;
+    }
+
+    public void setWebSocket(WebSocket webSocket) {
+        this.webSocket = webSocket;
+    }
     // Getters and setters
     public String getUsername() {
         return username;
