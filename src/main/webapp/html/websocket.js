@@ -5,6 +5,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 
   const username = document.getElementById("username").value;
   connectWebSocket(username);
+  showSection("section1");
 });
 
 document.getElementById("gameLobby").addEventListener("submit", (event) => {
