@@ -69,4 +69,5 @@ public class Player {
     public void setInGameScore(int inGameScore) {
         this.inGameScore = inGameScore;
     }
+
 }

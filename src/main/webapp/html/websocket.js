@@ -5,26 +5,9 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 
   const username = document.getElementById("username").value;
   connectWebSocket(username);
+  updateGameTable([]);
   showSection("section1");
 });
-
-document.getElementById("gameLobby").addEventListener("submit", (event) => {
-  event.preventDefault(); // Prevent form submission
-
-  const lobbyName = document.getElementById("lobbyName").value;
-  createGameLobby(lobbyName);
-});
-
-function createGameLobby(lobbyName) {
-  console.log("Attempting to create a new game lobby");
-  // Send the lobby name to the server
-  try {
-    socket.send("new_lobby:" + lobbyName);
-    console.log("New lobby created: ", lobbyName);
-  } catch (error) {
-    console.log("Error creating new lobby: ", error);
-  }
-}
 
 function updatePlayerList(playerNamesJSON) {
   const playerNames = JSON.parse(playerNamesJSON);
@@ -35,6 +18,29 @@ function updatePlayerList(playerNamesJSON) {
     let playerItem = document.createElement("li");
     playerItem.textContent = player; // Set the text to the player's name
     playerList.appendChild(playerItem);
+  });
+}
+
+function updateGameTable(gameRooms) {
+  const tbody = document.getElementById("gameTableBody");
+  tbody.innerHTML = ""; // Clear existing content
+
+  gameRooms.forEach((room) => {
+    let row = tbody.insertRow();
+    let cellRoom = row.insertCell(0);
+    let cellPlayers = row.insertCell(1);
+    let cellJoin = row.insertCell(2);
+
+    cellRoom.textContent = room.name;
+    cellPlayers.textContent = room.players;
+
+    let joinButton = document.createElement("button");
+    joinButton.textContent = "Join";
+    joinButton.id = "join_" + room.name; // Unique ID for button
+    joinButton.addEventListener("click", function () {
+      socket.send("join_game:" + room.name);
+    });
+    cellJoin.appendChild(joinButton);
   });
 }
 
@@ -71,8 +77,13 @@ socket.onmessage = function (event) {
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
 
-  switch (command) {
+  //   // Check if the message is about updating game rooms
+  //   if (data.startsWith("update_gameRooms:")) {
+  //     let gameRoomsJson = data.substring("update_gameRooms:".length);
+  //     updateGameTable(JSON.parse(gameRoomsJson));
+  // }
 
+  switch (command) {
     case "update_players":
       const username = content;
       console.log("Updating player list with data:", content);
@@ -87,6 +98,14 @@ socket.onmessage = function (event) {
       );
       break;
 
+    case "update_gameRooms":
+      console.log("RECIEVED GAMEROOM UPDATE REQUEST [update_gameRooms]")
+      const gameRooms = JSON.parse(content);
+      console.log("Updating game rooms with data:", gameRooms);
+      updateGameTable(gameRooms);
+      break;
+
+      
     case "player_added":
       try {
         const username = content;
@@ -110,6 +129,7 @@ socket.onmessage = function (event) {
       break;
     case "section1":
       showSection("section1");
+      
       console.log("section1");
       break;
     case "section2":
@@ -134,20 +154,21 @@ socket.onmessage = function (event) {
   }
 };
 
-socket.onerror = function(event) {
-    console.error("WebSocket error observed:", event);
-  };
+socket.onerror = function (event) {
+  console.error("WebSocket error observed:", event);
+};
 
-  socket.onclose = function(event) {
-    console.log("WebSocket connection closed", event.code, event.reason);
-  };
+socket.onclose = function (event) {
+  console.log("WebSocket connection closed", event.code, event.reason);
+};
 
 function showSection(sectionId) {
   // Hide all sections
   document.querySelectorAll("div").forEach((div) => {
-    if (div.id !== 'currentUser') { // Check if the id is not 'currentUser'
-        div.classList.add("hidden");
-      }
+    if (div.id !== "currentUser") {
+      // Check if the id is not 'currentUser'
+      div.classList.add("hidden");
+    }
   });
 
   // Show the specified section
