@@ -6,8 +6,10 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
   const username = document.getElementById("username").value;
   connectWebSocket(username);
   updateGameTable([]);
-  showSection("section1");
+  // showSection("After Login : section1");
+  socket.send("section1")
 });
+
 
 function updatePlayerList(playerNamesJSON) {
   const playerNames = JSON.parse(playerNamesJSON);
@@ -116,29 +118,29 @@ socket.onmessage = function (event) {
       }
 
       break;
-    default:
+      default:
       console.log("no such command [update_players]", command);
       break;
-  }
+    }
 
   switch (sectionToShow) {
     case "section0":
       showSection("section0");
       console.log("section0");
-
       break;
     case "section1":
       showSection("section1");
-      
-      console.log("section1");
+      console.log("From the switch case :section1");
       break;
     case "section2":
       showSection("section2");
-      console.log("section2");
+      console.log("From the switch case :section2")
+      // Add any additional logic for section2 button clicks here
       break;
     case "section3":
       showSection("section3");
-      console.log("section3");
+      console.log("From the switch case :section3")
+      // Add any additional logic for section3 button clicks here
       break;
     // if new player added then console.log player and username
     case "player_added":
@@ -149,7 +151,7 @@ socket.onmessage = function (event) {
       console.log("Player not added");
       break;
     default:
-      console.log("No such section exists");
+      console.log("No such section exists", sectionToShow);
       break;
   }
 };
@@ -162,18 +164,17 @@ socket.onclose = function (event) {
   console.log("WebSocket connection closed", event.code, event.reason);
 };
 
-function showSection(sectionId) {
-  // Hide all sections
-  document.querySelectorAll("div").forEach((div) => {
-    if (div.id !== "currentUser") {
-      // Check if the id is not 'currentUser'
-      div.classList.add("hidden");
-    }
-  });
 
-  // Show the specified section
+function showSection(sectionId) {
+  console.log("Showing section:", sectionId); // Debug: Log which section is being shown
+  document.querySelectorAll("div").forEach(div => {
+      div.classList.add('hidden'); // Hide all sections
+  });
   const section = document.getElementById(sectionId);
   if (section) {
-    section.classList.remove("hidden");
+      section.classList.remove('hidden'); // Show the current section
+  } else {
+      console.error("No section found with ID:", sectionId); // Error handling if no section is found
   }
 }
+
