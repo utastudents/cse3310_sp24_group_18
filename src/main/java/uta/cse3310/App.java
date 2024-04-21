@@ -99,6 +99,14 @@ public class App extends WebSocketServer {
         return gameMap;
     }
 
+    public void printAllGamePlayers() {
+        System.out.println("Printing all game players:");
+        for (Game game : gameMap.values()) {
+            System.out.println("Game Lobby: " + game.getLobbyName());
+            game.printPlayers();
+        }
+    }
+
     ////////// GAME ROOMS //////////////
     public synchronized String tryJoinGame(String lobbyName, Player player) {
         Game game = gameMap.get(lobbyName);
@@ -157,6 +165,8 @@ public class App extends WebSocketServer {
             String joinGameResponse = tryJoinGame(lobbyName, player);
             // Handle the join game response, such as updating client state or sending a
             // redirect command
+            System.out.println("[Adding game] Join game response: " + joinGameResponse);
+            printAllGamePlayers();
         }
 
         // socket.send("user_left:" + username); // This will send message to
@@ -230,7 +240,7 @@ public class App extends WebSocketServer {
             System.out.println("On Disconnect : ");;
             broadcastGameRooms();
         }
-        
+
         System.out.println("On Error : ");;
         broadcastGameRooms();
 

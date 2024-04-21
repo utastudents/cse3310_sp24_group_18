@@ -192,11 +192,25 @@ public class Game {
         if (player2 != null) {
             count++;
         }
-        return count+""; // "" is added to convert int to string
+        return count + ""; // "" is added to convert int to string
     }
 
-    
-    
+    // print players in all game
+    public void printPlayers() {
+        // Check if player1 is not null and print the player's name
+        if (player1 != null) {
+            System.out.println("Player 1: " + player1.getUsername());
+        } else {
+            System.out.println("Player 1: [Empty]");
+        }
+
+        // Check if player2 is not null and print the player's name
+        if (player2 != null) {
+            System.out.println("Player 2: " + player2.getUsername());
+        } else {
+            System.out.println("Player 2: [Empty]");
+        }
+    }
 
     // Other methods as needed...
 }
