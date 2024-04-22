@@ -30,17 +30,30 @@ function showGameRoom(roomId, player, opponent) {
   document.getElementById(roomId + "_player").textContent = player;
   document.getElementById(roomId + "_opponent").textContent = opponent;
 }
-
 function sendChatMessage(roomId) {
   const inputElement = document.getElementById(`${roomId}_chat_input`);
   const messageArea = document.getElementById(`${roomId}_chat`);
   const messageText = inputElement.value.trim();
 
   if (messageText) {
+    // Get the current user's username
+    const currentUsername = document.querySelector('.currentUsername').textContent;
+
     // Append message to the message area
     const messageElement = document.createElement('div');
     messageElement.classList.add('message');
-    messageElement.textContent = messageText; // Add the message text
+
+    // Create a span for the username
+    const usernameSpan = document.createElement('span');
+    usernameSpan.textContent = `${currentUsername}: `;
+    usernameSpan.classList.add('username');
+    messageElement.appendChild(usernameSpan);
+
+    // Create a span for the message text
+    const messageSpan = document.createElement('span');
+    messageSpan.textContent = messageText;
+    messageElement.appendChild(messageSpan);
+
     messageArea.appendChild(messageElement);
 
     // Scroll to the bottom of the message area
@@ -53,7 +66,6 @@ function sendChatMessage(roomId) {
     socket.send(`chat:${roomId}:${messageText}`);
   }
 }
-
 
 function displayChatMessage(roomId, messageText) {
   const messageArea = document.getElementById(`${roomId}_chat`);

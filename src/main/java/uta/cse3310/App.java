@@ -185,11 +185,11 @@ public class App extends WebSocketServer {
             // Example format of the message: "chat:Room1:Hello, how are you?"
             String[] parts = message.split(":", 3);
             if(parts.length >= 3) {
-              String roomId = parts[1];
-              String chatMessage = parts[2];
-              broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
+                String roomId = parts[1];
+                String chatMessage = parts[2];
+                broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
             }
-          }
+        }
 
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
@@ -296,15 +296,14 @@ public class App extends WebSocketServer {
     private void broadcastToGameRoom(String roomId, String message) {
         Game game = gameMap.get(roomId);
         if(game != null) {
-          Player[] players = game.getPlayers_chat();
-          for(Player player : players) {
-            if(player != null && player.getWebSocket() != null) {
-              player.getWebSocket().send(message);
+            Player[] players = game.getPlayers_chat();
+            for(Player player : players) {
+                if(player != null && player.getWebSocket() != null) {
+                    player.getWebSocket().send(message);
+                }
             }
-          }
         }
-      }
-    
+    }
 
     public static void main(String[] args) {
         int httpPort = 9080;
