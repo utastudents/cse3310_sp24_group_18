@@ -15,6 +15,7 @@ public class Game {
     private Player player2;
     private boolean isFinished;
     private String lobbyName;
+    private String roomId;
 
     private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
@@ -22,8 +23,9 @@ public class Game {
     private Map<String, Boolean> wordsFound;
     private static Random random = new Random();
 
-    public Game(String lobbyName) {
+    public Game(String lobbyName, String roomId) {
         this.lobbyName = lobbyName;
+        this.roomId = roomId;
         this.player1 = null;
         this.player2 = null;
         this.isFinished = false;
@@ -211,6 +213,20 @@ public class Game {
             System.out.println("Player 2: [Empty]");
         }
     }
+
+    //store the players list, used to redirect to the game page
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<>();
+        if (player1 != null) players.add(player1);
+        if (player2 != null) players.add(player2);
+        return players;
+    }
+
+    public String getGameRoomId() {
+        return roomId;
+    }
+    
+    
 
     // Other methods as needed...
 }

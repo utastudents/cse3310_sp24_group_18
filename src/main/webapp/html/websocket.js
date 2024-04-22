@@ -22,6 +22,13 @@ function updatePlayerList(playerNamesJSON) {
   });
 }
 
+// showGameRoom function to show the game room
+function showGameRoom(roomId, player, opponent) {
+  showSection(roomId); // Shows the appropriate game room
+  document.getElementById(roomId + "_player").textContent = player;
+  document.getElementById(roomId + "_opponent").textContent = opponent;
+}
+
 function updateGameTable(gameRooms) {
   const tbody = document.getElementById("gameTableBody");
   tbody.innerHTML = ""; // Clear existing content
@@ -104,6 +111,13 @@ socket.onmessage = function (event) {
       const gameRooms = JSON.parse(content);
       console.log("Updating game rooms with data:", gameRooms);
       updateGameTable(gameRooms);
+      break;
+
+    case "start_game":
+      const room = data[1];
+      const player = data[2];
+      const opponent = data[3];
+      showGameRoom(room, player, opponent);
       break;
 
     case "player_added":

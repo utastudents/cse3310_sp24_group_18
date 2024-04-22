@@ -89,10 +89,15 @@ public class App extends WebSocketServer {
     // Initialize Games
     private void initializeGameRooms() {
         // Create four game rooms with unique lobby names
-        gameMap.put("Room1", new Game("Room1"));
-        gameMap.put("Room2", new Game("Room2"));
-        gameMap.put("Room3", new Game("Room3"));
-        gameMap.put("Room4", new Game("Room4"));
+        // gameMap.put("Room1", new Game("Room1", "gameroom1"));
+        // gameMap.put("Room2", new Game("Room2","gameroom2"));
+        // gameMap.put("Room3", new Game("Room3","gameroom3"));
+        // gameMap.put("Room4", new Game("Room4","gameroom4"));
+
+         gameMap.put("Room1", new Game("Room1", "gameroom1"));
+        gameMap.put("Room2", new Game("Room2", "gameroom2"));
+        gameMap.put("Room3", new Game("Room3", "gameroom3"));
+        gameMap.put("Room4", new Game("Room4", "gameroom4"));
     }
 
     public Map<String, Game> getGameMap() {
@@ -107,7 +112,7 @@ public class App extends WebSocketServer {
         }
     }
 
-    ////////// GAME ROOMS //////////////
+    //////// GAME ROOMS //////////////
     public synchronized String tryJoinGame(String lobbyName, Player player) {
         Game game = gameMap.get(lobbyName);
         if (game != null && !game.isFull()) {
@@ -116,16 +121,28 @@ public class App extends WebSocketServer {
                 broadcastGameRooms();
                 if (game.isReadyToStart()) {
                     ///// ----------------- GAME START ----------------- /////
-                    player.getWebSocket().send("gameroom1"); // edit this so that two players are redirected to the game
-                    game.startGame();
-                    return "redirect:section2"; // Players are redirected to start the game
+                    List<Player> players = game.getPlayers();  // Get list of players
+                    if (players.size() == 2) { // Ensuring exactly two players are present
+                        String gameRoomId = game.getGameRoomId(); // Get the game room ID dynamically
+                        String startCommand = String.format("start_game:%s:%s:%s", 
+                            gameRoomId, players.get(0).getUsername(), players.get(1).getUsername());
+    
+                        // Send the start game command to both players
+                        players.get(0).getWebSocket().send(startCommand);
+                        players.get(1).getWebSocket().send(startCommand);
+                        
+                        game.startGame();
+                        return "redirect:" + gameRoomId; // Redirect to the specific game room
+                    }
                 }
                 return "wait"; // Player needs to wait for another player to join
             }
         }
         return "full"; // Game is full, or no game exists with the given lobby name
     }
-
+    
+    
+    
 
     private void handleMessage(WebSocket conn, String message) {
 
@@ -167,7 +184,7 @@ public class App extends WebSocketServer {
             String joinGameResponse = tryJoinGame(lobbyName, player);
             // Handle the join game response, such as updating client state or sending a
             // redirect command
-            System.out.println("[Adding game] Join game response: " + joinGameResponse);
+            //System.out.println("[Adding game] Join game response: " + joinGameResponse);
             printAllGamePlayers();
         }
 
