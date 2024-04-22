@@ -31,14 +31,36 @@ function showGameRoom(roomId, player, opponent) {
   document.getElementById(roomId + "_opponent").textContent = opponent;
 }
 
-// CHAT
 function sendChatMessage(roomId) {
-  const input = document.getElementById(`${roomId}_chat_input`);
-  const message = input.value.trim();
-  if(message) {
-    socket.send(`chat:${roomId}:${message}`);
-    input.value = ''; // Clear input field after sending
+  const inputElement = document.getElementById(`${roomId}_chat_input`);
+  const messageArea = document.getElementById(`${roomId}_messages`);
+  const messageText = inputElement.value.trim();
+
+  if (messageText) {
+    // Append message to the message area
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.textContent = messageText; // Add the message text
+    messageArea.appendChild(messageElement);
+
+    // Scroll to the bottom of the message area
+    messageArea.scrollTop = messageArea.scrollHeight;
+
+    // Clear the input field
+    inputElement.value = '';
+
+    // Send the message to the server via WebSocket
+    socket.send(`chat:${roomId}:${messageText}`);
   }
+}
+
+function displayChatMessage(roomId, messageText) {
+  const messageArea = document.getElementById(`${roomId}_messages`);
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message');
+  messageElement.textContent = messageText;
+  messageArea.appendChild(messageElement);
+  messageArea.scrollTop = messageArea.scrollHeight;
 }
 
 
@@ -168,20 +190,13 @@ socket.onmessage = function (event) {
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
 
-  //   // Check if the message is about updating game rooms
-  //   if (data.startsWith("update_gameRooms:")) {
-  //     let gameRoomsJson = data.substring("update_gameRooms:".length);
-  //     updateGameTable(JSON.parse(gameRoomsJson));
-  // }
-
-  if (command === 'chat') {
-    const roomId = data[1];
-    const message = data.slice(2).join(':');
-    const messagesContainer = document.getElementById(`${roomId}_messages`);
-    messagesContainer.innerHTML += `<div>${message}</div>`;
-  }
-
   switch (command) {
+    case 'chat':
+      const roomId = data[1];
+      const messageText = data.slice(2).join(':'); // In case the message contains ':'
+      displayChatMessage(roomId, messageText);
+      break;
+
     case "update_players":
       const username = content;
       console.log("Updating player list with data:", content);

@@ -25,12 +25,13 @@
     border: 1px solid #ddd;
   }
   
+  
   /* Individual message styling */
   .message {
-    padding: 5px;
+    background-color: #f1f1f1;
     border-radius: 5px;
+    padding: 5px;
     margin-bottom: 5px;
-    line-height: 1.4;
   }
   
   /* Username label in message */
@@ -84,4 +85,13 @@
   .exit-chat-btn:hover {
     background-color: #c9302c;
   }
-  
+
+  /* Message area styling */
+.message-area {
+    height: 100px; /* Height of the message area */
+    overflow-y: auto; /* Enables scrolling */
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin-top: 10px;
+  }
