@@ -56,18 +56,17 @@ function sendChatMessage(roomId) {
 
 
 function displayChatMessage(roomId, messageText) {
-  const messageArea = document.getElementById(`${roomId}_chat`); // Corrected reference
+  const messageArea = document.getElementById(`${roomId}_chat`);
   if (messageArea) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('message');
     messageElement.textContent = messageText;
     messageArea.appendChild(messageElement);
-    messageArea.scrollTop = messageArea.scrollHeight;
+    messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom
   } else {
     console.error(`Message area for room ${roomId} not found.`);
   }
 }
-
 
 
 function updateGameTable(gameRooms) {
@@ -338,7 +337,6 @@ function generateGridHTML(gridData) {
   console.log("Generated grid HTML:", gridHtml); // Check the output HTML
   return gridHtml;
 }
-
 function showSection(sectionId) {
   console.log("Showing section:", sectionId); // Debug: Log which section is being shown
   // Hide all sections
@@ -356,13 +354,15 @@ function showSection(sectionId) {
     console.error("No section found with ID:", sectionId);
   }
 
-  // If the section is a game room, also remove the hidden class from its grid and word list
+  // If the section is a game room, also remove the hidden class from its grid, word list, and chat area
   if (sectionId.startsWith("gameroom")) {
     const grid = document.getElementById(sectionId + "_grid");
     const words = document.getElementById(sectionId + "_words");
-    if (grid && words) {
+    const chatArea = document.getElementById(sectionId + "_chat");
+    if (grid && words && chatArea) {
       grid.classList.remove("hidden");
       words.classList.remove("hidden");
+      chatArea.classList.remove("hidden");
     }
   }
 }
