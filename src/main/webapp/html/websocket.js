@@ -156,9 +156,13 @@ socket.onopen = function (event) {
 
 function sendChatMessage(roomId) {
   const input = document.getElementById(roomId + '_chat_input');
-  const message = input.value;
+  const usernameSpan = document.querySelector('.currentUsername'); // Adjust selector as needed
+  const username = usernameSpan.textContent; // Or use .value if it’s an input field
+  const message = input.value.trim();
+
   if (message) {
-      socket.send(`chat:${roomId}:${message}`);
+      const fullMessage = username + ": " + message; // Combine username with message
+      socket.send(`chat:${roomId}:${fullMessage}`);
       input.value = '';  // Clear the input after sending
   }
 }
