@@ -1,5 +1,6 @@
 package uta.cse3310;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,16 +96,15 @@ public class App extends WebSocketServer {
         // gameMap.put("Room4", new Game("Room4","gameroom4"));
 
         // 5 concurrent games
-        gameMap.put("Room1", new Game("Room1", "gameroom1"));
-        gameMap.put("Room2", new Game("Room2", "gameroom2"));
-        gameMap.put("Room3", new Game("Room3", "gameroom3"));
-        gameMap.put("Room4", new Game("Room4", "gameroom4"));
-        gameMap.put("Room4", new Game("Room5", "gameroom5"));
+        gameMap.put("gameroom1", new Game("Room1", "gameroom1"));
+        gameMap.put("gameroom2", new Game("Room2", "gameroom2"));
+        gameMap.put("gameroom3", new Game("Room3", "gameroom3"));
+        gameMap.put("gameroom4", new Game("Room4", "gameroom4"));
+        gameMap.put("gameroom5", new Game("Room5", "gameroom5"));
+        System.out.println("Game rooms initialized.");
+
     }
 
-    public Map<String, Game> getGameMap() {
-        return gameMap;
-    }
 
     public void printAllGamePlayers() {
         System.out.println("Printing all game players:");
@@ -180,17 +180,17 @@ public class App extends WebSocketServer {
             }
         }
          
-        // Handle the chat message
-        else if (message.startsWith("chat:")) {
-            // Example format of the message: "chat:Room1:Hello, how are you?"
-            String[] parts = message.split(":", 3);
-            if(parts.length >= 3) {
-                String roomId = parts[1];
-                String chatMessage = parts[2];
-                broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
-            }
-        }
-
+        // // Handle the chat message
+        // else if (message.startsWith("chat:")) {
+        //     // Example format of the message: "chat:Room1:Hello, how are you?"
+        //     String[] parts = message.split(":", 3);
+        //     if (parts.length >= 3) {
+        //         String roomId = parts[1];
+        //         String chatMessage = parts[2];
+        //         System.out.println(" [DEBUG0] Broadcasting message to game room: " + roomId);
+        //         broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
+        //     }
+        // }
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
             String username = message.substring("new_player:".length());
@@ -227,9 +227,44 @@ public class App extends WebSocketServer {
                 .println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 
+    private void broadcastChatMessage(String roomID, String message) {
+        Game game = findGameByRoomID(roomID);
+        if (game != null) {
+            // Retrieve the players from the game room
+            Player[] players = game.getPlayers_chat();  // Assuming you have a method to retrieve players
+            for (Player player : players) {
+                if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
+                    player.getWebSocket().send("chat_update:" + roomID + ":" + message);
+                }
+            }
+        } else {
+            System.err.println("Game with room ID '" + roomID + "' not found.");
+        }
+    }
+
+    private Game findGameByRoomID(String roomID) {
+        return gameMap.get(roomID);
+    }
+    
+
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println("Message from WebSocket client: " + message);
+        System.out.println("[broadcastChatMessage]Message from WebSocket client: " + message);
+        if (message.startsWith("chat:")) {
+            String[] parts = message.split(":", 3); // Split to get roomID and chat message
+            String roomID = parts[1];
+            String chatMessage = parts[2];
+    
+            Game game = findGameByRoomID(roomID);
+            if (game != null) {
+                game.getChat().addMessage(chatMessage); // Add message to the game's chat
+                broadcastChatMessage(roomID, chatMessage); // Send the message to all clients in the room
+            }
+            else{
+                System.err.println("Game with room ID '" + roomID + "' not found.");
+            
+            }
+        }
         handleMessage(conn, message);
         conn.send(message); // This will send message to websocket.js socket.onmessage and it will show
                             // screen accordingly
@@ -292,19 +327,7 @@ public class App extends WebSocketServer {
     }
 
 
-    // ----------- CHAT FUNCTIONALITY ------------
-    private void broadcastToGameRoom(String roomId, String message) {
-        Game game = gameMap.get(roomId);
-        if(game != null) {
-            Player[] players = game.getPlayers_chat();
-            for(Player player : players) {
-                if(player != null && player.getWebSocket() != null) {
-                    player.getWebSocket().send(message);
-                }
-            }
-        }
-    }
-
+    
     public static void main(String[] args) {
         int httpPort = 9080;
         String httpPortEnv = System.getenv("HTTP_PORT");

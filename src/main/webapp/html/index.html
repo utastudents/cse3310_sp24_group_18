@@ -109,7 +109,7 @@
       <button id="Section3_gameroom5_enter_bttn">Enter Gameroom 4</button>
     </div>
 
-    
+    <!--GAME ROOM 1-->
     <div id="gameroom1" class="hidden game-room">
       <h1>Game Room 1</h1>
       <p>Player1: <span id="gameroom1_player"></span></p>
@@ -118,8 +118,7 @@
       <div id="gameroom1_grid" class="grid-container">
         <!-- The game grid will go here -->
       </div>
-      <button id="sendSelection" class="send-selection-btn">Send Selection</button>
-    
+
       <ul id="gameroom1_words" class="word-list">
         <!-- Found words will go here -->
       </ul>
@@ -140,7 +139,7 @@
       <button id="gameroom1_exit_bttn" class="exit-game-btn">Exit Game</button>
     </div>
 
-    
+    <!--GAME ROOM 2-->
     <div id="gameroom2" class="hidden">
       <h1>Game Room 2</h1>
       <p>Player1: <span id="gameroom2_player"></span></p>
@@ -150,8 +149,28 @@
       <button id="sendSelection">Send Selection</button>
 
       <ul id="gameroom2_words"></ul>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <span>Welcome, <span class="username">[Username]</span></span>
+          <button class="exit-chat-btn">Exit Chat</button>
+        </div>
+        <div id="gameroom2_chat" class="message-area">
+          <!-- Chat messages will appear here -->
+        </div>
+        <input type="text" id="gameroom2_chat_input" class="chat-input" placeholder="Type a message..." />
+        <button id="gameroom2_send_msg" class="send-btn" onclick="sendChatMessage('gameroom2')">Send</button>
+      </div>
+    
+      <button id="gameroom1_exit_bttn" class="exit-game-btn">Exit Game</button>
+    </div>
+
+
       <button id="gameroom2_exit_bttn">Exit Game</button>
     </div>
+
+
+    <!--GAME ROOM 3-->
     <div id="gameroom3" class="hidden">
       <h1>Game Room 3</h1>
       <p>Player1: <span id="gameroom3_player"></span></p>
@@ -161,6 +180,20 @@
       <button id="sendSelection">Send Selection</button>
 
       <ul id="gameroom3_words"></ul>
+
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <span>Welcome, <span class="username">[Username]</span></span>
+          <button class="exit-chat-btn">Exit Chat</button>
+        </div>
+        <div id="gameroom3_chat" class="message-area">
+          <!-- Chat messages will appear here -->
+        </div>
+        <input type="text" id="gameroom3_chat_input" class="chat-input" placeholder="Type a message..." />
+        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom3')">Send</button>
+      </div>
+
       <button id="gameroom3_exit_bttn">Exit Game</button>
     </div>
     <div id="gameroom4" class="hidden">
@@ -172,8 +205,22 @@
       <button id="sendSelection">Send Selection</button>
 
       <ul id="gameroom4_words"></ul>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <span>Welcome, <span class="username">[Username]</span></span>
+          <button class="exit-chat-btn">Exit Chat</button>
+        </div>
+        <div id="gameroom4_chat" class="message-area">
+          <!-- Chat messages will appear here -->
+        </div>
+        <input type="text" id="gameroom4_chat_input" class="chat-input" placeholder="Type a message..." />
+        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom4')">Send</button>
+      </div>
       <button id="gameroom4_exit_bttn">Exit Game</button>
     </div>
+
+    <!--GAME ROOM 5-->
 
     <div id="gameroom5" class="hidden">
       <h1>Game Room 4</h1>
@@ -184,6 +231,18 @@
       <button id="sendSelection">Send Selection</button>
 
       <ul id="gameroom5_words"></ul>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <span>Welcome, <span class="username">[Username]</span></span>
+          <button class="exit-chat-btn">Exit Chat</button>
+        </div>
+        <div id="gameroom5_chat" class="message-area">
+          <!-- Chat messages will appear here -->
+        </div>
+        <input type="text" id="gameroom5_chat_input" class="chat-input" placeholder="Type a message..." />
+        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom5')">Send</button>
+      </div>
       <button id="gameroom5_exit_bttn">Exit Game</button>
     </div>
 

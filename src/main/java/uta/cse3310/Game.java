@@ -20,6 +20,8 @@ public class Game {
     private boolean isFinished;
     private String lobbyName;
     private String roomId;
+    private Chat chat;
+
 
     private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
@@ -41,8 +43,23 @@ public class Game {
         placeWords();
         System.out.println("Grid for [game: " + lobbyName + " room: " + roomId);
         printGrid();
+        this.chat = new Chat(); // Initialize a new Chat object for this game
 
     }
+
+    // CHAT
+    public void addChatMessage(String message) {
+        this.chat.addMessage(message);
+    }
+
+    public List<String> getChatMessages() {
+        return this.chat.getMessages();
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
 
     public void sendGameDetails(WebSocket conn) {
         Gson gson = new Gson();
@@ -213,6 +230,10 @@ public class Game {
 
     public String getLobbyName() {
         return lobbyName;
+    }
+
+    public String roomID() {
+        return roomId;
     }
 
     public void startGame() {

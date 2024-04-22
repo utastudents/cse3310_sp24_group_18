@@ -26,64 +26,12 @@ function updatePlayerList(playerNamesJSON) {
 
 // showGameRoom function to show the game room
 function showGameRoom(roomId, player, opponent) {
-  showSection(roomId); // Shows the appropriate game room
   document.getElementById(roomId + "_player").textContent = player;
   document.getElementById(roomId + "_opponent").textContent = opponent;
-}
-function sendChatMessage(roomId) {
-  const inputElement = document.getElementById(`${roomId}_chat_input`);
-  const messageArea = document.getElementById(`${roomId}_chat`);
-  const messageText = inputElement.value.trim();
+  showSection(roomId); // Shows the appropriate game room
 
-  if (messageText) {
-    // Get the current user's username
-    const currentUsername = document.querySelector('.currentUsername').textContent;
-
-    // Append message to the message area
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message');
-
-    // Create a span for the username
-    const usernameSpan = document.createElement('span');
-    usernameSpan.textContent = `${currentUsername}: `;
-    usernameSpan.classList.add('username');
-    messageElement.appendChild(usernameSpan);
-
-    // Create a span for the message text
-    const messageSpan = document.createElement('span');
-    messageSpan.textContent = messageText;
-    messageElement.appendChild(messageSpan);
-
-    messageArea.appendChild(messageElement);
-
-    // Scroll to the bottom of the message area
-    messageArea.scrollTop = messageArea.scrollHeight;
-
-    // Clear the input field
-    inputElement.value = '';
-
-    // Send the message to the server via WebSocket
-    socket.send(`chat:${roomId}:${messageText}`);
-  }
 }
 
-function displayChatMessage(roomId, messageText) {
-  const messageArea = document.getElementById(`${roomId}_chat`);
-  if (messageArea) {
-    const existingMessageDiv = messageArea.lastElementChild;
-    if (existingMessageDiv && existingMessageDiv.classList.contains('message')) {
-      existingMessageDiv.textContent += ' ' + messageText;
-    } else {
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('message');
-      messageElement.textContent = messageText;
-      messageArea.appendChild(messageElement);
-    }
-    messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom
-  } else {
-    console.error(`Message area for room ${roomId} not found.`);
-  }
-}
 
 
 function updateGameTable(gameRooms) {
@@ -202,6 +150,39 @@ socket.onopen = function (event) {
   console.log("WebSocket connection established");
 };
 
+
+
+// CHAT
+
+function sendChatMessage(roomId) {
+  const input = document.getElementById(roomId + '_chat_input');
+  const message = input.value;
+  if (message) {
+      socket.send(`chat:${roomId}:${message}`);
+      input.value = '';  // Clear the input after sending
+  }
+}
+
+function updateChat(roomId, message) {
+  const chatBox = document.getElementById(roomId + '_chat');
+  const messageDiv = document.createElement('div');
+  messageDiv.textContent = message;
+  chatBox.appendChild(messageDiv);
+}
+
+
+function appendChatMessage(roomId, message) {
+  const chatBox = document.getElementById(roomId + '_chat');
+  if (chatBox) {
+      const messageDiv = document.createElement('div');
+      messageDiv.textContent = message; // Set the message text
+      chatBox.appendChild(messageDiv); // Append the new div to the chat box
+  } else {
+      console.error("Chat box not found for room:", roomId);
+  }
+}
+
+
 socket.onmessage = function (event) {
   const sectionToShow = event.data;
   // Use a switch case to determine which section to show
@@ -212,11 +193,16 @@ socket.onmessage = function (event) {
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
 
+  
+
   switch (command) {
-    case 'chat':
-      const roomId = data[1];
-      const messageText = data.slice(2).join(':'); // In case the message contains ':'
-      displayChatMessage(roomId, messageText);
+
+    case "chat_update":
+      if (data.length >= 3) {
+        const roomId = data[1];
+        const message = data.slice(2).join(":");
+        appendChatMessage(roomId, message);
+      }
       break;
 
     case "update_players":
@@ -247,6 +233,16 @@ socket.onmessage = function (event) {
         updateGrid(roomId, gridData);
       }
       break;
+
+      case "chat_update":
+        if (data.length >= 3) {
+            const roomId = data[1];
+            const message = data[2];
+            const chatBox = document.getElementById(roomId + '_chat');
+            chatBox.innerHTML += '<div>' + message + '</div>'; // Append new message
+        }
+        break;
+
     case "update_words":
       if (data.length >= 3) {
         const roomId = data[1];
