@@ -126,11 +126,16 @@ public class App extends WebSocketServer {
                         String gameRoomId = game.getGameRoomId(); // Get the game room ID dynamically
                         String startCommand = String.format("start_game:%s:%s:%s", 
                             gameRoomId, players.get(0).getUsername(), players.get(1).getUsername());
-    
+                        
+                            // Send game details such as the grid and words to both players
+                        game.sendGameDetails(players.get(0).getWebSocket());
+                        game.sendGameDetails(players.get(1).getWebSocket());
+
                         // Send the start game command to both players
                         players.get(0).getWebSocket().send(startCommand);
                         players.get(1).getWebSocket().send(startCommand);
                         
+                    
                         game.startGame();
                         return "redirect:" + gameRoomId; // Redirect to the specific game room
                     }
@@ -140,7 +145,7 @@ public class App extends WebSocketServer {
         }
         return "full"; // Game is full, or no game exists with the given lobby name
     }
-    
+        
     
     
 

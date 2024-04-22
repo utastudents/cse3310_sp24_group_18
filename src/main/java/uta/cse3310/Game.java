@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.java_websocket.WebSocket;
+
+import com.google.gson.Gson;
+
 public class Game {
     private Player player1;
     private Player player2;
@@ -31,8 +35,36 @@ public class Game {
         this.isFinished = false;
         this.grid = new char[GRID_SIZE][GRID_SIZE];
         this.wordsFound = new HashMap<>();
-        System.out.println("Creating game with lobby name: " + lobbyName);
+        loadWords(); // Load words specific to this game instance
+        System.out.println("Creating game with lobby name: " + lobbyName + " and room id: " + roomId);
+        initializeGrid();
+        placeWords();
+        System.out.println("Grid for [game: " + lobbyName + " room: " + roomId);
+        printGrid();
 
+    }
+
+    public void sendGameDetails(WebSocket conn) {
+        Gson gson = new Gson();
+        String gridJson = getGridAsJson(); // Get JSON representation of the game grid
+        List<String> placedWords = new ArrayList<>(wordsFound.keySet()); // Get list of placed words
+        String wordsJson = gson.toJson(placedWords); // Convert placed words list to JSON
+
+        System.out.println("Sending game details to client: " + conn.getRemoteSocketAddress());
+        try {
+            conn.send("update_grid:" + this.roomId + ":" + gridJson);
+            System.out.println("Sent!");
+        } catch (Exception e) {
+            System.out.println("Error sending grid to client: " + e.getMessage());
+        }
+
+        System.out.println("Sending words to client: " + conn.getRemoteSocketAddress());
+        try{
+            conn.send("update_words:" + this.roomId + ":" + wordsJson);
+            System.out.println("Sent!");
+        } catch (Exception e) {
+            System.out.println("Error sending words to client: " + e.getMessage());
+        }
     }
 
     private void initializeGrid() {
@@ -95,9 +127,10 @@ public class Game {
     }
 
     // Loads the words from a text file into the allWords list
-    private static void loadWords() {
+    public void loadWords() {
         try {
             allWords = Files.readAllLines(Paths.get("words.txt"));
+            System.out.println("Words loaded successfully");
         } catch (IOException e) {
             System.err.println("Error loading words: " + e.getMessage());
         }
@@ -214,19 +247,19 @@ public class Game {
         }
     }
 
-    //store the players list, used to redirect to the game page
+    // store the players list, used to redirect to the game page
     public List<Player> getPlayers() {
         List<Player> players = new ArrayList<>();
-        if (player1 != null) players.add(player1);
-        if (player2 != null) players.add(player2);
+        if (player1 != null)
+            players.add(player1);
+        if (player2 != null)
+            players.add(player2);
         return players;
     }
 
     public String getGameRoomId() {
         return roomId;
     }
-    
-    
 
     // Other methods as needed...
 }

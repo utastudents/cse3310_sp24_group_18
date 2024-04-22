@@ -52,6 +52,26 @@ function updateGameTable(gameRooms) {
   });
 }
 
+function updateGrid(roomId, gridData) {
+  const gridHtml = generateGridHTML(gridData);
+  const gridElement = document.getElementById(roomId + "_grid");
+  if (gridElement) {
+    gridElement.innerHTML = gridHtml;
+  } else {
+    console.error("No grid element found for room ID:", roomId);
+  }
+}
+
+function updateWords(roomId, words) {
+  const wordsListHtml = words.map(word => `<li>${word}</li>`).join("");
+  const wordsElement = document.getElementById(`${roomId}_words`);
+  if (wordsElement) {
+      wordsElement.innerHTML = wordsListHtml;
+  } else {
+      console.error("No words element found for room ID:", roomId);
+  }
+}
+
 function updateLoggedInUser(username) {
   // Query all elements that could contain the username and update them.
   document.querySelectorAll(".currentUsername").forEach(function (span) {
@@ -111,6 +131,21 @@ socket.onmessage = function (event) {
       const gameRooms = JSON.parse(content);
       console.log("Updating game rooms with data:", gameRooms);
       updateGameTable(gameRooms);
+      break;
+
+    case "update_grid":
+      if (data.length >= 3) {
+        const roomId = data[1];
+        const gridData = JSON.parse(data.slice(2).join(":")); // Joining back the rest of the message
+        updateGrid(roomId, gridData);
+      }
+      break;
+    case "update_words":
+      if (data.length >= 3) {
+        const roomId = data[1];
+        const words = JSON.parse(data.slice(2).join(":")); // Joining back the rest of the message
+        updateWords(roomId, words);
+      }
       break;
 
     case "start_game":
@@ -199,6 +234,15 @@ socket.onerror = function (event) {
 socket.onclose = function (event) {
   console.log("WebSocket connection closed", event.code, event.reason);
 };
+
+function generateGridHTML(gridData) {
+  console.log("Received grid data:", gridData); // Log to check the data
+  const gridHtml = gridData
+    .map((row) => `<div>${row.join(" ")}</div>`)
+    .join("");
+  console.log("Generated grid HTML:", gridHtml); // Check the output HTML
+  return gridHtml;
+}
 
 function showSection(sectionId) {
   console.log("Showing section:", sectionId); // Debug: Log which section is being shown
