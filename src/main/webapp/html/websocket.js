@@ -1,6 +1,5 @@
 const socket = new WebSocket("ws://localhost:9180");
 // grid
-document.getElementById('sendSelection').addEventListener('click', sendSelectedCells);
 document.getElementById("loginForm").addEventListener("submit", (event) => {
   event.preventDefault(); // Prevent form submission
 
@@ -57,65 +56,15 @@ function updateGameTable(gameRooms) {
   });
 }
 
-// GRID///
+// function toggleGridVisibility(roomId) {
+//   const gridElement = document.getElementById(`${roomId}_grid`);
+//   if (gridElement) {
+//     gridElement.classList.toggle("hidden");
+//   } else {
+//     console.error("No grid element found for room ID:", roomId);
+//   }
+// }
 
-let selectedCells = [];
-
-function generateGridHTML(grid) {
-  // Create grid HTML with clickable cells
-  return grid.map((row, rowIndex) =>
-    `<div class="grid-row">${row
-      .map((cell, cellIndex) => 
-        `<span class="grid-cell" data-row="${rowIndex}" data-cell="${cellIndex}" onclick="cellClickHandler(this)">${cell}</span>`)
-      .join('')}</div>`
-  ).join('');
-}
-
-function toggleGridVisibility(roomId) {
-  const gridElement = document.getElementById(`${roomId}_grid`);
-  if (gridElement) {
-    gridElement.classList.toggle("hidden");
-  } else {
-    console.error("No grid element found for room ID:", roomId);
-  }
-}
-
-function toggleCellSelection(cellElement, cellValue) {
-  const rowIndex = cellElement.dataset.row;
-  const cellIndex = cellElement.dataset.cell;
-  const cellKey = `${rowIndex}-${cellIndex}`;
-
-  if (selectedCells.includes(cellKey)) {
-    selectedCells = selectedCells.filter((cell) => cell !== cellKey);
-    cellElement.classList.remove('selected');
-  } else {
-    selectedCells.push(cellKey);
-    cellElement.classList.add('selected');
-  }
-}
-
-function cellClickHandler(cell) {
-  // Toggle selected class on click
-  cell.classList.toggle('selected');
-}
-
-
-// Function to send selected cells as a string
-function sendSelectedCells() {
-  const selectedCells = document.querySelectorAll('.grid-cell.selected');
-  const selectedText = Array.from(selectedCells).map(cell => cell.textContent).join('');
-  console.log(selectedText);
-}
-function updateGrid(roomId, gridData) {
-  const gridHtml = generateGridHTML(gridData);
-  const gridElement = document.getElementById(`${roomId}_grid`);
-  if (gridElement) {
-    gridElement.innerHTML = gridHtml;
-    gridElement.classList.remove("hidden"); // Make the grid visible
-  } else {
-    console.error("No grid element found for room ID:", roomId);
-  }
-}
 
 function updateWords(roomId, words) {
   const wordsListHtml = words.map((word) => `<li>${word}</li>`).join("");
@@ -230,13 +179,6 @@ socket.onmessage = function (event) {
       updateGameTable(gameRooms);
       break;
 
-    case "update_grid":
-      if (data.length >= 3) {
-        const roomId = data[1];
-        const gridData = JSON.parse(data.slice(2).join(":")); // Joining back the rest of the message
-        updateGrid(roomId, gridData);
-      }
-      break;
 
       case "chat_update":
         if (data.length >= 3) {
@@ -346,14 +288,7 @@ socket.onclose = function (event) {
   console.log("WebSocket connection closed", event.code, event.reason);
 };
 
-function generateGridHTML(gridData) {
-  console.log("Received grid data:", gridData); // Log to check the data
-  const gridHtml = gridData
-    .map((row) => `<div>${row.join(" ")}</div>`)
-    .join("");
-  console.log("Generated grid HTML:", gridHtml); // Check the output HTML
-  return gridHtml;
-}
+
 function showSection(sectionId) {
   console.log("Showing section:", sectionId); // Debug: Log which section is being shown
   // Hide all sections

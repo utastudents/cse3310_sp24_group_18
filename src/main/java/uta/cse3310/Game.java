@@ -63,13 +63,13 @@ public class Game {
 
     public void sendGameDetails(WebSocket conn) {
         Gson gson = new Gson();
-        String gridJson = getGridAsJson(); // Get JSON representation of the game grid
+        //String gridJson = getGridAsJson(); // Get JSON representation of the game grid
         List<String> placedWords = new ArrayList<>(wordsFound.keySet()); // Get list of placed words
         String wordsJson = gson.toJson(placedWords); // Convert placed words list to JSON
 
         System.out.println("Sending game details to client: " + conn.getRemoteSocketAddress());
         try {
-            conn.send("update_grid:" + this.roomId + ":" + gridJson);
+            //conn.send("update_grid:" + this.roomId + ":" + gridJson);
             System.out.println("Sent!");
         } catch (Exception e) {
             System.out.println("Error sending grid to client: " + e.getMessage());
@@ -154,25 +154,25 @@ public class Game {
     }
 
     // Converts the grid to a JSON string format
-    public String getGridAsJson() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (int i = 0; i < GRID_SIZE; i++) {
-            sb.append("[");
-            for (int j = 0; j < GRID_SIZE; j++) {
-                sb.append("\"").append(grid[i][j]).append("\"");
-                if (j < GRID_SIZE - 1) {
-                    sb.append(",");
-                }
-            }
-            sb.append("]");
-            if (i < GRID_SIZE - 1) {
-                sb.append(",");
-            }
-        }
-        sb.append("]");
-        return sb.toString();
-    }
+    // public String getGridAsJson() {
+    //     StringBuilder sb = new StringBuilder();
+    //     sb.append("[");
+    //     for (int i = 0; i < GRID_SIZE; i++) {
+    //         sb.append("[");
+    //         for (int j = 0; j < GRID_SIZE; j++) {
+    //             sb.append("\"").append(grid[i][j]).append("\"");
+    //             if (j < GRID_SIZE - 1) {
+    //                 sb.append(",");
+    //             }
+    //         }
+    //         sb.append("]");
+    //         if (i < GRID_SIZE - 1) {
+    //             sb.append(",");
+    //         }
+    //     }
+    //     sb.append("]");
+    //     return sb.toString();
+    // }
 
     // Prints the words that were successfully placed in the grid
     public void printWords() {
