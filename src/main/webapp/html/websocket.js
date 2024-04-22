@@ -33,7 +33,7 @@ function showGameRoom(roomId, player, opponent) {
 
 function sendChatMessage(roomId) {
   const inputElement = document.getElementById(`${roomId}_chat_input`);
-  const messageArea = document.getElementById(`${roomId}_messages`);
+  const messageArea = document.getElementById(`${roomId}_chat`);
   const messageText = inputElement.value.trim();
 
   if (messageText) {
@@ -54,14 +54,20 @@ function sendChatMessage(roomId) {
   }
 }
 
+
 function displayChatMessage(roomId, messageText) {
-  const messageArea = document.getElementById(`${roomId}_messages`);
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message');
-  messageElement.textContent = messageText;
-  messageArea.appendChild(messageElement);
-  messageArea.scrollTop = messageArea.scrollHeight;
+  const messageArea = document.getElementById(`${roomId}_chat`); // Corrected reference
+  if (messageArea) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.textContent = messageText;
+    messageArea.appendChild(messageElement);
+    messageArea.scrollTop = messageArea.scrollHeight;
+  } else {
+    console.error(`Message area for room ${roomId} not found.`);
+  }
 }
+
 
 
 function updateGameTable(gameRooms) {

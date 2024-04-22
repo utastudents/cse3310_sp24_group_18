@@ -109,37 +109,37 @@
       <button id="Section3_gameroom5_enter_bttn">Enter Gameroom 4</button>
     </div>
 
-    <div id="gameroom1" class="hidden">
+    <div id="gameroom1" class="hidden game-room">
       <h1>Game Room 1</h1>
-      <p>Player1 : <span id="gameroom1_player"></span></p>
+      <p>Player1: <span id="gameroom1_player"></span></p>
       <p>Player2: <span id="gameroom1_opponent"></span></p>
-
-      <div id="gameroom1_grid"></div>
-      <button id="sendSelection">Send Selection</button>
-
-      <ul id="gameroom1_words"></ul>
-
-      <!--chat feature-->
-      <div class="chat-header">
-        <span>Welcome, <span class="username">[Username]</span></span>
-        <button class="exit-chat-btn">Exit Chat</button>
+    
+      <div id="gameroom1_grid" class="grid-container">
+        <!-- The game grid will go here -->
       </div>
-      <div id="gameroom1_messages" class="message-area">
-        <!-- Messages will go here -->
+      <button id="sendSelection" class="send-selection-btn">Send Selection</button>
+    
+      <ul id="gameroom1_words" class="word-list">
+        <!-- Found words will go here -->
+      </ul>
+    
+      <!-- Chat feature -->
+      <div class="chat-container">
+        <div class="chat-header">
+          <span>Welcome, <span class="username">[Username]</span></span>
+          <button class="exit-chat-btn">Exit Chat</button>
+        </div>
+        <div id="gameroom1_chat" class="message-area">
+          <!-- Chat messages will appear here -->
+        </div>
+        <input type="text" id="gameroom1_chat_input" class="chat-input" placeholder="Type a message..." />
+        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom1')">Send</button>
       </div>
-      <input
-        type="text"
-        id="gameroom1_chat_input"
-        class="chat-input"
-        placeholder="Type a message..."
-      />
-
-      <button class="send-btn" onclick="sendChatMessage('gameroom1')">
-        Send
-      </button>
-
-      <button id="gameroom1_exit_bttn">Exit Game</button>
+    
+      <button id="gameroom1_exit_bttn" class="exit-game-btn">Exit Game</button>
     </div>
+
+    
     <div id="gameroom2" class="hidden">
       <h1>Game Room 2</h1>
       <p>Player1: <span id="gameroom2_player"></span></p>

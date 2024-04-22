@@ -6,13 +6,13 @@
     margin: 0 auto;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: relative; /* For absolute positioning of children */
   }
   
   /* Header for the chat with welcome message */
   .chat-header {
     padding: 5px;
     border-bottom: 1px solid #ddd;
-    text-align: center;
     background: #e9e9e9;
   }
   
@@ -23,6 +23,9 @@
     padding: 5px;
     background: #fff;
     border: 1px solid #ddd;
+  }
+  .game-room {
+    margin-bottom: 20px;
   }
   
   
@@ -35,7 +38,11 @@
   }
   
   /* Username label in message */
-  .message .username {
+  .message{
+    font-weight: bold;
+  }
+
+  .username {
     font-weight: bold;
   }
   
@@ -47,39 +54,59 @@
   
   /* Input field styling */
   .chat-input {
-    width: calc(100% - 20px); /* Adjust width considering padding */
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
     margin-top: 10px;
     box-sizing: border-box;
   }
   
   /* Send button styling */
   .send-btn {
-    background-color: #f90;
+    width: 100%;
+    padding: 10px;
+    background-color: #5cb85c;
     color: white;
     border: none;
-    padding: 10px 15px;
-    font-weight: bold;
-    border-radius: 5px;
+    margin-top: 10px;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
+
+  .send-selection-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
   
   .send-btn:hover {
     background-color: #e80;
   }
-  
-  /* Exit chat button styling */
-  .exit-chat-btn {
+  .exit-game-btn {
+    width: 100%;
+    padding: 10px;
     background-color: #d9534f;
     color: white;
     border: none;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  
+  
+  /* Exit chat button styling */
+  .exit-chat-btn {
     padding: 5px 10px;
-    float: right;
-    margin: 5px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    position: absolute; /* Positioning relative to the chat-container */
+    right: 10px;
+    top: 5px;
   }
   
   .exit-chat-btn:hover {
@@ -87,11 +114,11 @@
   }
 
   /* Message area styling */
-.message-area {
-    height: 100px; /* Height of the message area */
-    overflow-y: auto; /* Enables scrolling */
-    background: #fff;
-    border: 1px solid #ddd;
+  .message-area {
+    height: 200px; /* Fixed height for scrollable area */
+    overflow-y: auto; /* Enable scrolling */
     padding: 5px;
     margin-top: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
   }
