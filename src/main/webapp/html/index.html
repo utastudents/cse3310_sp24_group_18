@@ -68,6 +68,8 @@
       <button id="Section1_gameroom2_enter_bttn">Enter Gameroom 2</button>
       <button id="Section1_gameroom3_enter_bttn">Enter Gameroom 3</button>
       <button id="Section1_gameroom4_enter_bttn">Enter Gameroom 4</button>
+      <button id="Section1_gameroom5_enter_bttn">Enter Gameroom 4</button>
+
     </div>
 
     <div id="section2" class="hidden">
@@ -86,6 +88,7 @@
       <button id="Section2_gameroom2_enter_bttn">Enter Gameroom 2</button>
       <button id="Section2_gameroom3_enter_bttn">Enter Gameroom 3</button>
       <button id="Section2_gameroom4_enter_bttn">Enter Gameroom 4</button>
+      <button id="Section2_gameroom5_enter_bttn">Enter Gameroom 4</button>
     </div>
 
     <div id="section3" class="hidden">
@@ -103,6 +106,8 @@
       <button id="Section3_gameroom2_enter_bttn">Enter Gameroom 2</button>
       <button id="Section3_gameroom3_enter_bttn">Enter Gameroom 3</button>
       <button id="Section3_gameroom4_enter_bttn">Enter Gameroom 4</button>
+      <button id="Section3_gameroom5_enter_bttn">Enter Gameroom 4</button>
+
     </div>
 
     <div id="gameroom1" class="hidden">
@@ -114,6 +119,17 @@
       <button id="sendSelection">Send Selection</button>
 
       <ul id="gameroom1_words"></ul>
+
+      <!--chat feature-->
+      <div class="chat-header">
+        <span>Welcome, <span class="username">[Username]</span></span>
+        <button class="exit-chat-btn">Exit Chat</button>
+      </div>
+      <div id="gameroom1_messages" class="message-area">
+        <!-- Messages will go here -->
+      </div>
+      <input type="text" id="gameroom1_chat_input" class="chat-input" placeholder="Type a message...">
+      <button class="send-btn" onclick="sendChatMessage('gameroom1')">Send</button>
 
       <button id="gameroom1_exit_bttn">Exit Game</button>
     </div>
@@ -149,6 +165,18 @@
 
     <ul id="gameroom4_words"></ul>
       <button id="gameroom4_exit_bttn">Exit Game</button>
+    </div>
+
+    <div id="gameroom5" class="hidden">
+      <h1>Game Room 4</h1>
+      <p>Player1: <span id="gameroom5_player"></span></p>
+      <p>Player2: <span id="gameroom5_opponent"></span></p>
+
+      <div id="gameroom5_grid"></div>
+      <button id="sendSelection">Send Selection</button>
+
+    <ul id="gameroom5_words"></ul>
+      <button id="gameroom5_exit_bttn">Exit Game</button>
     </div>
 
     <script src="websocket.js"></script>

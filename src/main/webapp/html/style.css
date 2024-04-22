@@ -1,21 +1,87 @@
-.grid-container {
-    display: inline-block; /* or flex */
-    border: 1px solid #000;
-  }
-  
-  .grid-row {
-    display: flex;
-  }
-  
-  .grid-cell {
-    width: 20px; /* Adjust the size as needed */
-    height: 20px; /* Adjust the size as needed */
+/* Chat container styling */
+.chat-container {
     border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    width: 300px; /* Adjust as needed */
+    margin: 0 auto;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  /* Header for the chat with welcome message */
+  .chat-header {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
     text-align: center;
-    vertical-align: middle;
-    line-height: 20px; /* Same as height for vertical centering */
+    background: #e9e9e9;
+  }
+  
+  /* Message area styling */
+  #gameroom_messages {
+    height: 200px; /* Adjust as needed */
+    overflow-y: auto;
+    padding: 5px;
+    background: #fff;
+    border: 1px solid #ddd;
+  }
+  
+  /* Individual message styling */
+  .message {
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    line-height: 1.4;
+  }
+  
+  /* Username label in message */
+  .message .username {
+    font-weight: bold;
+  }
+  
+  /* Timestamp styling */
+  .message .timestamp {
+    font-size: 0.8em;
+    color: #666;
+  }
+  
+  /* Input field styling */
+  .chat-input {
+    width: calc(100% - 20px); /* Adjust width considering padding */
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Send button styling */
+  .send-btn {
+    background-color: #f90;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .send-btn:hover {
+    background-color: #e80;
+  }
+  
+  /* Exit chat button styling */
+  .exit-chat-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    float: right;
+    margin: 5px;
+    border-radius: 5px;
     cursor: pointer;
   }
-  .selected {
-    background-color: yellow; /* Highlight color */
-  }  
+  
+  .exit-chat-btn:hover {
+    background-color: #c9302c;
+  }
+  

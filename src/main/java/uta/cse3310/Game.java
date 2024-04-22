@@ -261,5 +261,9 @@ public class Game {
         return roomId;
     }
 
+    public Player[] getPlayers_chat() {
+        return new Player[] {player1, player2};
+      }
+
     // Other methods as needed...
 }

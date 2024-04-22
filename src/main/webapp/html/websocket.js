@@ -31,6 +31,17 @@ function showGameRoom(roomId, player, opponent) {
   document.getElementById(roomId + "_opponent").textContent = opponent;
 }
 
+// CHAT
+function sendChatMessage(roomId) {
+  const input = document.getElementById(`${roomId}_chat_input`);
+  const message = input.value.trim();
+  if(message) {
+    socket.send(`chat:${roomId}:${message}`);
+    input.value = ''; // Clear input field after sending
+  }
+}
+
+
 function updateGameTable(gameRooms) {
   const tbody = document.getElementById("gameTableBody");
   tbody.innerHTML = ""; // Clear existing content
@@ -58,22 +69,15 @@ function updateGameTable(gameRooms) {
 
 let selectedCells = [];
 
-function generateGridHTML(gridData) {
-  let gridHtml = '<div class="grid-container">';
-  gridData.forEach((row, rowIndex) => {
-    gridHtml += '<div class="grid-row">';
-    row.forEach((cell, cellIndex) => {
-      gridHtml += `
-        <div class="grid-cell" data-row="${rowIndex}" data-cell="${cellIndex}" onclick="toggleCellSelection(this, '${cell}')">
-          ${cell}
-        </div>`;
-    });
-    gridHtml += '</div>';
-  });
-  gridHtml += '</div>';
-  return gridHtml;
+function generateGridHTML(grid) {
+  // Create grid HTML with clickable cells
+  return grid.map((row, rowIndex) =>
+    `<div class="grid-row">${row
+      .map((cell, cellIndex) => 
+        `<span class="grid-cell" data-row="${rowIndex}" data-cell="${cellIndex}" onclick="cellClickHandler(this)">${cell}</span>`)
+      .join('')}</div>`
+  ).join('');
 }
-
 
 function toggleGridVisibility(roomId) {
   const gridElement = document.getElementById(`${roomId}_grid`);
@@ -85,30 +89,31 @@ function toggleGridVisibility(roomId) {
 }
 
 function toggleCellSelection(cellElement, cellValue) {
-  const cellIndex = cellElement.getAttribute('data-row') + '-' + cellElement.getAttribute('data-cell');
-  
-  // Toggle selection state
-  if (selectedCells.includes(cellIndex)) {
-    selectedCells = selectedCells.filter(selected => selected !== cellIndex);
+  const rowIndex = cellElement.dataset.row;
+  const cellIndex = cellElement.dataset.cell;
+  const cellKey = `${rowIndex}-${cellIndex}`;
+
+  if (selectedCells.includes(cellKey)) {
+    selectedCells = selectedCells.filter((cell) => cell !== cellKey);
     cellElement.classList.remove('selected');
   } else {
-    selectedCells.push(cellIndex);
+    selectedCells.push(cellKey);
     cellElement.classList.add('selected');
   }
 }
 
-// Function to send selected cells as a string
-function sendSelectedCells() {
-  const selectedValues = selectedCells.map(index => {
-    // Assuming your grid is stored in a 2D array called `grid`
-    const [row, cell] = index.split('-').map(Number);
-    return grid[row][cell];
-  }).join('');
-
-  console.log(selectedValues); // Log the selection
+function cellClickHandler(cell) {
+  // Toggle selected class on click
+  cell.classList.toggle('selected');
 }
 
 
+// Function to send selected cells as a string
+function sendSelectedCells() {
+  const selectedCells = document.querySelectorAll('.grid-cell.selected');
+  const selectedText = Array.from(selectedCells).map(cell => cell.textContent).join('');
+  console.log(selectedText);
+}
 function updateGrid(roomId, gridData) {
   const gridHtml = generateGridHTML(gridData);
   const gridElement = document.getElementById(`${roomId}_grid`);
@@ -168,6 +173,13 @@ socket.onmessage = function (event) {
   //     let gameRoomsJson = data.substring("update_gameRooms:".length);
   //     updateGameTable(JSON.parse(gameRoomsJson));
   // }
+
+  if (command === 'chat') {
+    const roomId = data[1];
+    const message = data.slice(2).join(':');
+    const messagesContainer = document.getElementById(`${roomId}_messages`);
+    messagesContainer.innerHTML += `<div>${message}</div>`;
+  }
 
   switch (command) {
     case "update_players":

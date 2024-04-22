@@ -94,10 +94,12 @@ public class App extends WebSocketServer {
         // gameMap.put("Room3", new Game("Room3","gameroom3"));
         // gameMap.put("Room4", new Game("Room4","gameroom4"));
 
-         gameMap.put("Room1", new Game("Room1", "gameroom1"));
+        // 5 concurrent games
+        gameMap.put("Room1", new Game("Room1", "gameroom1"));
         gameMap.put("Room2", new Game("Room2", "gameroom2"));
         gameMap.put("Room3", new Game("Room3", "gameroom3"));
         gameMap.put("Room4", new Game("Room4", "gameroom4"));
+        gameMap.put("Room4", new Game("Room5", "gameroom5"));
     }
 
     public Map<String, Game> getGameMap() {
@@ -177,6 +179,17 @@ public class App extends WebSocketServer {
                 System.out.println("Player not added: " + username);
             }
         }
+         
+        // Handle the chat message
+        else if (message.startsWith("chat:")) {
+            // Example format of the message: "chat:Room1:Hello, how are you?"
+            String[] parts = message.split(":", 3);
+            if(parts.length >= 3) {
+              String roomId = parts[1];
+              String chatMessage = parts[2];
+              broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
+            }
+          }
 
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
@@ -212,24 +225,6 @@ public class App extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         System.out
                 .println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
-
-        // // Find the username associated with the closing connection
-        // String disconnectedUsername = null;
-        // for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
-        // Player player = entry.getValue();
-        // if (player.getWebSocket() != null && player.getWebSocket().equals(conn)) {
-        // disconnectedUsername = entry.getKey();
-        // break;
-        // }
-        // }
-
-        // // If a username was found, remove that player from the map
-        // if (disconnectedUsername != null) {
-        // playerMap.remove(disconnectedUsername);
-        // System.out.println("Player removed: " + disconnectedUsername);
-        // // Optionally broadcast the updated player list after removal
-        // broadcastPlayerList();
-        // }
     }
 
     @Override
@@ -295,6 +290,21 @@ public class App extends WebSocketServer {
             System.out.println("Error adding player to connectionUserMap: " + e.getMessage());
         }
     }
+
+
+    // ----------- CHAT FUNCTIONALITY ------------
+    private void broadcastToGameRoom(String roomId, String message) {
+        Game game = gameMap.get(roomId);
+        if(game != null) {
+          Player[] players = game.getPlayers_chat();
+          for(Player player : players) {
+            if(player != null && player.getWebSocket() != null) {
+              player.getWebSocket().send(message);
+            }
+          }
+        }
+      }
+    
 
     public static void main(String[] args) {
         int httpPort = 9080;
