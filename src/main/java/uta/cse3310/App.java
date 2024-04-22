@@ -115,6 +115,8 @@ public class App extends WebSocketServer {
             if (added) {
                 broadcastGameRooms();
                 if (game.isReadyToStart()) {
+                    ///// ----------------- GAME START ----------------- /////
+                    player.getWebSocket().send("gameroom1"); // edit this so that two players are redirected to the game
                     game.startGame();
                     return "redirect:section2"; // Players are redirected to start the game
                 }

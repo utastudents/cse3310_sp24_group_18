@@ -7,9 +7,8 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
   connectWebSocket(username);
   updateGameTable([]);
   // showSection("After Login : section1");
-  socket.send("section1")
+  socket.send("section1");
 });
-
 
 function updatePlayerList(playerNamesJSON) {
   const playerNames = JSON.parse(playerNamesJSON);
@@ -101,13 +100,12 @@ socket.onmessage = function (event) {
       break;
 
     case "update_gameRooms":
-      console.log("RECIEVED GAMEROOM UPDATE REQUEST [update_gameRooms]")
+      console.log("RECIEVED GAMEROOM UPDATE REQUEST [update_gameRooms]");
       const gameRooms = JSON.parse(content);
       console.log("Updating game rooms with data:", gameRooms);
       updateGameTable(gameRooms);
       break;
 
-      
     case "player_added":
       try {
         const username = content;
@@ -118,10 +116,10 @@ socket.onmessage = function (event) {
       }
 
       break;
-      default:
+    default:
       console.log("no such command [update_players]", command);
       break;
-    }
+  }
 
   switch (sectionToShow) {
     case "section0":
@@ -134,14 +132,38 @@ socket.onmessage = function (event) {
       break;
     case "section2":
       showSection("section2");
-      console.log("From the switch case :section2")
+      console.log("From the switch case :section2");
       // Add any additional logic for section2 button clicks here
       break;
     case "section3":
       showSection("section3");
-      console.log("From the switch case :section3")
+      console.log("From the switch case :section3");
       // Add any additional logic for section3 button clicks here
       break;
+    case "gameroom1":
+      showSection("gameroom1");
+      console.log("From the switch case :gameroom1");
+      // Add any additional logic for gameroom1 button clicks here
+      break;
+
+    case "gameroom2":
+      console.log("From the switch case :gameroom2");
+      showSection("gameroom2");
+      // Add any additional logic for gameroom2 button clicks here
+      break;
+
+    case "gameroom3":
+      console.log("From the switch case :gameroom3");
+      showSection("gameroom3");
+      // Add any additional logic for gameroom3 button clicks here
+      break;
+
+    case "gameroom4":
+      console.log("From the switch case :gameroom4");
+      showSection("gameroom4");
+      // Add any additional logic for gameroom4 button clicks here
+      break;
+
     // if new player added then console.log player and username
     case "player_added":
       const player = event.data;
@@ -164,17 +186,15 @@ socket.onclose = function (event) {
   console.log("WebSocket connection closed", event.code, event.reason);
 };
 
-
 function showSection(sectionId) {
   console.log("Showing section:", sectionId); // Debug: Log which section is being shown
-  document.querySelectorAll("div").forEach(div => {
-      div.classList.add('hidden'); // Hide all sections
+  document.querySelectorAll("div").forEach((div) => {
+    div.classList.add("hidden"); // Hide all sections
   });
   const section = document.getElementById(sectionId);
   if (section) {
-      section.classList.remove('hidden'); // Show the current section
+    section.classList.remove("hidden"); // Show the current section
   } else {
-      console.error("No section found with ID:", sectionId); // Error handling if no section is found
+    console.error("No section found with ID:", sectionId); // Error handling if no section is found
   }
 }
-

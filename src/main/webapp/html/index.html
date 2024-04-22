@@ -1,87 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Dynamic Sections by WebSocket</title>
     <style>
-        .hidden {
-            display: none;
-        }
+      .hidden {
+        display: none;
+      }
     </style>
-</head>
-<body>
-<div id="section0">
-    <p>Your username : </p>
-    <p>This is the Login Page<p>
+  </head>
+  <body>
+    <div id="section0">
+      <p>Your username :</p>
+      <p>This is the Login Page</p>
+      <p></p>
 
-    <form id="loginForm">
+      <form id="loginForm">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required />
         <button type="submit" id="UsernameInput">Login</button>
-    </form>
-    <button id="btnSection0">New Class</button>
-    <button id="btnSection1">Section 1</button>
-    <button id="btnSection2">Section 2</button>
-    <button id="btnSection3">Section 3</button>
-</div>
+      </form>
+      <button id="btnSection0">New Class</button>
+      <button id="btnSection1">Section 1</button>
+      <button id="btnSection2">Section 2</button>
+      <button id="btnSection3">Section 3</button>
+    </div>
 
-<div id="section1" class="hidden">
-    <p>Your username : </p>
-    <div id="currentUser">Currently Logged in as: <span class="currentUsername"></span></div>
-    <p>This is the lobby page</p>
-    <p>Here you can Create game objects called as lobby and each game can take 2 players</p>
+    <div id="section1" class="hidden">
+      <p>Your username :</p>
+      <div id="currentUser">
+        Currently Logged in as: <span class="currentUsername"></span>
+      </div>
+      <p>This is the lobby page</p>
+      <p>
+        Here you can Create game objects called as lobby and each game can take
+        2 players
+      </p>
 
-    
+      <h3>Player's Online List :</h3>
+      <ul id="playerList"></ul>
+      <!-- Player list container -->
 
-    <button id="btnSection0_sec1">New Class</button>
-    <button id="btnSection1_sec1">Section 1</button>
-    <button id="btnSection2_sec1">Section 2</button>
-    <button id="btnSection3_sec1">Section 3</button>
-
-
-    <h3>Player's Online List :</h3>
-    <ul id="playerList"></ul> <!-- Player list container -->
-
-    <!-- 
+      <!-- 
     Join Game Table 
     It will list the game rooms on the column1, number of players joined Eg : (1/2) on column2 and Join button on column3
      -->
 
-    <table id="gameTable">
+      <table id="gameTable">
         <thead>
-            <tr>
-                <th>Game Room</th>
-                <th>Players</th>
-                <th>Join</th>
-            </tr>
+          <tr>
+            <th>Game Room</th>
+            <th>Players</th>
+            <th>Join</th>
+          </tr>
         </thead>
         <tbody id="gameTableBody"></tbody>
-    </table>
-</div>
+      </table>
 
-<div id="section2" class="hidden">
-    <p>Your username : </p>
-    <div id="currentUser">Currently Logged in as: <span class="currentUsername"></span></div>
-    <p>Section 2 Content</p>
-    
-    <button id="btnSection0_sec2">New Class</button>
-    <button id="btnSection1_sec2">Section 1</button>
-    <button id="btnSection2_sec2">Section 2</button>
-    <button id="btnSection3_sec2">Section 3</button>
-</div>
+      <button id="btnSection0_sec1">New Class</button>
+      <button id="btnSection1_sec1">Section 1</button>
+      <button id="btnSection2_sec1">Section 2</button>
+      <button id="btnSection3_sec1">Section 3</button>
 
-<div id="section3" class="hidden">
-    <p>Your username : </p>
-    <div id="currentUser">Currently Logged in as: <span class="currentUsername"></span></div>
-    <p>Section 3 Content</p>
+      <button id="Section1_gameroom1_enter_bttn">Enter Gameroom 1</button>
+      <button id="Section1_gameroom2_enter_bttn">Enter Gameroom 2</button>
+      <button id="Section1_gameroom3_enter_bttn">Enter Gameroom 3</button>
+      <button id="Section1_gameroom4_enter_bttn">Enter Gameroom 4</button>
+    </div>
 
-    <button id="btnSection0_sec3">New Class</button>
-    <button id="btnSection1_sec3">Section 1</button>
-    <button id="btnSection2_sec3">Section 2</button>
-    <button id="btnSection3_sec3">Section 3</button>
-</div>
+    <div id="section2" class="hidden">
+      <p>Your username :</p>
+      <div id="currentUser">
+        Currently Logged in as: <span class="currentUsername"></span>
+      </div>
+      <p>Section 2 Content</p>
 
-<script src="websocket.js"></script>
-<script src="navigate.js"></script>
-</body>
+      <div>
+        <p>Your Username :</p>
+      </div>
+
+      <div>
+        <p>Opponent Username :</p>
+      </div>
+
+      <button id="btnSection0_sec2">New Class</button>
+      <button id="btnSection1_sec2">Section 1</button>
+      <button id="btnSection2_sec2">Section 2</button>
+      <button id="btnSection3_sec2">Section 3</button>
+      <button id="Section2_gameroom1_enter_bttn">Enter Gameroom 1</button>
+      <button id="Section2_gameroom2_enter_bttn">Enter Gameroom 2</button>
+      <button id="Section2_gameroom3_enter_bttn">Enter Gameroom 3</button>
+      <button id="Section2_gameroom4_enter_bttn">Enter Gameroom 4</button>
+    </div>
+
+    <div id="section3" class="hidden">
+      <p>Your username :</p>
+      <div id="currentUser">
+        Currently Logged in as: <span class="currentUsername"></span>
+      </div>
+      <p>Section 3 Content</p>
+
+      <button id="btnSection0_sec3">New Class</button>
+      <button id="btnSection1_sec3">Section 1</button>
+      <button id="btnSection2_sec3">Section 2</button>
+      <button id="btnSection3_sec3">Section 3</button>
+      <button id="Section3_gameroom1_enter_bttn">Enter Gameroom 1</button>
+      <button id="Section3_gameroom2_enter_bttn">Enter Gameroom 2</button>
+      <button id="Section3_gameroom3_enter_bttn">Enter Gameroom 3</button>
+      <button id="Section3_gameroom4_enter_bttn">Enter Gameroom 4</button>
+    </div>
+
+    <div id="gameroom1" class="hidden">
+      <h1>Game Room 1</h1>
+      <p>Player: <span id="gameroom1_player"></span></p>
+      <p>Opponent: <span id="gameroom1_opponent"></span></p>
+      <button id="gameroom1_exit_bttn">Exit Game</button>
+    </div>
+    <div id="gameroom2" class="hidden">
+      <h1>Game Room 2</h1>
+      <p>Player: <span id="gameroom2_player"></span></p>
+      <p>Opponent: <span id="gameroom2_opponent"></span></p>
+      <button id="gameroom2_exit_bttn">Exit Game</button>
+    </div>
+    <div id="gameroom3" class="hidden">
+      <h1>Game Room 3</h1>
+      <p>Player: <span id="gameroom3_player"></span></p>
+      <p>Opponent: <span id="gameroom3_opponent"></span></p>
+      <button id="gameroom3_exit_bttn">Exit Game</button>
+    </div>
+    <div id="gameroom4" class="hidden">
+      <h1>Game Room 4</h1>
+      <p>Player: <span id="gameroom4_player"></span></p>
+      <p>Opponent: <span id="gameroom4_opponent"></span></p>
+      <button id="gameroom4_exit_bttn">Exit Game</button>
+    </div>
+
+    <script src="websocket.js"></script>
+    <script src="navigate.js"></script>
+  </body>
 </html>
