@@ -1,5 +1,6 @@
 const socket = new WebSocket("ws://localhost:9180");
-
+// grid
+document.getElementById('sendSelection').addEventListener('click', sendSelectedCells);
 document.getElementById("loginForm").addEventListener("submit", (event) => {
   event.preventDefault(); // Prevent form submission
 
@@ -9,6 +10,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
   // showSection("After Login : section1");
   socket.send("section1");
 });
+
 
 function updatePlayerList(playerNamesJSON) {
   const playerNames = JSON.parse(playerNamesJSON);
@@ -52,23 +54,79 @@ function updateGameTable(gameRooms) {
   });
 }
 
+// GRID///
+
+let selectedCells = [];
+
+function generateGridHTML(gridData) {
+  let gridHtml = '<div class="grid-container">';
+  gridData.forEach((row, rowIndex) => {
+    gridHtml += '<div class="grid-row">';
+    row.forEach((cell, cellIndex) => {
+      gridHtml += `
+        <div class="grid-cell" data-row="${rowIndex}" data-cell="${cellIndex}" onclick="toggleCellSelection(this, '${cell}')">
+          ${cell}
+        </div>`;
+    });
+    gridHtml += '</div>';
+  });
+  gridHtml += '</div>';
+  return gridHtml;
+}
+
+
+function toggleGridVisibility(roomId) {
+  const gridElement = document.getElementById(`${roomId}_grid`);
+  if (gridElement) {
+    gridElement.classList.toggle("hidden");
+  } else {
+    console.error("No grid element found for room ID:", roomId);
+  }
+}
+
+function toggleCellSelection(cellElement, cellValue) {
+  const cellIndex = cellElement.getAttribute('data-row') + '-' + cellElement.getAttribute('data-cell');
+  
+  // Toggle selection state
+  if (selectedCells.includes(cellIndex)) {
+    selectedCells = selectedCells.filter(selected => selected !== cellIndex);
+    cellElement.classList.remove('selected');
+  } else {
+    selectedCells.push(cellIndex);
+    cellElement.classList.add('selected');
+  }
+}
+
+// Function to send selected cells as a string
+function sendSelectedCells() {
+  const selectedValues = selectedCells.map(index => {
+    // Assuming your grid is stored in a 2D array called `grid`
+    const [row, cell] = index.split('-').map(Number);
+    return grid[row][cell];
+  }).join('');
+
+  console.log(selectedValues); // Log the selection
+}
+
+
 function updateGrid(roomId, gridData) {
   const gridHtml = generateGridHTML(gridData);
-  const gridElement = document.getElementById(roomId + "_grid");
+  const gridElement = document.getElementById(`${roomId}_grid`);
   if (gridElement) {
     gridElement.innerHTML = gridHtml;
+    gridElement.classList.remove("hidden"); // Make the grid visible
   } else {
     console.error("No grid element found for room ID:", roomId);
   }
 }
 
 function updateWords(roomId, words) {
-  const wordsListHtml = words.map(word => `<li>${word}</li>`).join("");
+  const wordsListHtml = words.map((word) => `<li>${word}</li>`).join("");
   const wordsElement = document.getElementById(`${roomId}_words`);
   if (wordsElement) {
-      wordsElement.innerHTML = wordsListHtml;
+    wordsElement.innerHTML = wordsListHtml;
   } else {
-      console.error("No words element found for room ID:", roomId);
+    console.error("No words element found for room ID:", roomId);
   }
 }
 
@@ -149,10 +207,14 @@ socket.onmessage = function (event) {
       break;
 
     case "start_game":
+      // Extracted room ID, player, and opponent names
       const room = data[1];
       const player = data[2];
       const opponent = data[3];
+      // Show the game room with updated player and opponent info
       showGameRoom(room, player, opponent);
+      // Additionally, show the grid and words for this game room
+      showSection(room);
       break;
 
     case "player_added":
@@ -246,13 +308,28 @@ function generateGridHTML(gridData) {
 
 function showSection(sectionId) {
   console.log("Showing section:", sectionId); // Debug: Log which section is being shown
-  document.querySelectorAll("div").forEach((div) => {
-    div.classList.add("hidden"); // Hide all sections
-  });
+  // Hide all sections
+  document
+    .querySelectorAll("div[id^='section'], div[id^='gameroom']")
+    .forEach((div) => {
+      div.classList.add("hidden");
+    });
+
+  // Show the current section
   const section = document.getElementById(sectionId);
   if (section) {
-    section.classList.remove("hidden"); // Show the current section
+    section.classList.remove("hidden");
   } else {
-    console.error("No section found with ID:", sectionId); // Error handling if no section is found
+    console.error("No section found with ID:", sectionId);
+  }
+
+  // If the section is a game room, also remove the hidden class from its grid and word list
+  if (sectionId.startsWith("gameroom")) {
+    const grid = document.getElementById(sectionId + "_grid");
+    const words = document.getElementById(sectionId + "_words");
+    if (grid && words) {
+      grid.classList.remove("hidden");
+      words.classList.remove("hidden");
+    }
   }
 }

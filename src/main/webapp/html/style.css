@@ -1,0 +1,21 @@
+.grid-container {
+    display: inline-block; /* or flex */
+    border: 1px solid #000;
+  }
+  
+  .grid-row {
+    display: flex;
+  }
+  
+  .grid-cell {
+    width: 20px; /* Adjust the size as needed */
+    height: 20px; /* Adjust the size as needed */
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px; /* Same as height for vertical centering */
+    cursor: pointer;
+  }
+  .selected {
+    background-color: yellow; /* Highlight color */
+  }  
