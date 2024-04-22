@@ -58,10 +58,15 @@ function sendChatMessage(roomId) {
 function displayChatMessage(roomId, messageText) {
   const messageArea = document.getElementById(`${roomId}_chat`);
   if (messageArea) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message');
-    messageElement.textContent = messageText;
-    messageArea.appendChild(messageElement);
+    const existingMessageDiv = messageArea.lastElementChild;
+    if (existingMessageDiv && existingMessageDiv.classList.contains('message')) {
+      existingMessageDiv.textContent += ' ' + messageText;
+    } else {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message');
+      messageElement.textContent = messageText;
+      messageArea.appendChild(messageElement);
+    }
     messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom
   } else {
     console.error(`Message area for room ${roomId} not found.`);
