@@ -26,8 +26,6 @@ public class App extends WebSocketServer {
         initializeGameRooms();
     }
 
-
-
     // Player List
     private void broadcastPlayerList() {
         List<String> playerNames = new ArrayList<>();
@@ -55,36 +53,35 @@ public class App extends WebSocketServer {
     }
 
     private void broadcastGameRooms() {
-        //debug
-        System.out.println("Broadcasting game rooms");
+        // debug
+        System.out.println("broadcaseGameRooms()_Broadcasting game rooms");
         List<Map<String, String>> gameRoomsInfo = new ArrayList<>();
-        
+
         // Iterate through all game rooms to gather their information
         for (Map.Entry<String, Game> entry : gameMap.entrySet()) {
             Map<String, String> roomInfo = new HashMap<>();
             roomInfo.put("name", entry.getKey()); // Room name (lobby name)
             Game game = entry.getValue();
-            // The number of players is obtained and formatted as a string like "1/2" or "2/2"
+            // The number of players is obtained and formatted as a string like "1/2" or
+            // "2/2"
             String players = game.getCurrentNumberOfPlayers() + "/2";
             roomInfo.put("players", players);
             gameRoomsInfo.add(roomInfo); // Add the room info to the list
 
-            //debug
+            // debug
             System.out.println("Room: " + entry.getKey() + " Players: " + players);
         }
-    
+
         Gson gson = new Gson();
         String gameRoomsJson = gson.toJson(gameRoomsInfo); // Convert the list of maps to JSON string
-    
+
         // Broadcast the game rooms JSON string to all connected clients
         for (WebSocket conn : this.getConnections()) {
             conn.send("update_gameRooms:" + gameRoomsJson);
-            //debug
-            System.out.println("[App.java broadcastGameRooms()]Broadcasting game rooms to client");
+            // debug
+            System.out.println("\n[App.java broadcastGameRooms()]\nBroadcasting game rooms to client");
         }
     }
-    
-
 
     // --------------------------- GAMES ---------------------------
     // Initialize Games
@@ -105,7 +102,6 @@ public class App extends WebSocketServer {
 
     }
 
-
     public void printAllGamePlayers() {
         System.out.println("Printing all game players:");
         for (Game game : gameMap.values()) {
@@ -123,21 +119,20 @@ public class App extends WebSocketServer {
                 broadcastGameRooms();
                 if (game.isReadyToStart()) {
                     ///// ----------------- GAME START ----------------- /////
-                    List<Player> players = game.getPlayers();  // Get list of players
+                    List<Player> players = game.getPlayers(); // Get list of players
                     if (players.size() == 2) { // Ensuring exactly two players are present
                         String gameRoomId = game.getGameRoomId(); // Get the game room ID dynamically
-                        String startCommand = String.format("start_game:%s:%s:%s", 
-                            gameRoomId, players.get(0).getUsername(), players.get(1).getUsername());
-                        
-                            // Send game details such as the grid and words to both players
+                        String startCommand = String.format("start_game:%s:%s:%s",
+                                gameRoomId, players.get(0).getUsername(), players.get(1).getUsername());
+
+                        // Send game details such as the grid and words to both players
                         game.sendGameDetails(players.get(0).getWebSocket());
                         game.sendGameDetails(players.get(1).getWebSocket());
 
                         // Send the start game command to both players
                         players.get(0).getWebSocket().send(startCommand);
                         players.get(1).getWebSocket().send(startCommand);
-                        
-                    
+
                         game.startGame();
                         return "redirect:" + gameRoomId; // Redirect to the specific game room
                     }
@@ -147,9 +142,6 @@ public class App extends WebSocketServer {
         }
         return "full"; // Game is full, or no game exists with the given lobby name
     }
-        
-    
-    
 
     private void handleMessage(WebSocket conn, String message) {
 
@@ -179,17 +171,17 @@ public class App extends WebSocketServer {
                 System.out.println("Player not added: " + username);
             }
         }
-         
+
         // // Handle the chat message
         // else if (message.startsWith("chat:")) {
-        //     // Example format of the message: "chat:Room1:Hello, how are you?"
-        //     String[] parts = message.split(":", 3);
-        //     if (parts.length >= 3) {
-        //         String roomId = parts[1];
-        //         String chatMessage = parts[2];
-        //         System.out.println(" [DEBUG0] Broadcasting message to game room: " + roomId);
-        //         broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
-        //     }
+        // // Example format of the message: "chat:Room1:Hello, how are you?"
+        // String[] parts = message.split(":", 3);
+        // if (parts.length >= 3) {
+        // String roomId = parts[1];
+        // String chatMessage = parts[2];
+        // System.out.println(" [DEBUG0] Broadcasting message to game room: " + roomId);
+        // broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
+        // }
         // }
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
@@ -202,7 +194,7 @@ public class App extends WebSocketServer {
             String joinGameResponse = tryJoinGame(lobbyName, player);
             // Handle the join game response, such as updating client state or sending a
             // redirect command
-            //System.out.println("[Adding game] Join game response: " + joinGameResponse);
+            // System.out.println("[Adding game] Join game response: " + joinGameResponse);
             printAllGamePlayers();
         }
 
@@ -231,7 +223,7 @@ public class App extends WebSocketServer {
         Game game = findGameByRoomID(roomID);
         if (game != null) {
             // Retrieve the players from the game room
-            Player[] players = game.getPlayers_chat();  // Assuming you have a method to retrieve players
+            Player[] players = game.getPlayers_chat(); // Assuming you have a method to retrieve players
             for (Player player : players) {
                 if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
                     player.getWebSocket().send("chat_update:" + roomID + ":" + message);
@@ -245,7 +237,83 @@ public class App extends WebSocketServer {
     private Game findGameByRoomID(String roomID) {
         return gameMap.get(roomID);
     }
-    
+
+    private void clearPlayerStates(Game game) {
+        if (game.getPlayer1() != null) {
+            removePlayer(game.getPlayer1());
+        }
+        if (game.getPlayer2() != null) {
+            removePlayer(game.getPlayer2());
+        }
+        System.out.println("Cleared players from the reset game.");
+    }
+
+    // Call this method to remove player and ensure all states are synchronized
+    private void removePlayer(Player player) {
+        playerMap.remove(player.getUsername());
+        WebSocket conn = player.getWebSocket();
+        if (conn != null && conn.isOpen()) {
+            conn.close(); // Optionally close the connection or notify the player
+        }
+    }
+
+    // Helper method to clear players from a game
+    private void clearPlayersFromGame(Game game) {
+        // Disconnect and remove players from the game
+        disconnectPlayer(game.getPlayer1());
+        disconnectPlayer(game.getPlayer2());
+
+        // Player1 and Player2 are set to null
+        System.out.println("\n---Players after RESET-\nPrinting players in the game: ");
+        System.out.println("\n---Player's after DISCONNECT---\n");
+        game.printPlayers();
+        // Ensure the game is aware that the players are removed
+
+        game.setPlayer1(null);
+        game.setPlayer2(null);
+        System.out.println("n---Player's after SET NULL---\n");
+        game.printPlayers();
+    }
+
+    private void disconnectPlayer(Player player) {
+        if (player != null && player.getWebSocket() != null) {
+            WebSocket conn = player.getWebSocket();
+            if (conn.isOpen()) {
+                try {
+                    conn.close(); // Close the WebSocket connection
+                    System.out.println("Disconnected player: " + player.getUsername());
+                } catch (Exception e) {
+                    System.err.println("Error disconnecting player: " + player.getUsername() + "; " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    private void resetGame(String roomId, WebSocket conn) {
+        Game game = gameMap.get(roomId);
+        if (game != null) {
+            // Reset the game, which clears all its internal states
+            game.reset();
+
+            // Clear player connections from the game
+            clearPlayersFromGame(game);
+
+            try {
+                System.out.println("Sending game reset message to client: " + conn.getRemoteSocketAddress());
+                conn.send("game_reset:" + roomId); // Notify the client that the game has been reset
+                System.out.println("Game reset message sent.");
+
+                System.out.println("resetGame() broadcasting game rooms");
+                broadcastGameRooms(); // Update all clients with the new state of the game rooms
+                broadcastPlayerList(); // Update all clients with the new player list
+
+            } catch (Exception e) {
+                System.err.println("Error sending game reset message to client: " + e.getMessage());
+            }
+        } else {
+            conn.send("error:Game not found");
+        }
+    }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
@@ -254,17 +322,27 @@ public class App extends WebSocketServer {
             String[] parts = message.split(":", 3); // Split to get roomID and chat message
             String roomID = parts[1];
             String chatMessage = parts[2];
-    
+
             Game game = findGameByRoomID(roomID);
             if (game != null) {
                 game.getChat().addMessage(chatMessage); // Add message to the game's chat
                 broadcastChatMessage(roomID, chatMessage); // Send the message to all clients in the room
-            }
-            else{
+            } else {
                 System.err.println("Game with room ID '" + roomID + "' not found.");
-            
+
             }
         }
+
+        if (message.startsWith("reset_game:")) {
+            System.out.println("\n---RESET----\n[App.java] Resetting game...");
+            String roomId = message.split(":")[1];
+            try {
+                resetGame(roomId, conn);
+            } catch (Exception e) {
+                System.out.println("Error resetting game: " + e.getMessage());
+            }
+        }
+
         handleMessage(conn, message);
         conn.send(message); // This will send message to websocket.js socket.onmessage and it will show
                             // screen accordingly
@@ -291,11 +369,13 @@ public class App extends WebSocketServer {
             System.out.println("Player removed (Tab Closed): " + errorUsername);
             // Optionally broadcast the updated player list after removal
             broadcastPlayerList();
-            System.out.println("On Disconnect : ");;
+            System.out.println("On Disconnect : ");
+            ;
             broadcastGameRooms();
         }
 
-        System.out.println("On Error : ");;
+        System.out.println("On Error : ");
+        ;
         broadcastGameRooms();
 
     }
@@ -326,8 +406,6 @@ public class App extends WebSocketServer {
         }
     }
 
-
-    
     public static void main(String[] args) {
         int httpPort = 9080;
         String httpPortEnv = System.getenv("HTTP_PORT");

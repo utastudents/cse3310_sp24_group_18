@@ -23,7 +23,7 @@ public class Game {
     private Chat chat;
 
 
-    private static final int GRID_SIZE = 20;
+    private static final int GRID_SIZE = 35;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsFound;
@@ -46,6 +46,19 @@ public class Game {
         this.chat = new Chat(); // Initialize a new Chat object for this game
 
     }
+
+    public void reset() {
+        // Reset the game's properties
+        System.out.println("Resetting game in lobby: " + lobbyName);
+        this.player1 = null;
+        this.player2 = null;
+        this.isFinished = false;
+        this.wordsFound.clear();
+        initializeGrid();
+        placeWords();
+        System.out.println("Game reset in lobby: " + lobbyName);
+    }
+    
 
     // CHAT
     public void addChatMessage(String message) {

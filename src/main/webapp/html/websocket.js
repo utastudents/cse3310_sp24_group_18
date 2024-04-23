@@ -10,6 +10,18 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
   socket.send("section1");
 });
 
+// The BIG RESET
+document.getElementById('resetGame').addEventListener('click', function() {
+    // manually reset the game  
+    console.log("[RESETING ALL GAMES] \n Resetting the game");
+    socket.send('reset_game:' + 'gameroom1');
+    socket.send('reset_game:' + 'gameroom2');
+    socket.send('reset_game:' + 'gameroom3');
+    socket.send('reset_game:' + 'gameroom4');
+    socket.send('reset_game:' + 'gameroom5');
+});
+
+
 
 function updatePlayerList(playerNamesJSON) {
   const playerNames = JSON.parse(playerNamesJSON);
