@@ -1,6 +1,6 @@
 const socket = new WebSocket("ws://localhost:9180");
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
 });
 
@@ -8,46 +8,47 @@ function setupEventListeners() {
   // Login form submission event
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
-      loginForm.addEventListener("submit", function(event) {
-          event.preventDefault(); // Prevent form submission
-          const username = document.getElementById("username").value;
-          connectWebSocket(username);
-          updateGameTable([]);
-          socket.send("section1");
-      });
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent form submission
+      const username = document.getElementById("username").value;
+      connectWebSocket(username);
+      updateGameTable([]);
+      socket.send("section1");
+    });
   }
 
   // Game reset event
   const resetGameButton = document.getElementById('resetGame');
   if (resetGameButton) {
-      resetGameButton.addEventListener('click', function() {
-          console.log("[RESETING ALL GAMES] \n Resetting the game");
-          socket.send('reset_game:' + 'gameroom1');
-          socket.send('reset_game:' + 'gameroom2');
-          socket.send('reset_game:' + 'gameroom3');
-          socket.send('reset_game:' + 'gameroom4');
-          socket.send('reset_game:' + 'gameroom5');
-      });
-  }}
+    resetGameButton.addEventListener('click', function () {
+      console.log("[RESETING ALL GAMES] \n Resetting the game");
+      socket.send('reset_game:' + 'gameroom1');
+      socket.send('reset_game:' + 'gameroom2');
+      socket.send('reset_game:' + 'gameroom3');
+      socket.send('reset_game:' + 'gameroom4');
+      socket.send('reset_game:' + 'gameroom5');
+    });
+  }
+}
 
-    // Add event listeners for sending words in each game room
-    addSendButtonListener('gameroom1');
-    addSendButtonListener('gameroom2');
-    addSendButtonListener('gameroom3');
-    addSendButtonListener('gameroom4');
-    addSendButtonListener('gameroom5');
+// Add event listeners for sending words in each game room
+addSendButtonListener('gameroom1');
+addSendButtonListener('gameroom2');
+addSendButtonListener('gameroom3');
+addSendButtonListener('gameroom4');
+addSendButtonListener('gameroom5');
 
- // GRID
- function addSendButtonListener(roomId) {
+// GRID
+function addSendButtonListener(roomId) {
   const sendButton = document.getElementById(roomId + '_send');
   if (sendButton) {
-    sendButton.addEventListener('click', function() {
+    sendButton.addEventListener('click', function () {
       sendWords(roomId);
     });
   }
 }
 
- function toggleCell(cell, value) {
+function toggleCell(cell, value) {
   if (cell.style.backgroundColor === 'yellow') {
     cell.style.backgroundColor = ''; // Change to your default or previous color
     removeFromSelected(value); // Function to remove from selected words
@@ -68,15 +69,24 @@ function removeFromSelected(word) {
     selectedWords.splice(index, 1);
   }
 }
+
+
 function sendWords(roomId) {
-  const usernameSpan = document.querySelector('.currentUsername'); // Adjust selector as needed
+  const usernameSpan = document.querySelector('.currentUsername');
   if (usernameSpan) {
     const username = usernameSpan.textContent;
-    console.log("check_word" + ":" + username + ":" + selectedWords.join(""));
-} else {
+    if (selectedWords.length > 0) {
+      const message = "check_word:" + roomId + ":" + username + ":" + selectedWords.join(",");
+      socket.send(message);
+      selectedWords = [];  // Clear the selected words after sending
+    }
+  } else {
     console.error("Username display element not found");
+  }
 }
-}
+
+
+
 
 function updateGrid(roomId, gridJson) {
   let gridData = JSON.parse(gridJson);
@@ -197,9 +207,9 @@ function sendChatMessage(roomId) {
   const message = input.value.trim();
 
   if (message) {
-      const fullMessage = username + ": " + message; // Combine username with message
-      socket.send(`chat:${roomId}:${fullMessage}`);
-      input.value = '';  // Clear the input after sending
+    const fullMessage = username + ": " + message; // Combine username with message
+    socket.send(`chat:${roomId}:${fullMessage}`);
+    input.value = '';  // Clear the input after sending
   }
 }
 
@@ -214,11 +224,11 @@ function updateChat(roomId, message) {
 function appendChatMessage(roomId, message) {
   const chatBox = document.getElementById(roomId + '_chat');
   if (chatBox) {
-      const messageDiv = document.createElement('div');
-      messageDiv.textContent = message; // Set the message text
-      chatBox.appendChild(messageDiv); // Append the new div to the chat box
+    const messageDiv = document.createElement('div');
+    messageDiv.textContent = message; // Set the message text
+    chatBox.appendChild(messageDiv); // Append the new div to the chat box
   } else {
-      console.error("Chat box not found for room:", roomId);
+    console.error("Chat box not found for room:", roomId);
   }
 }
 
@@ -233,12 +243,30 @@ socket.onmessage = function (event) {
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
 
+
+
   switch (command) {
+
+    case "words_found": {
+      const roomId = data[1];
+      const content = data.slice(2).join(":");
+      const words = content.split(",");
+      console.log("Words found: " + words.join(", "));
+      updateWordsDisplay(roomId, words);
+      break;
+  }
+
+  case "word_not_found": {
+      console.log("Word not found: " + data[1]);
+      break;
+  }
+  
+
     case "update_grid":
-            const roomId = data[1];
-            const gridJson = data.slice(2).join(":"); // Assuming grid data is sent as JSON
-            updateGrid(roomId, gridJson);
-            break;
+      const roomId = data[1];
+      const gridJson = data.slice(2).join(":"); // Assuming grid data is sent as JSON
+      updateGrid(roomId, gridJson);
+      break;
 
     case "chat_update":
       if (data.length >= 3) {
@@ -270,14 +298,14 @@ socket.onmessage = function (event) {
       break;
 
 
-      case "chat_update":
-        if (data.length >= 3) {
-            const roomId = data[1];
-            const message = data[2];
-            const chatBox = document.getElementById(roomId + '_chat');
-            chatBox.innerHTML += '<div>' + message + '</div>'; // Append new message
-        }
-        break;
+    case "chat_update":
+      if (data.length >= 3) {
+        const roomId = data[1];
+        const message = data[2];
+        const chatBox = document.getElementById(roomId + '_chat');
+        chatBox.innerHTML += '<div>' + message + '</div>'; // Append new message
+      }
+      break;
 
     case "update_words":
       if (data.length >= 3) {
@@ -355,6 +383,8 @@ socket.onmessage = function (event) {
       showSection("gameroom4");
       // Add any additional logic for gameroom4 button clicks here
       break;
+
+    // case "gamerrom"
 
     // if new player added then console.log player and username
     case "player_added":

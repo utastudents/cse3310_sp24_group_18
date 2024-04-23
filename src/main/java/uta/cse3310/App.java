@@ -42,6 +42,8 @@ public class App extends WebSocketServer {
         }
     }
 
+
+
     // add to playermap
     private void addPlayer(Player player) {
         playerMap.put(player.getUsername(), player);
@@ -220,6 +222,14 @@ public class App extends WebSocketServer {
             // System.out.println("[Adding game] Join game response: " + joinGameResponse);
             printAllGamePlayers();
         }
+        else if (message.startsWith("check_word:")) {
+        String[] parts = message.split(":");
+        if (parts.length > 3) {
+            String roomId = parts[1];
+            String username = parts[2];
+            String words = parts[3];
+            handleCheckWord(conn, roomId, username, words);
+        }
 
         // socket.send("user_left:" + username); // This will send message to
         // websocket.js socket.onmessage and it will show screen accordingly
@@ -228,7 +238,25 @@ public class App extends WebSocketServer {
             playerMap.remove(username);
             conn.send("user_removed");
         }
+        else {
+            System.out.println("NULL FUNC");
+        }}
     }
+
+    private void handleCheckWord(WebSocket conn, String roomId, String username, String words) {
+    Game game = gameMap.get(roomId);
+    if (game != null) {
+        String[] wordList = words.split(",");
+        List<String> foundWords = game.checkWords(username, wordList); // Assuming Game has a method checkWords
+        if (!foundWords.isEmpty()) {
+            conn.send("words_found:" + roomId + ":" + String.join(",", foundWords));
+        } else {
+            conn.send("word_not_found:" + roomId);
+        }
+    } else {
+        conn.send("error:Game not found");
+    }
+}
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {

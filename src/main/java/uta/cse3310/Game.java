@@ -52,7 +52,31 @@ public class Game {
 
     }
 
+    public List<String> checkWords(String username, String[] words) {
+    List<String> foundWords = new ArrayList<>();
+    for (String word : words) {
+        if (checkWord(username, word)) {
+            foundWords.add(word);
+        }
+    }
+    return foundWords;
+}
 
+private boolean checkWord(String username, String word) {
+    // Implement your logic here to check if the word is valid for the given username
+    // You can use the existing method markWordAsFound to mark the word as found
+    // For example:
+    // if (isValidWordForUser(username, word)) {
+    //     markWordAsFound(word, username);
+    //     return true;
+    // } else {
+    //     return false;
+    // }
+
+    // For demonstration purposes, let's assume all words are valid for any user
+    markWordAsFound(word, username);
+    return true;
+}
      // Method to mark a word as found
     public void markWordAsFound(String word, String username) {
         if (wordsFound.containsKey(word) && !wordsFound.get(word)) { // Check if word is placed and not yet marked as found
