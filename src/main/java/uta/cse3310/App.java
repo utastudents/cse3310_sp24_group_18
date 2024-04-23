@@ -461,7 +461,7 @@ public class App extends WebSocketServer {
     }
 
     public static void main(String[] args) {
-        int httpPort = 9080;
+        int httpPort = 9018;
         String httpPortEnv = System.getenv("HTTP_PORT");
         if (httpPortEnv != null) {
             httpPort = Integer.parseInt(httpPortEnv);
@@ -471,7 +471,7 @@ public class App extends WebSocketServer {
         httpServer.start();
         System.out.println("[App.java] HTTP Server started on port: " + httpPort);
 
-        int wsPort = 9180;
+        int wsPort = 9118;
         String wsPortEnv = System.getenv("WEBSOCKET_PORT");
         if (wsPortEnv != null) {
             wsPort = Integer.parseInt(wsPortEnv);
