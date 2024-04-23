@@ -10,6 +10,7 @@
     </style>
   </head>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="grid.css" />
   <body>
     <h2> THE GAME IS STILL IN DEVELOPMENT AND THE BUTTONS ARE MEANT FOR DEBUG PURPOSES</h2>
     <div id="section0">
@@ -117,6 +118,31 @@
       <h1>Game Room 1</h1>
       <p>Player1: <span id="gameroom1_player"></span></p>
       <p>Player2: <span id="gameroom1_opponent"></span></p>
+    
+
+      <div>
+        <label for="player1-color-gameroom1">Player 1 Color:</label>
+        <select id="player1-color-gameroom1">
+            <option value="#ff0000">Red</option>
+            <option value="#0000ff">Blue</option>
+            <option value="#008000">Green</option>
+            <option value="#ffff00">Yellow</option>
+            <option value="#ffa500">Orange</option>
+            <option value="#800080">Purple</option>
+            <option value="#000000">Black</option>
+        </select>
+
+        <label for="player2-color-gameroom1">Player 2 Color:</label>
+        <select id="player2-color-gameroom1">
+            <option value="#0000ff">Blue</option>
+            <option value="#ff0000">Red</option>
+            <option value="#008000">Green</option>
+            <option value="#ffff00">Yellow</option>
+            <option value="#ffa500">Orange</option>
+            <option value="#800080">Purple</option>
+            <option value="#000000">Black</option>
+        </select>
+    </div>
     
       <div id="gameroom1_grid" class="grid-container">
         <!-- The game grid will go here -->

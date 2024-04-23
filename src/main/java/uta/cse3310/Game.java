@@ -23,7 +23,7 @@ public class Game {
     private Chat chat;
 
 
-    private static final int GRID_SIZE = 35;
+    private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsFound;
@@ -167,25 +167,25 @@ public class Game {
     }
 
     // Converts the grid to a JSON string format
-    // public String getGridAsJson() {
-    //     StringBuilder sb = new StringBuilder();
-    //     sb.append("[");
-    //     for (int i = 0; i < GRID_SIZE; i++) {
-    //         sb.append("[");
-    //         for (int j = 0; j < GRID_SIZE; j++) {
-    //             sb.append("\"").append(grid[i][j]).append("\"");
-    //             if (j < GRID_SIZE - 1) {
-    //                 sb.append(",");
-    //             }
-    //         }
-    //         sb.append("]");
-    //         if (i < GRID_SIZE - 1) {
-    //             sb.append(",");
-    //         }
-    //     }
-    //     sb.append("]");
-    //     return sb.toString();
-    // }
+    public String getGridAsJson() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < GRID_SIZE; i++) {
+            sb.append("[");
+            for (int j = 0; j < GRID_SIZE; j++) {
+                sb.append("\"").append(grid[i][j]).append("\"");
+                if (j < GRID_SIZE - 1) {
+                    sb.append(",");
+                }
+            }
+            sb.append("]");
+            if (i < GRID_SIZE - 1) {
+                sb.append(",");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 
     // Prints the words that were successfully placed in the grid
     public void printWords() {

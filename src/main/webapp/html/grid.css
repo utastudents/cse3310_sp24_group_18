@@ -1,0 +1,43 @@
+
+/* Specific styles for exit buttons in game rooms, if needed */
+.exit-game-btn {
+    background-color: #f44336; /* Red */
+}
+
+.exit-game-btn:hover {
+    background-color: #d32f2f; /* Darker red */
+}
+
+/* Game grid styling */
+.game-grid {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 600px; /* Limits the size of the grid */
+    margin: auto; /* Center the grid horizontally */
+}
+
+.game-grid td {
+    border: 1px solid #ddd; /* Light grey border */
+    padding: 8px;
+    text-align: center;
+    font-size: 18px;
+    color: #333; /* Dark grey text color */
+}
+
+/* Hover effect for grid cells */
+.game-grid td:hover {
+    background-color: #f2f2f2; /* Light grey background */
+}
+
+/* Styles for grid container if any specific styling is needed */
+.grid-container {
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow around grid container */
+    background-color: #ffffff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Hide elements initially hidden and show them later via JavaScript */
+.hidden {
+    display: none;
+}

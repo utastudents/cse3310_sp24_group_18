@@ -1,27 +1,91 @@
 const socket = new WebSocket("ws://localhost:9180");
-// grid
-document.getElementById("loginForm").addEventListener("submit", (event) => {
-  event.preventDefault(); // Prevent form submission
 
-  const username = document.getElementById("username").value;
-  connectWebSocket(username);
-  updateGameTable([]);
-  // showSection("After Login : section1");
-  socket.send("section1");
+document.addEventListener("DOMContentLoaded", function() {
+  setupEventListeners();
 });
+function setupEventListeners() {
+  // Login form submission event
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+      loginForm.addEventListener("submit", function(event) {
+          event.preventDefault(); // Prevent form submission
+          const username = document.getElementById("username").value;
+          connectWebSocket(username);
+          updateGameTable([]);
+          socket.send("section1");
+      });
+  }
 
-// The BIG RESET
-document.getElementById('resetGame').addEventListener('click', function() {
-    // manually reset the game  
-    console.log("[RESETING ALL GAMES] \n Resetting the game");
-    socket.send('reset_game:' + 'gameroom1');
-    socket.send('reset_game:' + 'gameroom2');
-    socket.send('reset_game:' + 'gameroom3');
-    socket.send('reset_game:' + 'gameroom4');
-    socket.send('reset_game:' + 'gameroom5');
-});
+  // Game reset event
+  const resetGameButton = document.getElementById('resetGame');
+  if (resetGameButton) {
+      resetGameButton.addEventListener('click', function() {
+          console.log("[RESETING ALL GAMES] \n Resetting the game");
+          socket.send('reset_game:' + 'gameroom1');
+          socket.send('reset_game:' + 'gameroom2');
+          socket.send('reset_game:' + 'gameroom3');
+          socket.send('reset_game:' + 'gameroom4');
+          socket.send('reset_game:' + 'gameroom5');
+      });
+  }
 
+  // Setup color pickers and grid cells for each game room
+  setupColorPickersAndGrid();
+}
 
+function setupColorPickersAndGrid() {
+  const gameRooms = ['gameroom1', 'gameroom2', 'gameroom3', 'gameroom4', 'gameroom5'];
+  gameRooms.forEach(roomId => {
+      const player1ColorPicker = document.getElementById(`player1-color-${roomId}`);
+      const player2ColorPicker = document.getElementById(`player2-color-${roomId}`);
+      const gridCells = document.querySelectorAll(`#${roomId} .game-grid td`);
+
+      if (player1ColorPicker && player2ColorPicker && gridCells.length > 0) {
+          let player1Color = player1ColorPicker.value;
+          let player2Color = player2ColorPicker.value;
+
+          player1ColorPicker.addEventListener("change", () => {
+              player1Color = player1ColorPicker.value;
+          });
+
+          player2ColorPicker.addEventListener("change", () => {
+              player2Color = player2ColorPicker.value;
+          });
+
+          gridCells.forEach(cell => {
+              cell.addEventListener("click", function() {
+                  // Placeholder for determining current player (you will need actual logic here)
+                  const currentPlayer = determineCurrentPlayer();
+                  if (currentPlayer === 1) {
+                      this.style.backgroundColor = player1Color;
+                  } else if (currentPlayer === 2) {
+                      this.style.backgroundColor = player2Color;
+                  }
+                  this.classList.add('selected');
+              });
+          });
+      }
+  });
+}
+
+function updateGrid(roomId, gridJson) {
+  let gridData = JSON.parse(gridJson);
+  let gridHtml = formatGridHtml(gridData);
+  document.getElementById(`${roomId}_grid`).innerHTML = gridHtml;
+}
+
+function formatGridHtml(grid) {
+  let html = '<table class="game-grid">';
+  grid.forEach(row => {
+      html += '<tr>';
+      row.forEach(cell => {
+          html += `<td>${cell}</td>`;
+      });
+      html += '</tr>';
+  });
+  html += '</table>';
+  return html;
+}
 
 function updatePlayerList(playerNamesJSON) {
   const playerNames = JSON.parse(playerNamesJSON);
@@ -158,9 +222,12 @@ socket.onmessage = function (event) {
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
 
-  
-
   switch (command) {
+    case "update_grid":
+            const roomId = data[1];
+            const gridJson = data.slice(2).join(":"); // Assuming grid data is sent as JSON
+            updateGrid(roomId, gridJson);
+            break;
 
     case "chat_update":
       if (data.length >= 3) {
