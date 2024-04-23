@@ -22,16 +22,14 @@ public class Game {
     private String roomId;
     private Chat chat;
 
-
     private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsPlaced;
     private static Random random = new Random();
 
-
     // Maintain the original naming convention
-    private Map<String, Boolean> wordsFound = new HashMap<>();
+    private ArrayList<String> wordsFound = new ArrayList<String>(); // Create an ArrayList object
     private Map<String, List<String>> wordsFoundByPlayer = new HashMap<>();
 
     public Game(String lobbyName, String roomId) {
@@ -48,74 +46,46 @@ public class Game {
         placeWords();
         System.out.println("Grid for [game: " + lobbyName + " room: " + roomId);
         printGrid();
+        printWords();
         this.chat = new Chat(); // Initialize a new Chat object for this game
 
     }
 
-    public List<String> checkWords(String username, String[] words) {
-    List<String> foundWords = new ArrayList<>();
-    for (String word : words) {
-        if (checkWord(username, word)) {
-            foundWords.add(word);
-        }
-    }
-    return foundWords;
-}
-
-private boolean checkWord(String username, String word) {
-    // Implement your logic here to check if the word is valid for the given username
-    // You can use the existing method markWordAsFound to mark the word as found
-    // For example:
-    // if (isValidWordForUser(username, word)) {
-    //     markWordAsFound(word, username);
-    //     return true;
-    // } else {
-    //     return false;
-    // }
-
-    // For demonstration purposes, let's assume all words are valid for any user
-    markWordAsFound(word, username);
-    return true;
-}
-     // Method to mark a word as found
-    public void markWordAsFound(String word, String username) {
-        if (wordsFound.containsKey(word) && !wordsFound.get(word)) { // Check if word is placed and not yet marked as found
-            wordsFound.put(word, true); // Mark the word as found
-            if (!wordsFoundByPlayer.containsKey(username)) {
-                wordsFoundByPlayer.put(username, new ArrayList<>()); // Create a new list for this user if not exist
-            }
-            wordsFoundByPlayer.get(username).add(word); // Add the word to the user's found list
+    public boolean checkWord(String username, String word) {
+        Boolean foundStatus = wordsPlaced.get(word);
+        if (foundStatus != null && foundStatus) { // Check if the word exists and is set to true (available to be found)
+            wordsPlaced.put(word, false); // Mark the word as found by setting it to false
+            wordsFound.add(word); // Optionally maintain a list of all found words
+            wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
             System.out.println(username + " found the word: " + word);
+            return true;
+        } else {
+            System.out.println("Word not found or already marked as found: " + word);
+            return false;
         }
     }
 
-    // Retrieve the list of words found by a specific player
-    public List<String> getWordsFoundByPlayer(String username) {
-        return wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
+    public void printWordsFoundByUser(String username) {
+        List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
+        System.out.println(username + " has found: " + foundWords);
     }
-
-    // Debugging method to print words found by each player
-    public void printWordsFound() {
-        for (Map.Entry<String, List<String>> entry : wordsFoundByPlayer.entrySet()) {
-            System.out.println("User: " + entry.getKey() + ", Words Found: " + entry.getValue());
+    
+    public void printAllWordsAndTheirStatus() {
+        for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
+            System.out.println("Word: " + entry.getKey() + ", Available: " + entry.getValue());
         }
     }
-
-    // Retrieve the list of all words that have been placed and their found status
-    public List<String> getPlacedWords() {
-        return new ArrayList<>(wordsFound.keySet());
-    }
-
-    // Check if a specific word is placed in the game and has been found
-    public boolean isWordPlacedAndFound(String word) {
-        return wordsFound.containsKey(word) && wordsFound.get(word);
-    }
-
-
 
     public void reset() {
         // Reset the game's properties
         System.out.println("Resetting game in lobby: " + lobbyName);
+
+        // Reset the game's properties and states for a new game
+        for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
+            entry.setValue(false); // Reset each word to not found
+        }
+        wordsFound.clear();
+        wordsFoundByPlayer.clear();
         this.player1 = null;
         this.player2 = null;
         this.isFinished = false;
@@ -124,7 +94,6 @@ private boolean checkWord(String username, String word) {
         placeWords();
         System.out.println("Game reset in lobby: " + lobbyName);
     }
-    
 
     // CHAT
     public void addChatMessage(String message) {
@@ -139,23 +108,23 @@ private boolean checkWord(String username, String word) {
         return chat;
     }
 
-
     public void sendGameDetails(WebSocket conn) {
         Gson gson = new Gson();
-        //String gridJson = getGridAsJson(); // Get JSON representation of the game grid
+        // String gridJson = getGridAsJson(); // Get JSON representation of the game
+        // grid
         List<String> placedWords = new ArrayList<>(wordsPlaced.keySet()); // Get list of placed words
         String wordsJson = gson.toJson(placedWords); // Convert placed words list to JSON
 
         System.out.println("Sending game details to client: " + conn.getRemoteSocketAddress());
         try {
-            //conn.send("update_grid:" + this.roomId + ":" + gridJson);
+            // conn.send("update_grid:" + this.roomId + ":" + gridJson);
             System.out.println("Sent!");
         } catch (Exception e) {
             System.out.println("Error sending grid to client: " + e.getMessage());
         }
 
         System.out.println("Sending words to client: " + conn.getRemoteSocketAddress());
-        try{
+        try {
             conn.send("update_words:" + this.roomId + ":" + wordsJson);
             System.out.println("Sent!");
         } catch (Exception e) {
@@ -179,9 +148,14 @@ private boolean checkWord(String username, String word) {
                 attempts++;
             }
             if (placed) {
-                wordsPlaced.put(word, false);
+                wordsPlaced.put(word, true);
             }
         }
+        // DEBUG
+        // System.out.println("IN placewords()");
+        // for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
+        //     System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
+        // }
     }
 
     // Attempts to place a single word in the grid randomly
@@ -255,10 +229,20 @@ private boolean checkWord(String username, String word) {
 
     // Prints the words that were successfully placed in the grid
     public void printWords() {
+        System.out.println("----------PLACED WORDS-------------");
         for (String word : wordsPlaced.keySet()) {
-            System.out.println("Placed word: " + word);
+            System.out.print(word + " " );
         }
-    }
+
+        // Debug
+        // System.out.println("\nDEBUG : \n"+wordsPlaced.get("Buggati"));
+        // System.out.println("\n------------------------------------\n");
+        // for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
+        //     System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
+        // }
+
+
+    }   
 
     // Method to add a player to the game
     public boolean addPlayer(Player player) {
@@ -362,8 +346,8 @@ private boolean checkWord(String username, String word) {
     }
 
     public Player[] getPlayers_chat() {
-        return new Player[] {player1, player2};
-      }
+        return new Player[] { player1, player2 };
+    }
 
     // Other methods as needed...
 }

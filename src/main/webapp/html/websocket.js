@@ -76,7 +76,7 @@ function sendWords(roomId) {
   if (usernameSpan) {
     const username = usernameSpan.textContent;
     if (selectedWords.length > 0) {
-      const message = "check_word:" + roomId + ":" + username + ":" + selectedWords.join(",");
+      const message = "check_word:" + roomId + ":" + username + ":" + selectedWords.join("");
       socket.send(message);
       selectedWords = [];  // Clear the selected words after sending
     }

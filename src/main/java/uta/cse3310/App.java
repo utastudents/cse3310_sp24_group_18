@@ -166,7 +166,8 @@ public class App extends WebSocketServer {
         }
         return "full"; // Game is full, or no game exists with the given lobby name
     }
-    
+
+
 
     private void handleMessage(WebSocket conn, String message) {
 
@@ -197,17 +198,6 @@ public class App extends WebSocketServer {
             }
         }
 
-        // // Handle the chat message
-        // else if (message.startsWith("chat:")) {
-        // // Example format of the message: "chat:Room1:Hello, how are you?"
-        // String[] parts = message.split(":", 3);
-        // if (parts.length >= 3) {
-        // String roomId = parts[1];
-        // String chatMessage = parts[2];
-        // System.out.println(" [DEBUG0] Broadcasting message to game room: " + roomId);
-        // broadcastToGameRoom(roomId, "chat:" + roomId + ":" + chatMessage);
-        // }
-        // }
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
             String username = message.substring("new_player:".length());
@@ -223,14 +213,14 @@ public class App extends WebSocketServer {
             printAllGamePlayers();
         }
         else if (message.startsWith("check_word:")) {
-        String[] parts = message.split(":");
-        if (parts.length > 3) {
-            String roomId = parts[1];
-            String username = parts[2];
-            String words = parts[3];
-            System.out.println("\n- GOT CHECK WORD REQUEST -\n"+"WORD : "+words+" ");
-            handleCheckWord(conn, roomId, username, words);
-        }
+            String[] parts = message.split(":");
+            if (parts.length > 3) {
+                String roomId = parts[1];
+                String username = parts[2];
+                String word = parts[3];
+                System.out.println("\n- GOT CHECK WORD REQUEST -\n" + "WORD : " + word + " ");
+                handleCheckWord(conn, roomId, username, word);
+            }
 
         // socket.send("user_left:" + username); // This will send message to
         // websocket.js socket.onmessage and it will show screen accordingly
@@ -242,25 +232,34 @@ public class App extends WebSocketServer {
         else {
             System.out.println("NULL FUNC");
         }}
+        
     }
 
-    private void handleCheckWord(WebSocket conn, String roomId, String username, String words) {
-        System.out.println("INSIDE HANDLE CHECK WORD");
-    Game game = gameMap.get(roomId);
-    if (game != null) {
-        String[] wordList = words.split(",");
-        List<String> foundWords = game.checkWords(username, wordList); // Assuming Game has a method checkWords
-        if (!foundWords.isEmpty()) {
-            conn.send("words_found:" + roomId + ":" + String.join(",", foundWords));
-            System.out.println("MATCH FOUND!!");
+    private void handleCheckWord(WebSocket conn, String roomId, String username, String word) {
+        Game game = gameMap.get(roomId);
+        if (game != null) {
+            boolean wordFound = game.checkWord(username, word);
+            if (wordFound) {
+                conn.send("word_found:" + word);  // Notify client that the word was found
+                game.printWordsFoundByUser(username);  // Optionally print all words found by the user so far
+            } else {
+                conn.send("word_not_found:" + word);  // Notify client that the word was not found or already marked
+            }
         } else {
-            conn.send("word_not_found:" + roomId);
-            System.out.println("No match found!!!");
+            conn.send("error:Game not found");
         }
-    } else {
-        conn.send("error:Game not found");
     }
-}
+    public void printPlayerWordCounts() {
+        for (Game game : gameMap.values()) {
+            System.out.println("Game Lobby: " + game.getLobbyName() + " Word Counts:");
+            game.printAllWordsAndTheirStatus(); // Assuming Game.java has this method to print each word and whether it's found
+        }
+    }
+    
+    
+ 
+    
+    
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
