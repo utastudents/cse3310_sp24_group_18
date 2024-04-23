@@ -389,7 +389,7 @@ public class App extends WebSocketServer {
         if (errorUsername != null) {
             playerMap.remove(errorUsername);
             connectionUserMap.remove(conn); // Clean up the connection map
-            System.out.println("Player removed (Tab Closed): " + errorUsername);
+            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername+"\n\n");
             // Optionally broadcast the updated player list after removal
             broadcastPlayerList();
             System.out.println("On Disconnect : ");

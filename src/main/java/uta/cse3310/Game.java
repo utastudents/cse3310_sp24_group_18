@@ -26,7 +26,7 @@ public class Game {
     private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
-    private Map<String, Boolean> wordsFound;
+    private Map<String, Boolean> wordsPlaced;
     private static Random random = new Random();
 
     public Game(String lobbyName, String roomId) {
@@ -36,7 +36,7 @@ public class Game {
         this.player2 = null;
         this.isFinished = false;
         this.grid = new char[GRID_SIZE][GRID_SIZE];
-        this.wordsFound = new HashMap<>();
+        this.wordsPlaced = new HashMap<>();
         loadWords(); // Load words specific to this game instance
         System.out.println("Creating game with lobby name: " + lobbyName + " and room id: " + roomId);
         initializeGrid();
@@ -53,7 +53,7 @@ public class Game {
         this.player1 = null;
         this.player2 = null;
         this.isFinished = false;
-        this.wordsFound.clear();
+        this.wordsPlaced.clear();
         initializeGrid();
         placeWords();
         System.out.println("Game reset in lobby: " + lobbyName);
@@ -77,7 +77,7 @@ public class Game {
     public void sendGameDetails(WebSocket conn) {
         Gson gson = new Gson();
         //String gridJson = getGridAsJson(); // Get JSON representation of the game grid
-        List<String> placedWords = new ArrayList<>(wordsFound.keySet()); // Get list of placed words
+        List<String> placedWords = new ArrayList<>(wordsPlaced.keySet()); // Get list of placed words
         String wordsJson = gson.toJson(placedWords); // Convert placed words list to JSON
 
         System.out.println("Sending game details to client: " + conn.getRemoteSocketAddress());
@@ -113,7 +113,7 @@ public class Game {
                 attempts++;
             }
             if (placed) {
-                wordsFound.put(word, false);
+                wordsPlaced.put(word, false);
             }
         }
     }
@@ -189,7 +189,7 @@ public class Game {
 
     // Prints the words that were successfully placed in the grid
     public void printWords() {
-        for (String word : wordsFound.keySet()) {
+        for (String word : wordsPlaced.keySet()) {
             System.out.println("Placed word: " + word);
         }
     }
