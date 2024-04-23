@@ -3,6 +3,7 @@ const socket = new WebSocket("ws://localhost:9180");
 document.addEventListener("DOMContentLoaded", function() {
   setupEventListeners();
 });
+
 function setupEventListeners() {
   // Login form submission event
   const loginForm = document.getElementById("loginForm");
@@ -27,45 +28,50 @@ function setupEventListeners() {
           socket.send('reset_game:' + 'gameroom4');
           socket.send('reset_game:' + 'gameroom5');
       });
-  }
+  }}
 
-  // Setup color pickers and grid cells for each game room
-  setupColorPickersAndGrid();
+    // Add event listeners for sending words in each game room
+    addSendButtonListener('gameroom1');
+    addSendButtonListener('gameroom2');
+    addSendButtonListener('gameroom3');
+    addSendButtonListener('gameroom4');
+    addSendButtonListener('gameroom5');
+
+ // GRID
+ function addSendButtonListener(roomId) {
+  const sendButton = document.getElementById(roomId + '_send');
+  if (sendButton) {
+    sendButton.addEventListener('click', function() {
+      sendWords(roomId);
+    });
+  }
 }
 
-function setupColorPickersAndGrid() {
-  const gameRooms = ['gameroom1', 'gameroom2', 'gameroom3', 'gameroom4', 'gameroom5'];
-  gameRooms.forEach(roomId => {
-      const player1ColorPicker = document.getElementById(`player1-color-${roomId}`);
-      const player2ColorPicker = document.getElementById(`player2-color-${roomId}`);
-      const gridCells = document.querySelectorAll(`#${roomId} .game-grid td`);
+ function toggleCell(cell, value) {
+  if (cell.style.backgroundColor === 'yellow') {
+    cell.style.backgroundColor = ''; // Change to your default or previous color
+    removeFromSelected(value); // Function to remove from selected words
+  } else {
+    cell.style.backgroundColor = 'yellow'; // Change to your highlight color
+    addToSelected(value); // Function to add to selected words
+  }
+}
+var selectedWords = []; // This will store the selected words
 
-      if (player1ColorPicker && player2ColorPicker && gridCells.length > 0) {
-          let player1Color = player1ColorPicker.value;
-          let player2Color = player2ColorPicker.value;
+function addToSelected(word) {
+  selectedWords.push(word);
+}
 
-          player1ColorPicker.addEventListener("change", () => {
-              player1Color = player1ColorPicker.value;
-          });
-
-          player2ColorPicker.addEventListener("change", () => {
-              player2Color = player2ColorPicker.value;
-          });
-
-          gridCells.forEach(cell => {
-              cell.addEventListener("click", function() {
-                  // Placeholder for determining current player (you will need actual logic here)
-                  const currentPlayer = determineCurrentPlayer();
-                  if (currentPlayer === 1) {
-                      this.style.backgroundColor = player1Color;
-                  } else if (currentPlayer === 2) {
-                      this.style.backgroundColor = player2Color;
-                  }
-                  this.classList.add('selected');
-              });
-          });
-      }
-  });
+function removeFromSelected(word) {
+  const index = selectedWords.indexOf(word);
+  if (index > -1) {
+    selectedWords.splice(index, 1);
+  }
+}
+function sendWords(roomId) {
+  const usernameSpan = document.getElementById(roomId + "_player"); // Adjust according to how you track usernames
+  const username = usernameSpan.textContent;
+  console.log(username + ":" + selectedWords.join(""));
 }
 
 function updateGrid(roomId, gridJson) {
@@ -76,12 +82,13 @@ function updateGrid(roomId, gridJson) {
 
 function formatGridHtml(grid) {
   let html = '<table class="game-grid">';
-  grid.forEach(row => {
-      html += '<tr>';
-      row.forEach(cell => {
-          html += `<td>${cell}</td>`;
-      });
-      html += '</tr>';
+  let cellId = 0;
+  grid.forEach((row, rowIndex) => {
+    html += '<tr>';
+    row.forEach((cell, colIndex) => {
+      html += `<td id="cell_${rowIndex}_${colIndex}" onclick="toggleCell(this, '${cell}')" class="grid-cell">${cell}</td>`;
+    });
+    html += '</tr>';
   });
   html += '</table>';
   return html;
@@ -99,6 +106,7 @@ function updatePlayerList(playerNamesJSON) {
   });
 }
 
+
 // showGameRoom function to show the game room
 function showGameRoom(roomId, player, opponent) {
   document.getElementById(roomId + "_player").textContent = player;
@@ -106,7 +114,6 @@ function showGameRoom(roomId, player, opponent) {
   showSection(roomId); // Shows the appropriate game room
 
 }
-
 
 
 function updateGameTable(gameRooms) {

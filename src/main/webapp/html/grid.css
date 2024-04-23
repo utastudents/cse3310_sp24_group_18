@@ -15,6 +15,10 @@
     max-width: 600px; /* Limits the size of the grid */
     margin: auto; /* Center the grid horizontally */
 }
+.grid-cell {
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }  
 
 .game-grid td {
     border: 1px solid #ddd; /* Light grey border */
