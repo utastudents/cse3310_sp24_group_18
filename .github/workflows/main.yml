@@ -19,9 +19,9 @@ jobs:
           echo "github url = ${{ github.server_url }}"
           echo "Owner =  ${{ github.repository_owner }}"
           echo "Repository name = ${{ github.event.repository.name }}"
-          echo "Service name = twsg"
-          echo "http port = 9018"
-          echo "websocket port = 9118"
+          echo "Service name = ${{ vars.service_name }}"
+          echo "http port = ${{ vars.http_port }}"
+          echo "websocket port = ${{ vars.websocket_port }}"
           echo "version = $${ github.sha }}"
           # On to the work at hand.
           mkdir -p ~/.ssh/
