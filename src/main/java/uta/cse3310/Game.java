@@ -29,6 +29,11 @@ public class Game {
     private Map<String, Boolean> wordsPlaced;
     private static Random random = new Random();
 
+
+    // Maintain the original naming convention
+    private Map<String, Boolean> wordsFound = new HashMap<>();
+    private Map<String, List<String>> wordsFoundByPlayer = new HashMap<>();
+
     public Game(String lobbyName, String roomId) {
         this.lobbyName = lobbyName;
         this.roomId = roomId;
@@ -46,6 +51,43 @@ public class Game {
         this.chat = new Chat(); // Initialize a new Chat object for this game
 
     }
+
+
+     // Method to mark a word as found
+    public void markWordAsFound(String word, String username) {
+        if (wordsFound.containsKey(word) && !wordsFound.get(word)) { // Check if word is placed and not yet marked as found
+            wordsFound.put(word, true); // Mark the word as found
+            if (!wordsFoundByPlayer.containsKey(username)) {
+                wordsFoundByPlayer.put(username, new ArrayList<>()); // Create a new list for this user if not exist
+            }
+            wordsFoundByPlayer.get(username).add(word); // Add the word to the user's found list
+            System.out.println(username + " found the word: " + word);
+        }
+    }
+
+    // Retrieve the list of words found by a specific player
+    public List<String> getWordsFoundByPlayer(String username) {
+        return wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
+    }
+
+    // Debugging method to print words found by each player
+    public void printWordsFound() {
+        for (Map.Entry<String, List<String>> entry : wordsFoundByPlayer.entrySet()) {
+            System.out.println("User: " + entry.getKey() + ", Words Found: " + entry.getValue());
+        }
+    }
+
+    // Retrieve the list of all words that have been placed and their found status
+    public List<String> getPlacedWords() {
+        return new ArrayList<>(wordsFound.keySet());
+    }
+
+    // Check if a specific word is placed in the game and has been found
+    public boolean isWordPlacedAndFound(String word) {
+        return wordsFound.containsKey(word) && wordsFound.get(word);
+    }
+
+
 
     public void reset() {
         // Reset the game's properties
