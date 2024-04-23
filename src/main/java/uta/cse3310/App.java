@@ -228,6 +228,7 @@ public class App extends WebSocketServer {
             String roomId = parts[1];
             String username = parts[2];
             String words = parts[3];
+            System.out.println("\n- GOT CHECK WORD REQUEST -\n"+"WORD : "+words+" ");
             handleCheckWord(conn, roomId, username, words);
         }
 
@@ -244,14 +245,17 @@ public class App extends WebSocketServer {
     }
 
     private void handleCheckWord(WebSocket conn, String roomId, String username, String words) {
+        System.out.println("INSIDE HANDLE CHECK WORD");
     Game game = gameMap.get(roomId);
     if (game != null) {
         String[] wordList = words.split(",");
         List<String> foundWords = game.checkWords(username, wordList); // Assuming Game has a method checkWords
         if (!foundWords.isEmpty()) {
             conn.send("words_found:" + roomId + ":" + String.join(",", foundWords));
+            System.out.println("MATCH FOUND!!");
         } else {
             conn.send("word_not_found:" + roomId);
+            System.out.println("No match found!!!");
         }
     } else {
         conn.send("error:Game not found");

@@ -249,18 +249,17 @@ socket.onmessage = function (event) {
 
     case "words_found": {
       const roomId = data[1];
-      const content = data.slice(2).join(":");
-      const words = content.split(",");
+      const wordsContent = data.slice(2).join(":");
+      const words = wordsContent.split(",");
       console.log("Words found: " + words.join(", "));
       updateWordsDisplay(roomId, words);
       break;
-  }
+    }
 
-  case "word_not_found": {
+    case "word_not_found": {
       console.log("Word not found: " + data[1]);
       break;
-  }
-  
+    }
 
     case "update_grid":
       const roomId = data[1];
