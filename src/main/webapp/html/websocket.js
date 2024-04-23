@@ -69,9 +69,13 @@ function removeFromSelected(word) {
   }
 }
 function sendWords(roomId) {
-  const usernameSpan = document.getElementById(roomId + "_player"); // Adjust according to how you track usernames
-  const username = usernameSpan.textContent;
-  console.log(username + ":" + selectedWords.join(""));
+  const usernameSpan = document.querySelector('.currentUsername'); // Adjust selector as needed
+  if (usernameSpan) {
+    const username = usernameSpan.textContent;
+    console.log("check_word" + ":" + username + ":" + selectedWords.join(""));
+} else {
+    console.error("Username display element not found");
+}
 }
 
 function updateGrid(roomId, gridJson) {
