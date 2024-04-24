@@ -170,33 +170,73 @@ public class Game {
         // }
     }
 
+    private int getRowIncrement(int orientation, int i) {
+        switch (orientation) {
+            case 0: // Horizontal right
+            case 2: // Horizontal left
+                return 0;
+            case 1: // Vertical down
+            case 7: // Diagonal right down
+            case 5: // Diagonal left down
+                return i;
+            case 3: // Vertical up
+            case 6: // Diagonal right up
+            case 4: // Diagonal left up
+                return -i;
+            default:
+                return 0;
+        }
+    }
+    
+    private int getColIncrement(int orientation, int i) {
+        switch (orientation) {
+            case 0: // Horizontal right
+            case 7: // Diagonal right down
+            case 6: // Diagonal right up
+                return i;
+            case 1: // Vertical down
+            case 3: // Vertical up
+                return 0;
+            case 2: // Horizontal left
+            case 5: // Diagonal left down
+            case 4: // Diagonal left up
+                return -i;
+            default:
+                return 0;
+        }
+    }
+    
     // Attempts to place a single word in the grid randomly
     private boolean placeWordInGrid(String word) {
-        int orientation = random.nextInt(2); // 0 for horizontal, 1 for vertical
+        int orientation = random.nextInt(8); // Updated for 8 orientations
         for (int attempts = 0; attempts < 100; attempts++) {
             int row = random.nextInt(GRID_SIZE);
             int col = random.nextInt(GRID_SIZE);
             if (canPlaceWord(word, row, col, orientation)) {
                 for (int i = 0; i < word.length(); i++) {
-                    grid[row + (orientation == 1 ? i : 0)][col + (orientation == 0 ? i : 0)] = word.charAt(i);
+                    int newRow = row + getRowIncrement(orientation, i);
+                    int newCol = col + getColIncrement(orientation, i);
+                    grid[newRow][newCol] = word.charAt(i);
                 }
                 return true;
             }
         }
         return false;
     }
+    
 
     // Checks if a word can be placed at the specified position
     private boolean canPlaceWord(String word, int row, int col, int orientation) {
         for (int i = 0; i < word.length(); i++) {
-            int newRow = row + (orientation == 1 ? i : 0);
-            int newCol = col + (orientation == 0 ? i : 0);
-            if (newRow >= GRID_SIZE || newCol >= GRID_SIZE || grid[newRow][newCol] != '_') {
+            int newRow = row + getRowIncrement(orientation, i);
+            int newCol = col + getColIncrement(orientation, i);
+            if (newRow < 0 || newRow >= GRID_SIZE || newCol < 0 || newCol >= GRID_SIZE || grid[newRow][newCol] != '_') {
                 return false;
             }
         }
         return true;
     }
+    
 
     // Prints the current state of the grid
     public void printGrid() {
