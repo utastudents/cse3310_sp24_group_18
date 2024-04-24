@@ -171,7 +171,7 @@ public class Game {
     }
 
     // Attempts to place a single word in the grid randomly
-    private boolean placeWordInGrid(String word) {
+   public boolean placeWordInGrid(String word) {
         int orientation = random.nextInt(2); // 0 for horizontal, 1 for vertical
         for (int attempts = 0; attempts < 100; attempts++) {
             int row = random.nextInt(GRID_SIZE);

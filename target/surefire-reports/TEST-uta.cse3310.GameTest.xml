@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="uta.cse3310.AppTest" time="0.017" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="uta.cse3310.GameTest" time="0.019" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -51,5 +51,37 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testApp" classname="uta.cse3310.AppTest" time="0.001"/>
+  <testcase name="testCase" classname="uta.cse3310.GameTest" time="0.018">
+    <system-out><![CDATA[Words loaded successfully
+Creating game with lobby name: TestLobby and room id: TestRoom
+Grid for [game: TestLobby room: TestRoom
+_ _ _ _ _ _ _ _ _ _ A r r i n e r a N _ 
+_ _ I _ _ _ _ _ _ _ _ B u g a t t i o _ 
+_ _ t _ _ _ P _ _ _ _ _ A p o l l o b _ 
+_ _ a _ G F a _ _ _ Z e n v o _ _ _ l _ 
+_ _ l _ u e g _ _ L e v a n t e _ _ e A 
+_ _ d _ m r a A s t o n M a r t i n _ s 
+_ M e _ p r n _ _ _ _ _ _ _ _ _ _ _ _ p 
+K a s _ e a i _ _ _ _ _ F L _ _ _ _ _ a 
+o y i _ r r D e v e l _ e a _ R _ S _ r 
+e b g _ t i _ _ _ _ _ _ n m _ i _ p _ k 
+n a n _ _ _ _ _ _ _ _ _ y b _ m _ y _ _ 
+i c _ _ _ B e n t l e y r o _ a C k _ _ 
+g h M a s e r a t i _ _ _ r _ c z e _ W 
+s _ _ _ _ _ _ _ _ _ _ _ _ g _ _ i r _ M 
+e _ M c L a r e n _ _ _ _ h _ _ n _ S o 
+g _ _ _ _ _ _ _ _ _ _ _ _ i _ _ g _ a t 
+g _ _ _ _ _ _ _ _ _ _ _ _ n _ _ e _ l o 
+_ _ _ _ B r a b h a m _ _ i _ _ r _ e r 
+_ _ _ _ _ _ _ _ P o r s c h e _ _ _ e s 
+_ _ _ _ _ H e n n e s s e y _ _ _ _ n _ 
+----------PLACED WORDS-------------
+Hennessey Fenyr Levante Brabham AstonMartin Aspark Ferrari Maserati Porsche Arrinera Zenvo WMotors Gumpert Italdesign Noble Apollo Bugatti Pagani Rimac Bentley Lamborghini Devel Czinger Maybach Spyker Saleen McLaren Koenigsegg 
+
+Total words: 28
+------------------------------------
+
+
+]]></system-out>
+  </testcase>
 </testsuite>
