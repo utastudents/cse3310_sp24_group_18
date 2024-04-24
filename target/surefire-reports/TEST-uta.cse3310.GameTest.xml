@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="uta.cse3310.GameTest" time="0.028" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="uta.cse3310.GameTest" time="0.012" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/vboxuser/cse3310_sp24_group_18/target/surefire/surefirebooter17846720475229774983.jar /home/vboxuser/cse3310_sp24_group_18/target/surefire 2024-04-24T11-29-33_372-jvmRun1 surefire17989286545376267620tmp surefire_012529219792347502595tmp"/>
+    <property name="sun.java.command" value="/home/vboxuser/cse3310_sp24_group_18/target/surefire/surefirebooter981475045296962279.jar /home/vboxuser/cse3310_sp24_group_18/target/surefire 2024-04-24T11-48-08_972-jvmRun1 surefire5817679859623445510tmp surefire_04952936610728600147tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/vboxuser/cse3310_sp24_group_18/target/test-classes:/home/vboxuser/cse3310_sp24_group_18/target/classes:/home/vboxuser/.m2/repository/net/freeutils/jlhttp/2.6/jlhttp-2.6.jar:/home/vboxuser/.m2/repository/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar:/home/vboxuser/.m2/repository/org/java-websocket/Java-WebSocket/1.5.4/Java-WebSocket-1.5.4.jar:/home/vboxuser/.m2/repository/org/slf4j/slf4j-api/2.0.6/slf4j-api-2.0.6.jar:/home/vboxuser/.m2/repository/junit/junit/4.12/junit-4.12.jar:/home/vboxuser/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/vboxuser/cse3310_sp24_group_18/target/surefire/surefirebooter17846720475229774983.jar"/>
+    <property name="surefire.real.class.path" value="/home/vboxuser/cse3310_sp24_group_18/target/surefire/surefirebooter981475045296962279.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.9+9-Ubuntu-122.04"/>
     <property name="user.name" value="vboxuser"/>
@@ -51,30 +51,30 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testCase" classname="uta.cse3310.GameTest" time="0.027">
+  <testcase name="testCase" classname="uta.cse3310.GameTest" time="0.012">
     <system-out><![CDATA[Words loaded successfully
 Creating game with lobby name: TestLobby and room id: TestRoom
 Grid for [game: TestLobby room: TestRoom
-_ _ _ _ _ _ _ _ I t a l d e s i g n _ _ 
-_ D B r a b h a m _ _ _ _ _ _ _ _ _ _ _ 
-_ e _ N o b l e _ _ _ _ C z i n g e r M 
-A v _ _ _ _ _ _ _ _ _ P a g a n i _ _ a 
-s e L P _ _ _ _ _ _ _ _ _ _ _ A _ _ _ s 
-p l e o F e r r a r i _ _ _ _ p _ K _ e 
-a _ v r _ _ _ B u g a t t i _ o Z o _ r 
-r _ a s H e n n e s s e y _ _ l e e A a 
-k _ n c _ _ _ _ _ _ _ _ _ _ _ l n n s t 
-L _ t h _ _ _ _ _ _ _ _ _ _ B o v i t i 
-a _ e e _ _ F _ _ _ _ _ _ _ e _ o g o S 
-m _ _ _ _ _ e _ _ _ _ _ _ _ n _ _ s n p 
-b _ S _ _ _ n _ _ _ _ _ _ _ t _ _ e M y 
-o _ a _ _ _ y M c L a r e n l _ _ g a k 
-r _ l _ _ _ r _ _ _ _ _ _ _ e _ _ g r e 
-g _ e _ G u m p e r t _ _ _ y _ _ _ t r 
-h _ e _ M a y b a c h W M o t o r s i _ 
-i _ n _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ n _ 
-n _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-i R i m a c _ _ _ _ A r r i n e r a _ _ 
+C z i n g e r _ I t a l d e s i g n _ _ 
+_ _ W _ _ _ F _ _ _ N o b l e _ _ _ _ _ 
+_ _ M _ _ _ e K o e n i g s e g g _ _ _ 
+_ _ o _ _ _ r _ _ P a g a n i _ _ _ _ B 
+_ _ t _ _ _ r _ M a y b a c h B _ _ _ e 
+_ _ o _ _ _ a _ _ _ _ _ _ _ _ u _ _ _ n 
+_ _ r _ _ _ r _ _ _ _ _ _ _ _ g _ _ G t 
+_ _ s _ _ _ i _ _ _ _ _ _ _ _ a S _ u l 
+A s t o n M a r t i n _ _ L _ t a _ m e 
+_ _ A _ M a s e r a t i _ a _ t l _ p y 
+_ _ r P o r s c h e _ _ _ m _ i e _ e A 
+B _ r _ D e v e l _ _ _ _ b _ _ e _ r p 
+r M i _ _ _ _ _ _ _ _ _ _ o _ _ n _ t o 
+a c n _ F e n y r _ _ _ _ r Z _ _ _ _ l 
+b L e L e v a n t e _ _ _ g e _ _ _ _ l 
+h a r H e n n e s s e y _ h n _ _ _ R o 
+a r a _ _ _ _ _ _ _ _ _ _ i v _ _ _ i _ 
+m e _ _ _ _ _ _ _ _ _ _ _ n o _ _ _ m _ 
+_ n _ S p y k e r _ _ _ _ i _ _ _ _ a _ 
+_ _ _ A s p a r k _ _ _ _ _ _ _ _ _ c _ 
 ----------PLACED WORDS-------------
 Hennessey Fenyr Levante Brabham AstonMartin Aspark Ferrari Maserati Porsche Arrinera Zenvo WMotors Gumpert Italdesign Noble Apollo Bugatti Pagani Rimac Bentley Lamborghini Devel Czinger Maybach Spyker Saleen McLaren Koenigsegg 
 
