@@ -36,6 +36,12 @@
       <version>1.5.4</version>
     </dependency>
 
+  
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -59,6 +65,18 @@
           <mainClass>${mainClass}</mainClass>
         </configuration>
       </plugin>
+      <!-- runs test -->
+      <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version> <!-- Adjust version as needed -->
+                <configuration>
+         <includes>
+        <include>**/*Test.java</include>
+        <include>**/Test*.java</include>
+          </includes>
+                </configuration>
+            </plugin>
     </plugins>
   </build>
 </project>
