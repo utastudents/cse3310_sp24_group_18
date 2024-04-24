@@ -50,7 +50,6 @@ public class Game {
         this.chat = new Chat(); // Initialize a new Chat object for this game
 
     }
-
     public boolean checkWord(String username, String word) {
         Boolean foundStatus = wordsPlaced.get(word);
         if (foundStatus != null && foundStatus) { // Check if the word exists and is set to true (available to be found)
@@ -58,12 +57,15 @@ public class Game {
             wordsFound.add(word); // Optionally maintain a list of all found words
             wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
             System.out.println(username + " found the word: " + word);
+            // print the list 
+            printWordsFoundByUser(username);
             return true;
         } else {
             System.out.println("Word not found or already marked as found: " + word);
             return false;
         }
     }
+
 
     public void printWordsFoundByUser(String username) {
         List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
@@ -75,6 +77,16 @@ public class Game {
             System.out.println("Word: " + entry.getKey() + ", Available: " + entry.getValue());
         }
     }
+
+    // USER SCORE
+    public Map<String, Integer> getPlayerScores() {
+        Map<String, Integer> scores = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : wordsFoundByPlayer.entrySet()) {
+            scores.put(entry.getKey(), entry.getValue().size());
+        }
+        return scores;
+    }
+
 
     public void reset() {
         // Reset the game's properties
@@ -233,6 +245,10 @@ public class Game {
         for (String word : wordsPlaced.keySet()) {
             System.out.print(word + " " );
         }
+
+        // print the count of words
+        System.out.println("\n\nTotal words: " + wordsPlaced.size());
+        System.out.println("------------------------------------\n\n");
 
         // Debug
         // System.out.println("\nDEBUG : \n"+wordsPlaced.get("Buggati"));

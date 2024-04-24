@@ -20,6 +20,10 @@ public class Player {
         this.webSocket = webSocket;
 
     }
+    public void incrementScore() {
+        this.inGameScore += 1;
+    }
+    
 
     // Getters and Setters for the webSocket...
     public WebSocket getWebSocket() {

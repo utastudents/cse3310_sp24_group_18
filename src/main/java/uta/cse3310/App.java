@@ -72,7 +72,7 @@ public class App extends WebSocketServer {
         
     private void broadcastGameRooms() {
         // debug
-        System.out.println("broadcaseGameRooms()_Broadcasting game rooms");
+        System.out.println("broadcastGameRooms()_Broadcasting game rooms");
         List<Map<String, String>> gameRoomsInfo = new ArrayList<>();
 
         // Iterate through all game rooms to gather their information
@@ -197,6 +197,20 @@ public class App extends WebSocketServer {
                 System.out.println("Player not added: " + username);
             }
         }
+        else if (message.startsWith("check_word:")) {
+            String[] parts = message.split(":");
+            if (parts.length > 3) {
+                String roomId = parts[1];
+                String username = parts[2];
+                String word = parts[3];
+                Game game = gameMap.get(roomId);
+                if (game != null && game.checkWord(username, word)) {
+                    // After updating the score in checkWord, now broadcast the score
+                    broadcastScore(roomId);
+                }
+            }
+        }
+        
 
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
@@ -234,7 +248,6 @@ public class App extends WebSocketServer {
         }}
         
     }
-
     private void handleCheckWord(WebSocket conn, String roomId, String username, String word) {
         Game game = gameMap.get(roomId);
         if (game != null) {
@@ -242,6 +255,7 @@ public class App extends WebSocketServer {
             if (wordFound) {
                 conn.send("word_found:" + word);  // Notify client that the word was found
                 game.printWordsFoundByUser(username);  // Optionally print all words found by the user so far
+                broadcastScore(roomId);  // Broadcast updated scores after a word is found
             } else {
                 conn.send("word_not_found:" + word);  // Notify client that the word was not found or already marked
             }
@@ -249,6 +263,7 @@ public class App extends WebSocketServer {
             conn.send("error:Game not found");
         }
     }
+  
     public void printPlayerWordCounts() {
         for (Game game : gameMap.values()) {
             System.out.println("Game Lobby: " + game.getLobbyName() + " Word Counts:");
@@ -457,6 +472,27 @@ public class App extends WebSocketServer {
             broadcastGameRooms();
         } catch (Exception e) {
             System.out.println("Error adding player to connectionUserMap: " + e.getMessage());
+        }
+    }
+
+    public void broadcastScore(String roomId) {
+        System.out.println("\n\nReached BroadcastScore()");
+        Game game = gameMap.get(roomId);
+        if (game != null) {
+            Map<String, Integer> scores = game.getPlayerScores();
+            Gson gson = new Gson();
+            String scoresJson = gson.toJson(scores);
+            
+            for (WebSocket conn : this.getConnections()) {
+                conn.send("update_scores:" + roomId + ":" + scoresJson);
+            }
+            // print scoresJson
+            System.out.println("Scores JSON: " + scoresJson);
+            System.out.println("\nScores broadcasted");
+        }
+        else
+        {
+            System.out.println("Game not found");
         }
     }
 
