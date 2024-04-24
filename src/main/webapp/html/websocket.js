@@ -49,11 +49,11 @@ function addSendButtonListener(roomId) {
 }
 
 function toggleCell(cell, value) {
-  if (cell.style.backgroundColor === "yellow") {
+  if (cell.style.backgroundColor === "cyan") {
     cell.style.backgroundColor = ""; // Change to your default or previous color
     removeFromSelected(value); // Function to remove from selected words
   } else {
-    cell.style.backgroundColor = "yellow"; // Change to your highlight color
+    cell.style.backgroundColor = "cyan"; // Change to your highlight color
     addToSelected(value); // Function to add to selected words
   }
 }
