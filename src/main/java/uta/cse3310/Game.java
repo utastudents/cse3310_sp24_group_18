@@ -6,9 +6,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.java_websocket.WebSocket;
 
@@ -26,6 +29,7 @@ public class Game {
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsPlaced;
+    private Set<Integer> placedLetters = new HashSet<>();
     private static Random random = new Random();
 
     // Maintain the original naming convention
@@ -42,14 +46,12 @@ public class Game {
         this.wordsPlaced = new HashMap<>();
         loadWords(); // Load words specific to this game instance
         System.out.println("Creating game with lobby name: " + lobbyName + " and room id: " + roomId);
-        initializeGrid();
-        placeWords();
-        System.out.println("Grid for [game: " + lobbyName + " room: " + roomId);
-        printGrid();
-        printWords();
         this.chat = new Chat(); // Initialize a new Chat object for this game
+        startGame();
 
     }
+
+    
     public boolean checkWord(String username, String word) {
         Boolean foundStatus = wordsPlaced.get(word);
         if (foundStatus != null && foundStatus) { // Check if the word exists and is set to true (available to be found)
@@ -105,6 +107,7 @@ public class Game {
         initializeGrid();
         placeWords();
         System.out.println("Game reset in lobby: " + lobbyName);
+        
     }
 
     // CHAT
@@ -146,10 +149,21 @@ public class Game {
 
     private void initializeGrid() {
         for (int i = 0; i < GRID_SIZE; i++) {
-            Arrays.fill(grid[i], '_');
+            Arrays.fill(grid[i], '_'); // Initialize all cells to '_'
         }
     }
 
+    private void fillRemainingCells() {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                if (grid[i][j] == '_') { // Only fill cells that have not been filled with a word
+                    grid[i][j] = (char) ('A' + random.nextInt(26));
+                }
+            }
+        }
+    }
+    
+    
     // Attempts to place all words into the grid
     private void placeWords() {
         for (String word : allWords) {
@@ -163,12 +177,21 @@ public class Game {
                 wordsPlaced.put(word, true);
             }
         }
+    
         // DEBUG
         // System.out.println("IN placewords()");
         // for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
         //     System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
         // }
-    }
+        }
+        public void calculateWordDensity() {
+            int totalCells = GRID_SIZE * GRID_SIZE;
+            int wordCells = placedLetters.size(); // The set size gives us the number of unique cells with words
+        
+            double density = (double) wordCells / totalCells * 100;
+            System.out.printf("Density of valid words in the grid: %.2f%%\n", density);
+        }
+        
 
     private int getRowIncrement(int orientation, int i) {
         switch (orientation) {
@@ -217,6 +240,7 @@ public class Game {
                     int newRow = row + getRowIncrement(orientation, i);
                     int newCol = col + getColIncrement(orientation, i);
                     grid[newRow][newCol] = word.charAt(i);
+                    placedLetters.add(newRow * GRID_SIZE + newCol); // Track positions
                 }
                 return true;
             }
@@ -251,13 +275,16 @@ public class Game {
     // Loads the words from a text file into the allWords list
     public void loadWords() {
         try {
-            allWords = Files.readAllLines(Paths.get("words.txt"));
-            System.out.println("Words loaded successfully");
+            allWords = Files.readAllLines(Paths.get("words.txt")).stream()
+                            .map(String::toUpperCase) // Convert each word to uppercase
+                            .filter(word -> word.length() > 3) // Filter out words that are less than or equal to 3 letters
+                            .collect(Collectors.toList());
+            System.out.println("Words loaded successfully. Total words loaded: " + allWords.size());
         } catch (IOException e) {
             System.err.println("Error loading words: " + e.getMessage());
         }
     }
-
+    
     // Converts the grid to a JSON string format
     public String getGridAsJson() {
         StringBuilder sb = new StringBuilder();
@@ -356,7 +383,12 @@ public class Game {
     }
 
     public void startGame() {
-        // Start the game
+        initializeGrid();
+        placeWords();
+        fillRemainingCells(); // Fill the rest of the grid after placing words
+        printGrid();
+        printWords();
+        calculateWordDensity(); // Ensure this is called after words are placed
     }
 
     public String getCurrentNumberOfPlayers() {
@@ -404,6 +436,4 @@ public class Game {
     public Player[] getPlayers_chat() {
         return new Player[] { player1, player2 };
     }
-
-    // Other methods as needed...
 }
