@@ -11,6 +11,7 @@
   </head>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="grid.css" />
+  <link rel="stylesheet" href="leaderboard.css" />
   <body>
     <h2> THE GAME IS STILL IN DEVELOPMENT AND THE BUTTONS ARE MEANT FOR DEBUG PURPOSES</h2>
     <div id="section0">
@@ -148,9 +149,21 @@
         <!-- The game grid will go here -->
       </div>
       <button id="gameroom1_send">Send Words</button>
-      <ul id="gameroom1_words" class="word-list">
+      <ul id="gameroom1_words">
         <!-- Found words will go here -->
       </ul>
+
+      <table id="gameroom1_leaderboard_table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
     
       <!-- Chat feature -->
       <div class="chat-container">
@@ -178,6 +191,18 @@
 
       <ul id="gameroom2_words"></ul>
 
+      <table id="gameroom2_leaderboard_table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
+
       <div class="chat-container">
         <div class="chat-header">
           <span>CHAT BOX</span></span>
@@ -188,12 +213,8 @@
         <input type="text" id="gameroom2_chat_input" class="chat-input" placeholder="Type a message..." />
         <button id="gameroom2_send_msg" class="send-btn" onclick="sendChatMessage('gameroom2')">Send</button>
       </div>
-    
       <button id="gameroom1_exit_bttn" class="exit-game-btn">Exit Game</button>
-
     </div>
-
-
       <button id="gameroom2_exit_bttn">Exit Game</button>
     </div>
 
@@ -209,6 +230,17 @@
 
       <ul id="gameroom3_words"></ul>
 
+      <table id="gameroom3_leaderboard_table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
 
       <div class="chat-container">
         <div class="chat-header">
@@ -223,6 +255,8 @@
 
       <button id="gameroom3_exit_bttn">Exit Game</button>
     </div>
+
+    <!-------GAME ROOM 4--------->
     <div id="gameroom4" class="hidden">
       <h1>Game Room 4</h1>
       <p>Player1: <span id="gameroom4_player"></span></p>
@@ -232,6 +266,18 @@
       <button id="gameroom4_send">Send Words</button>
 
       <ul id="gameroom4_words"></ul>
+
+      <table id="gameroom4_leaderboard_table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
 
       <div class="chat-container">
         <div class="chat-header">
@@ -249,7 +295,7 @@
     <!--GAME ROOM 5-->
 
     <div id="gameroom5" class="hidden">
-      <h1>Game Room 4</h1>
+      <h1>Game Room 5</h1>
       <p>Player1: <span id="gameroom5_player"></span></p>
       <p>Player2: <span id="gameroom5_opponent"></span></p>
 
@@ -257,6 +303,18 @@
       <button id="gameroom5_send">Send Words</button>
 
       <ul id="gameroom5_words"></ul>
+
+      <table id="gameroom5_leaderboard_table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
 
       <div class="chat-container">
         <div class="chat-header">

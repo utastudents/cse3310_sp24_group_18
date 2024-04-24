@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://localhost:9180");
+const socket = new WebSocket("ws://localhost:9118");
 
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
@@ -18,42 +18,42 @@ function setupEventListeners() {
   }
 
   // Game reset event
-  const resetGameButton = document.getElementById('resetGame');
+  const resetGameButton = document.getElementById("resetGame");
   if (resetGameButton) {
-    resetGameButton.addEventListener('click', function () {
+    resetGameButton.addEventListener("click", function () {
       console.log("[RESETING ALL GAMES] \n Resetting the game");
-      socket.send('reset_game:' + 'gameroom1');
-      socket.send('reset_game:' + 'gameroom2');
-      socket.send('reset_game:' + 'gameroom3');
-      socket.send('reset_game:' + 'gameroom4');
-      socket.send('reset_game:' + 'gameroom5');
+      socket.send("reset_game:" + "gameroom1");
+      socket.send("reset_game:" + "gameroom2");
+      socket.send("reset_game:" + "gameroom3");
+      socket.send("reset_game:" + "gameroom4");
+      socket.send("reset_game:" + "gameroom5");
     });
   }
 }
 
 // Add event listeners for sending words in each game room
-addSendButtonListener('gameroom1');
-addSendButtonListener('gameroom2');
-addSendButtonListener('gameroom3');
-addSendButtonListener('gameroom4');
-addSendButtonListener('gameroom5');
+addSendButtonListener("gameroom1");
+addSendButtonListener("gameroom2");
+addSendButtonListener("gameroom3");
+addSendButtonListener("gameroom4");
+addSendButtonListener("gameroom5");
 
 // GRID
 function addSendButtonListener(roomId) {
-  const sendButton = document.getElementById(roomId + '_send');
+  const sendButton = document.getElementById(roomId + "_send");
   if (sendButton) {
-    sendButton.addEventListener('click', function () {
+    sendButton.addEventListener("click", function () {
       sendWords(roomId);
     });
   }
 }
 
 function toggleCell(cell, value) {
-  if (cell.style.backgroundColor === 'yellow') {
-    cell.style.backgroundColor = ''; // Change to your default or previous color
+  if (cell.style.backgroundColor === "yellow") {
+    cell.style.backgroundColor = ""; // Change to your default or previous color
     removeFromSelected(value); // Function to remove from selected words
   } else {
-    cell.style.backgroundColor = 'yellow'; // Change to your highlight color
+    cell.style.backgroundColor = "yellow"; // Change to your highlight color
     addToSelected(value); // Function to add to selected words
   }
 }
@@ -70,23 +70,20 @@ function removeFromSelected(word) {
   }
 }
 
-
 function sendWords(roomId) {
-  const usernameSpan = document.querySelector('.currentUsername');
+  const usernameSpan = document.querySelector(".currentUsername");
   if (usernameSpan) {
     const username = usernameSpan.textContent;
     if (selectedWords.length > 0) {
-      const message = "check_word:" + roomId + ":" + username + ":" + selectedWords.join("");
+      const message =
+        "check_word:" + roomId + ":" + username + ":" + selectedWords.join("");
       socket.send(message);
-      selectedWords = [];  // Clear the selected words after sending
+      selectedWords = []; // Clear the selected words after sending
     }
   } else {
     console.error("Username display element not found");
   }
 }
-
-
-
 
 function updateGrid(roomId, gridJson) {
   let gridData = JSON.parse(gridJson);
@@ -98,13 +95,13 @@ function formatGridHtml(grid) {
   let html = '<table class="game-grid">';
   let cellId = 0;
   grid.forEach((row, rowIndex) => {
-    html += '<tr>';
+    html += "<tr>";
     row.forEach((cell, colIndex) => {
       html += `<td id="cell_${rowIndex}_${colIndex}" onclick="toggleCell(this, '${cell}')" class="grid-cell">${cell}</td>`;
     });
-    html += '</tr>';
+    html += "</tr>";
   });
-  html += '</table>';
+  html += "</table>";
   return html;
 }
 
@@ -120,15 +117,12 @@ function updatePlayerList(playerNamesJSON) {
   });
 }
 
-
 // showGameRoom function to show the game room
 function showGameRoom(roomId, player, opponent) {
   document.getElementById(roomId + "_player").textContent = player;
   document.getElementById(roomId + "_opponent").textContent = opponent;
   showSection(roomId); // Shows the appropriate game room
-
 }
-
 
 function updateGameTable(gameRooms) {
   const tbody = document.getElementById("gameTableBody");
@@ -161,7 +155,6 @@ function updateGameTable(gameRooms) {
 //     console.error("No grid element found for room ID:", roomId);
 //   }
 // }
-
 
 function updateWords(roomId, words) {
   const wordsListHtml = words.map((word) => `<li>${word}</li>`).join("");
@@ -196,35 +189,32 @@ socket.onopen = function (event) {
   console.log("WebSocket connection established");
 };
 
-
-
 // CHAT
 
 function sendChatMessage(roomId) {
-  const input = document.getElementById(roomId + '_chat_input');
-  const usernameSpan = document.querySelector('.currentUsername'); // Adjust selector as needed
+  const input = document.getElementById(roomId + "_chat_input");
+  const usernameSpan = document.querySelector(".currentUsername"); // Adjust selector as needed
   const username = usernameSpan.textContent; // Or use .value if it’s an input field
   const message = input.value.trim();
 
   if (message) {
     const fullMessage = username + ": " + message; // Combine username with message
     socket.send(`chat:${roomId}:${fullMessage}`);
-    input.value = '';  // Clear the input after sending
+    input.value = ""; // Clear the input after sending
   }
 }
 
 function updateChat(roomId, message) {
-  const chatBox = document.getElementById(roomId + '_chat');
-  const messageDiv = document.createElement('div');
+  const chatBox = document.getElementById(roomId + "_chat");
+  const messageDiv = document.createElement("div");
   messageDiv.textContent = message;
   chatBox.appendChild(messageDiv);
 }
 
-
 function appendChatMessage(roomId, message) {
-  const chatBox = document.getElementById(roomId + '_chat');
+  const chatBox = document.getElementById(roomId + "_chat");
   if (chatBox) {
-    const messageDiv = document.createElement('div');
+    const messageDiv = document.createElement("div");
     messageDiv.textContent = message; // Set the message text
     chatBox.appendChild(messageDiv); // Append the new div to the chat box
   } else {
@@ -232,6 +222,41 @@ function appendChatMessage(roomId, message) {
   }
 }
 
+// leader board
+function updateLeaderboard(roomId, scores) {
+  const tbody = document.getElementById(roomId + "_leaderboard_table").getElementsByTagName('tbody')[0];
+  tbody.innerHTML = ''; // Clear existing rows
+
+  Object.entries(scores).forEach(([player, score]) => {
+    const row = tbody.insertRow();
+    const cellPlayer = row.insertCell(0);
+    const cellScore = row.insertCell(1);
+    cellPlayer.textContent = player;
+    cellScore.textContent = score;
+
+    // debug
+    console.log("Player: ", player, " Score: ", score);
+  });
+}
+
+function extractJson(jsonPart) {
+  let braceCount = 0;
+  let json = '';
+  
+  for (let i = 0; i < jsonPart.length; i++) {
+    json += jsonPart[i];
+    if (jsonPart[i] === '{') {
+      braceCount++;
+    } else if (jsonPart[i] === '}') {
+      braceCount--;
+      if (braceCount === 0) {
+        break; // When brace count returns to 0, we've captured a complete JSON object
+      }
+    }
+  }
+
+  return json;
+}
 
 socket.onmessage = function (event) {
   const sectionToShow = event.data;
@@ -242,10 +267,28 @@ socket.onmessage = function (event) {
   const data = event.data.split(":");
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
-
+  let jsonPart = data.slice(2).join(":"); // Join the remaining parts that might contain JSON data
 
 
   switch (command) {
+    
+    case 'update_scores':{
+      const roomId = data[1];
+  
+      console.log("CONTENT:\n"+content)
+      const json = extractJson(jsonPart);
+      console.log("JSON:\n"+json)
+      const scores = JSON.parse(json); 
+      
+      
+      console.log("\n\n-- JSON --\n\n" + json);
+      console.log("\n\n-- SCORE UPDATE REQUEST --\n\n");
+      console.log("Updating scores for room:", roomId);
+      console.log("Scores:", scores);
+
+      updateLeaderboard(roomId, scores);
+      break;
+    }
 
     case "words_found": {
       const roomId = data[1];
@@ -296,13 +339,12 @@ socket.onmessage = function (event) {
       updateGameTable(gameRooms);
       break;
 
-
     case "chat_update":
       if (data.length >= 3) {
         const roomId = data[1];
         const message = data[2];
-        const chatBox = document.getElementById(roomId + '_chat');
-        chatBox.innerHTML += '<div>' + message + '</div>'; // Append new message
+        const chatBox = document.getElementById(roomId + "_chat");
+        chatBox.innerHTML += "<div>" + message + "</div>"; // Append new message
       }
       break;
 
@@ -406,7 +448,6 @@ socket.onerror = function (event) {
 socket.onclose = function (event) {
   console.log("WebSocket connection closed", event.code, event.reason);
 };
-
 
 function showSection(sectionId) {
   console.log("Showing section:", sectionId); // Debug: Log which section is being shown
