@@ -266,7 +266,12 @@ public class Game {
         }
     }
 
-    //uses the concept of binary division by recursively splitting the list of words into halves, and then sub-halves, to select words uniformly from various sections. It starts by dividing the list into two equal segments, picking words from each, then further splits each segment again into smaller segments, continuing this binary division until selections have been made across all possible divisions. 
+    // uses the concept of binary division by recursively splitting the list of
+    // words into halves, and then sub-halves, to select words uniformly from
+    // various sections. It starts by dividing the list into two equal segments,
+    // picking words from each, then further splits each segment again into smaller
+    // segments, continuing this binary division until selections have been made
+    // across all possible divisions.
 
     // ensures a balanced and random selection from all parts of the list
     private List<String> structuredShuffle(List<String> words, int segments) {
@@ -419,12 +424,12 @@ public class Game {
     }
 
     public void startGame() {
-        initializeGrid();
-        placeWords();
-        fillRemainingCells(); // Fill the rest of the grid after placing words
+        initializeGrid(); // first fill with dashes
+        placeWords(); // then place words
+        fillRemainingCells(); // then fill the dahses with the remaining letters
         printGrid();
         printWords();
-        calculateWordDensity(); // Ensure this is called after words are placed
+        calculateWordDensity();
     }
 
     public String getCurrentNumberOfPlayers() {
