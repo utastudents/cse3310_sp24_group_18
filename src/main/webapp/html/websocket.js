@@ -1,4 +1,6 @@
-const socket = new WebSocket("ws://localhost:9118");
+// const socket = new WebSocket("ws://localhost:9118");
+serverUrl = "ws://" + window.location.hostname + ":9118";
+const socket = new WebSocket(serverUrl);
 
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
