@@ -25,11 +25,16 @@ public class AppTest
         return new TestSuite( AppTest.class );
     }
 
-    /**
-     * Rigourous Test :-)
-     */
     public void testApp()
     {
-        assertTrue( true );
+    Game g = new Game("TestLobby", "TestRoom"); // New test Room
+    Player p1 = new Player("josh", null); // new player named josh
+    Player p2 = new Player("adam", null); // new player named adam
+
+    App a = new App(0);
+
+    a.tryJoinGame("TestLobby", p2);
+    a.tryJoinGame("TestLobby", p2);
+
     }
 }
