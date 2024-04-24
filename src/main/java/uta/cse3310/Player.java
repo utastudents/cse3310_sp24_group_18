@@ -13,7 +13,7 @@ public class Player {
 
     public Player(String username, WebSocket webSocket) {
         this.username = username;
-        this.colorChoice = "Default"; // Default color, can be set later
+        this.colorChoice = "Default"; 
         this.gamesWon = 0;
         this.gamesLost = 0;
         this.inGameScore = 0;

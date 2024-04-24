@@ -1,115 +1,97 @@
 /*-------------------chat-----------------------*/
+
 /* Chat Container */
 .chat-container {
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    width: 300px; /* Adjust as needed */
-    margin: 0 auto;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    position: relative; /* For absolute positioning of children */
-  }
-  
-  /* Header for the Chat with Welcome Message */
-  .chat-header {
-    padding: 10px 20px; 
-    border-bottom: 2px solid #ddd; 
-    background-color: #f3f3f3; 
-    font-size: 18px; 
-    font-weight: bold; 
-    color: #333;
-  }
-  
-  /* Message Area Styling */
-  .message-area {
-    height: 200px; /* Adjust as needed */
-    overflow-y: auto;
-    padding: 5px;
-    background: #fff;
-    border: 1px solid #ddd;
-  }
-  
-  /* Individual Message Styling */
-  .message {
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 5px;
-    margin-bottom: 5px;
-  }
-  
-  /* Username Label in Message */
-  .message .username {
-    font-weight: bold;
-  }
-  
-  /* Timestamp Styling */
-  .message .timestamp {
-    font-size: 0.8em;
-    color: #666;
-  }
-  
-  /* Input Field Styling */
-  .chat-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    box-sizing: border-box;
-  }
-  
-  /* Send Button Styling */
-  .send-btn,
-  .send-selection-btn,
-  .exit-game-btn {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .send-btn {
-    background-color: #5cb85c;
-    color: white;
-  }
-  
-  .send-btn:hover {
-    background-color: #4cae4c;
-  }
-  
-  .send-selection-btn {
-    background-color: #f0ad4e;
-    color: white;
-  }
-  
-  .send-selection-btn:hover {
-    background-color: #eea236;
-  }
-  
-  .exit-game-btn {
-    background-color: #d9534f;
-    color: white;
-  }
-  
-  .exit-game-btn:hover {
-    background-color: #c9302c;
-  }
-  
-  /* Exit Chat Button Styling */
-  .exit-chat-btn {
-    padding: 5px 10px;
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute; /* Positioning relative to the chat-container */
-    right: 10px;
-    top: 5px;
-  }
-  
-  .exit-chat-btn:hover {
-    background-color: #c9302c;
-  }
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  width: 300px; /* Adjust as needed */
+  margin: 0 auto;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position: relative; /* For absolute positioning of children */
+  border-radius: 10px; /* Rounded corners */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation for hover effect */
+}
+
+.chat-container:hover {
+  transform: translateY(-5px); /* Slight rise effect */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Deeper shadow on hover */
+}
+
+/* Header for the Chat with Welcome Message */
+.chat-header {
+  padding: 10px 20px; 
+  border-bottom: 2px solid #ddd; 
+  background-color: #f3f3f3; 
+  font-size: 18px; 
+  font-weight: bold; 
+  color: #333;
+  border-top-left-radius: 10px; /* Rounded corners */
+  border-top-right-radius: 10px; /* Rounded corners */
+}
+
+/* Message Area Styling */
+.message-area {
+  height: 200px; /* Adjust as needed */
+  overflow-y: auto;
+  padding: 5px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-bottom-left-radius: 10px; /* Rounded corners */
+  border-bottom-right-radius: 10px; /* Rounded corners */
+}
+
+/* Individual Message Styling */
+.message {
+  background-color: #f1f1f1;
+  border-radius: 10px; /* More rounded edges for message bubbles */
+  padding: 5px;
+  margin-bottom: 5px;
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.message:hover {
+  background-color: #e8e8e8; /* Lighter background on hover */
+}
+
+/* Input Field Styling */
+.chat-input {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  padding: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  border-radius: 5px; /* Rounded corners for input */
+  border: 1px solid #ccc; /* Add border to input */
+}
+
+/* Send Button Styling */
+.send-btn,
+.send-selection-btn,
+.exit-game-btn {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px; /* More pronounced rounded edges for buttons */
+  font-weight: bold;
+  transition: all 0.3s ease; /* Animate all changes smoothly */
+}
+
+/* Exit Chat Button Styling */
+.exit-chat-btn {
+  padding: 5px 10px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 15px; /* Rounded corners */
+  cursor: pointer;
+  position: absolute; /* Positioning relative to the chat-container */
+  right: 10px;
+  top: 5px;
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.exit-chat-btn:hover {
+  background-color: #c9302c;
+}

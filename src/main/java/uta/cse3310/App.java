@@ -1,6 +1,5 @@
 package uta.cse3310;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
