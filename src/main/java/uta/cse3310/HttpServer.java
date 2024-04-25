@@ -14,7 +14,7 @@ import net.freeutils.httpserver.HTTPServer.VirtualHost;
 public class HttpServer {
 
     int port = 8080;
-    String dirname = "src/main/webapp/html"; // Replace with the actual absolute path to the html folder.
+    String dirname = "src/main/webapp/html";
 
     public HttpServer(int portNum, String dirName) {
         port = portNum;
