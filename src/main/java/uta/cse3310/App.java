@@ -1,6 +1,5 @@
 package uta.cse3310;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -284,8 +283,34 @@ public class App extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        System.out
-                .println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out.println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+
+        // Find the username associated with the connection that caused the error
+        String errorUsername = null;
+        for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
+            Player player = entry.getValue();
+            if (player.getWebSocket() != null && player.getWebSocket().equals(conn)) {
+                errorUsername = entry.getKey();
+                break;
+            }
+        }
+
+        // If a username was found, remove that player from the map
+        if (errorUsername != null) {
+            playerMap.remove(errorUsername);
+            connectionUserMap.remove(conn); // Clean up the connection map
+            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername+"\n\n");
+            // Optionally broadcast the updated player list after removal
+            broadcastPlayerList();
+            System.out.println("On Disconnect : ");
+            ;
+            broadcastGameRooms();
+        }
+
+        System.out.println("On Error : ");
+        ;
+        broadcastGameRooms();
+
     }
 
     private void broadcastChatMessage(String roomID, String message) {

@@ -6,9 +6,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.java_websocket.WebSocket;
 
@@ -26,6 +29,7 @@ public class Game {
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsPlaced;
+    private Set<Integer> placedLetters = new HashSet<>();
     private static Random random = new Random();
 
     // Maintain the original naming convention
@@ -42,14 +46,11 @@ public class Game {
         this.wordsPlaced = new HashMap<>();
         loadWords(); // Load words specific to this game instance
         System.out.println("Creating game with lobby name: " + lobbyName + " and room id: " + roomId);
-        initializeGrid();
-        placeWords();
-        System.out.println("Grid for [game: " + lobbyName + " room: " + roomId);
-        printGrid();
-        printWords();
         this.chat = new Chat(); // Initialize a new Chat object for this game
+        startGame();
 
     }
+
     public boolean checkWord(String username, String word) {
         Boolean foundStatus = wordsPlaced.get(word);
         if (foundStatus != null && foundStatus) { // Check if the word exists and is set to true (available to be found)
@@ -57,7 +58,7 @@ public class Game {
             wordsFound.add(word); // Optionally maintain a list of all found words
             wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
             System.out.println(username + " found the word: " + word);
-            // print the list 
+            // print the list
             printWordsFoundByUser(username);
             return true;
         } else {
@@ -66,12 +67,11 @@ public class Game {
         }
     }
 
-
     public void printWordsFoundByUser(String username) {
         List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
         System.out.println(username + " has found: " + foundWords);
     }
-    
+
     public void printAllWordsAndTheirStatus() {
         for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
             System.out.println("Word: " + entry.getKey() + ", Available: " + entry.getValue());
@@ -86,7 +86,6 @@ public class Game {
         }
         return scores;
     }
-
 
     public void reset() {
         // Reset the game's properties
@@ -105,6 +104,7 @@ public class Game {
         initializeGrid();
         placeWords();
         System.out.println("Game reset in lobby: " + lobbyName);
+
     }
 
     // CHAT
@@ -146,7 +146,17 @@ public class Game {
 
     private void initializeGrid() {
         for (int i = 0; i < GRID_SIZE; i++) {
-            Arrays.fill(grid[i], '_');
+            Arrays.fill(grid[i], '_'); // Initialize all cells to '_'
+        }
+    }
+
+    private void fillRemainingCells() {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                if (grid[i][j] == '_') { // Only fill cells that have not been filled with a word
+                    grid[i][j] = (char) ('A' + random.nextInt(26));
+                }
+            }
         }
     }
 
@@ -163,22 +173,73 @@ public class Game {
                 wordsPlaced.put(word, true);
             }
         }
+
         // DEBUG
         // System.out.println("IN placewords()");
         // for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
-        //     System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
+        // System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
         // }
     }
 
+    public void calculateWordDensity() {
+        int totalCells = GRID_SIZE * GRID_SIZE;
+        int wordCells = placedLetters.size(); // The set size gives us the number of unique cells with words
+
+        double density = (double) wordCells / totalCells * 100;
+        System.out.printf("Density of valid words in the grid: %.2f%%\n", density);
+    }
+
+    private int getRowIncrement(int orientation, int i) {
+        switch (orientation) {
+            case 0: // Horizontal right
+            case 2: // Horizontal left
+                return 0;
+            case 1: // Vertical down
+            case 7: // Diagonal right down
+            case 5: // Diagonal left down
+                return i;
+            case 3: // Vertical up
+            case 6: // Diagonal right up
+            case 4: // Diagonal left up
+                return -i;
+            default:
+                return 0;
+        }
+    }
+
+    private int getColIncrement(int orientation, int i) {
+        switch (orientation) {
+            case 0: // Horizontal right
+            case 7: // Diagonal right down
+            case 6: // Diagonal right up
+                return i;
+            case 1: // Vertical down
+            case 3: // Vertical up
+                return 0;
+            case 2: // Horizontal left
+            case 5: // Diagonal left down
+            case 4: // Diagonal left up
+                return -i;
+            default:
+                return 0;
+        }
+    }
+
     // Attempts to place a single word in the grid randomly
-   public boolean placeWordInGrid(String word) {
+   private boolean placeWordInGrid(String word) {
         int orientation = random.nextInt(2); // 0 for horizontal, 1 for vertical
+
+    private boolean placeWordInGrid(String word) {
+        int orientation = random.nextInt(8); // Updated for 8 orientations
         for (int attempts = 0; attempts < 100; attempts++) {
             int row = random.nextInt(GRID_SIZE);
             int col = random.nextInt(GRID_SIZE);
             if (canPlaceWord(word, row, col, orientation)) {
                 for (int i = 0; i < word.length(); i++) {
-                    grid[row + (orientation == 1 ? i : 0)][col + (orientation == 0 ? i : 0)] = word.charAt(i);
+                    int newRow = row + getRowIncrement(orientation, i);
+                    int newCol = col + getColIncrement(orientation, i);
+                    grid[newRow][newCol] = word.charAt(i);
+                    placedLetters.add(newRow * GRID_SIZE + newCol); // Track positions
                 }
                 return true;
             }
@@ -189,9 +250,9 @@ public class Game {
     // Checks if a word can be placed at the specified position
     private boolean canPlaceWord(String word, int row, int col, int orientation) {
         for (int i = 0; i < word.length(); i++) {
-            int newRow = row + (orientation == 1 ? i : 0);
-            int newCol = col + (orientation == 0 ? i : 0);
-            if (newRow >= GRID_SIZE || newCol >= GRID_SIZE || grid[newRow][newCol] != '_') {
+            int newRow = row + getRowIncrement(orientation, i);
+            int newCol = col + getColIncrement(orientation, i);
+            if (newRow < 0 || newRow >= GRID_SIZE || newCol < 0 || newCol >= GRID_SIZE || grid[newRow][newCol] != '_') {
                 return false;
             }
         }
@@ -208,11 +269,62 @@ public class Game {
         }
     }
 
+    // uses the concept of binary division by recursively splitting the list of
+    // words into halves, and then sub-halves, to select words uniformly from
+    // various sections. It starts by dividing the list into two equal segments,
+    // picking words from each, then further splits each segment again into smaller
+    // segments, continuing this binary division until selections have been made
+    // across all possible divisions.
+
+    // ensures a balanced and random selection from all parts of the list
+    private List<String> structuredShuffle(List<String> words, int segments) {
+        List<String> shuffled = new ArrayList<>(); // This will hold the shuffled list of words.
+        int segmentSize = words.size() / segments; // Calculate how many words each segment will contain.
+
+        // Set to track which indices have been added to the shuffled list to avoid
+        // duplicating words.
+        Set<Integer> addedIndices = new HashSet<>();
+
+        // Continue looping until the shuffled list contains all words from the original
+        // list.
+        while (shuffled.size() < words.size()) {
+            for (int i = 0; i < segments; i++) {
+                int start = i * segmentSize; // Calculate the start index of the current segment.
+                int end = (i + 1) * segmentSize; // Calculate the end index of the current segment.
+                if (i == segments - 1) {
+                    end = words.size(); // Ensure the last segment includes all remaining words.
+                }
+
+                // Generate a random index within the current segment to pick a word.
+                int randomIndex = start + random.nextInt(end - start);
+                // Check if the index has already been used to prevent duplicate selections.
+                if (!addedIndices.contains(randomIndex)) {
+                    shuffled.add(words.get(randomIndex)); // Add the selected word to the shuffled list.
+                    addedIndices.add(randomIndex); // Mark this index as used.
+                }
+
+                // Break out of the loop if all words are already added to the shuffled list.
+                if (shuffled.size() >= words.size()) {
+                    break;
+                }
+            }
+        }
+
+        return shuffled; // Return the uniformly shuffled list of words.
+    }
+
     // Loads the words from a text file into the allWords list
     public void loadWords() {
         try {
-            allWords = Files.readAllLines(Paths.get("words.txt"));
-            System.out.println("Words loaded successfully");
+            List<String> loadedWords = Files.readAllLines(Paths.get("words.txt")).stream()
+                    .map(String::toUpperCase) // Convert each word to uppercase
+                    .filter(word -> word.length() > 3) // Filter out words that are too short
+                    .collect(Collectors.toList());
+
+            // New method to shuffle words by picking from different segments
+            allWords = structuredShuffle(loadedWords, 10); // Shuffle with desired number of segments
+
+            System.out.println("Words loaded successfully. Total words loaded: " + allWords.size());
         } catch (IOException e) {
             System.err.println("Error loading words: " + e.getMessage());
         }
@@ -243,7 +355,7 @@ public class Game {
     public void printWords() {
         System.out.println("----------PLACED WORDS-------------");
         for (String word : wordsPlaced.keySet()) {
-            System.out.print(word + " " );
+            System.out.print(word + " ");
         }
 
         // print the count of words
@@ -254,11 +366,10 @@ public class Game {
         // System.out.println("\nDEBUG : \n"+wordsPlaced.get("Buggati"));
         // System.out.println("\n------------------------------------\n");
         // for (Map.Entry<String, Boolean> entry : wordsPlaced.entrySet()) {
-        //     System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
+        // System.out.println("\"" + entry.getKey() + "\":" + entry.getValue());
         // }
 
-
-    }   
+    }
 
     // Method to add a player to the game
     public boolean addPlayer(Player player) {
@@ -316,7 +427,12 @@ public class Game {
     }
 
     public void startGame() {
-        // Start the game
+        initializeGrid(); // first fill with dashes
+        placeWords(); // then place words
+        fillRemainingCells(); // then fill the dahses with the remaining letters
+        printGrid();
+        printWords();
+        calculateWordDensity();
     }
 
     public String getCurrentNumberOfPlayers() {
@@ -364,6 +480,4 @@ public class Game {
     public Player[] getPlayers_chat() {
         return new Player[] { player1, player2 };
     }
-
-    // Other methods as needed...
 }

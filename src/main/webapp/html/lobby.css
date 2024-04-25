@@ -1,0 +1,75 @@
+/*------------------THE LOBBY------------------------*/
+/* Style for the container */
+#section1 {
+  padding: 20px; /* Add padding */
+  max-width: 800px; /* Set maximum width */
+  margin: 0 auto; /* Center the container */
+  background-color: #f9f9f9; /* Set background color */
+  border-radius: 15px; /* Round the corners of the container */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Add shadow for better appearance */
+}
+
+/* Style for paragraphs */
+#section1 p {
+  margin-bottom: 15px; /* Add space between paragraphs */
+  font-size: 16px; /* Set font size */
+  color: #333; /* Set text color */
+}
+
+/* Style for the container of currently logged-in user */
+#section1 #currentUser {
+  margin-bottom: 15px; /* Add space below the container */
+}
+
+/* Style for the currently logged-in username */
+#section1 .currentUsername {
+  font-weight: bold; /* Make the username bold */
+  color: #007bff; /* Set text color */
+}
+
+/* Style for the lobby page title */
+#section1 h3 {
+  margin-bottom: 10px; /* Add space below the title */
+  font-size: 18px; /* Set font size */
+  color: #333; /* Set text color */
+}
+
+/* Style for the player list */
+#section1 #playerList {
+  margin-bottom: 15px; /* Add space below the player list */
+}
+
+/* Style for the game table */
+#section1 #gameTable {
+  width: 100%; /* Make the table fill the entire width of its container */
+  border-collapse: collapse; /* Collapse table borders for better appearance */
+}
+
+/* Style for table headers */
+#section1 #gameTable th {
+  padding: 8px; /* Add padding for better header appearance */
+  background-color: #007bff; /* Set background color */
+  color: #fff; /* Set text color */
+  border: 1px solid #ddd; /* Add border */
+}
+
+/* Style for table cells */
+#section1 #gameTable td {
+  padding: 8px; /* Add padding for better cell appearance */
+  border: 1px solid #ddd; /* Add border */
+}
+
+/* Style for the Join button in the game table */
+#section1 #gameTable .joinButton {
+  background-color: #007bff; /* Set background color */
+  color: #fff; /* Set text color */
+  border: none; /* Remove border */
+  padding: 5px 10px; /* Add padding for better button appearance */
+  border-radius: 4px; /* Round the corners of the button */
+  cursor: pointer; /* Show pointer cursor on hover */
+}
+
+/* Hover effect for the Join button */
+#section1 #gameTable .joinButton:hover {
+  background-color: #0056b3; /* Darken the background color on hover */
+}

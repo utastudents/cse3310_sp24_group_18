@@ -9,34 +9,41 @@
       }
     </style>
   </head>
+  <link rel="stylesheet" href="body.css" />
+  <link rel="stylesheet" href="login_form.css" />
+  <link rel="stylesheet" href="lobby.css" />
+  <link rel="stylesheet" href="chat.css" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="grid.css" />
   <link rel="stylesheet" href="leaderboard.css" />
   <body>
-    <h2> THE GAME IS STILL IN DEVELOPMENT AND THE BUTTONS ARE MEANT FOR DEBUG PURPOSES</h2>
     <div id="section0">
-      <p>Your username :</p>
-      <div id="currentUser">
-        Currently Logged in as: <span class="currentUsername"></span>
+      <div id="loginSection" class="login-background">
+        <div class="login-container">
+          <div id="currentUser">
+            Welcome, <span class="currentUsername"></span>
+          </div>
+          <p>This is the Login Page</p>
+      
+          <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required="">
+            <button type="submit" id="UsernameInput">Login</button>
+          </form>
+          <div class="button-group">
+            <button id="btnSection0">Logout</button>
+            <button id="btnSection1">Section 1</button>
+            <button id="btnSection2">Section 2</button>
+            <button id="btnSection3">Section 3</button>
+          </div>
+        </div>
       </div>
-      <p>This is the Login Page</p>
-      <p></p>
-
-      <form id="loginForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-        <button type="submit" id="UsernameInput">Login</button>
-      </form>
-      <button id="btnSection0">New Class</button>
-      <button id="btnSection1">Section 1</button>
-      <button id="btnSection2">Section 2</button>
-      <button id="btnSection3">Section 3</button>
+      
     </div>
 
     <div id="section1" class="hidden">
-      <p>Your username :</p>
       <div id="currentUser">
-        Currently Logged in as: <span class="currentUsername"></span>
+        Your Username :  <span class="currentUsername"></span>
       </div>
       <p>This is the lobby page</p>
       <p>
@@ -45,6 +52,7 @@
       </p>
 
       <button id="resetGame">Reset Game</button>
+      <p>Please give about 5 seconds for the game to </p>
 
       <h3>Player's Online List :</h3>
       <ul id="playerList"></ul>
@@ -66,7 +74,7 @@
         <tbody id="gameTableBody"></tbody>
       </table>
 
-      <button id="btnSection0_sec1">New Class</button>
+      <button id="btnSection0_sec1">Logout</button>
       <button id="btnSection1_sec1">Section 1</button>
       <button id="btnSection2_sec1">Section 2</button>
       <button id="btnSection3_sec1">Section 3</button>
@@ -79,13 +87,12 @@
     </div>
 
     <div id="section2" class="hidden">
-      <p>Your username :</p>
       <div id="currentUser">
-        Currently Logged in as: <span class="currentUsername"></span>
+        Your Username :  <span class="currentUsername"></span>
       </div>
       <p>Section 2 Content</p>
 
-      <button id="btnSection0_sec2">New Class</button>
+      <button id="btnSection0_sec2">Logout</button>
       <button id="btnSection1_sec2">Section 1</button>
       <button id="btnSection2_sec2">Section 2</button>
       <button id="btnSection3_sec2">Section 3</button>
@@ -97,13 +104,12 @@
     </div>
 
     <div id="section3" class="hidden">
-      <p>Your username :</p>
       <div id="currentUser">
-        Currently Logged in as: <span class="currentUsername"></span>
+        Your Username :  <span class="currentUsername"></span>
       </div>
       <p>Section 3 Content</p>
 
-      <button id="btnSection0_sec3">New Class</button>
+      <button id="btnSection0_sec3">Logout</button>
       <button id="btnSection1_sec3">Section 1</button>
       <button id="btnSection2_sec3">Section 2</button>
       <button id="btnSection3_sec3">Section 3</button>
@@ -148,7 +154,7 @@
       <div id="gameroom1_grid" class="grid-container">
         <!-- The game grid will go here -->
       </div>
-      <button id="gameroom1_send">Send Words</button>
+      <button id="gameroom1_send">Check Selection</button>
       <ul id="gameroom1_words">
         <!-- Found words will go here -->
       </ul>
@@ -187,7 +193,7 @@
       <p>player2: <span id="gameroom2_opponent"></span></p>
 
       <div id="gameroom2_grid"></div>
-      <button id="gameroom2_send">Send Words</button>
+      <button id="gameroom2_send">Check Selection</button>
 
       <ul id="gameroom2_words"></ul>
 
@@ -213,9 +219,8 @@
         <input type="text" id="gameroom2_chat_input" class="chat-input" placeholder="Type a message..." />
         <button id="gameroom2_send_msg" class="send-btn" onclick="sendChatMessage('gameroom2')">Send</button>
       </div>
-      <button id="gameroom1_exit_bttn" class="exit-game-btn">Exit Game</button>
+      <button id="gameroom2_exit_bttn" class="exit-game-btn">Exit Game</button>
     </div>
-      <button id="gameroom2_exit_bttn">Exit Game</button>
     </div>
 
 
@@ -226,7 +231,7 @@
       <p>Player2: <span id="gameroom3_opponent"></span></p>
 
       <div id="gameroom3_grid"></div>
-      <button id="gameroom3_send">Send Words</button>
+      <button id="gameroom3_send">Check Selection</button>
 
       <ul id="gameroom3_words"></ul>
 
@@ -263,7 +268,7 @@
       <p>Player2: <span id="gameroom4_opponent"></span></p>
 
       <div id="gameroom4_grid"></div>
-      <button id="gameroom4_send">Send Words</button>
+      <button id="gameroom4_send">Check Selection</button>
 
       <ul id="gameroom4_words"></ul>
 
@@ -300,7 +305,7 @@
       <p>Player2: <span id="gameroom5_opponent"></span></p>
 
       <div id="gameroom5_grid"></div>
-      <button id="gameroom5_send">Send Words</button>
+      <button id="gameroom5_send">Check Selection</button>
 
       <ul id="gameroom5_words"></ul>
 
