@@ -226,8 +226,6 @@ public class Game {
     }
 
     // Attempts to place a single word in the grid randomly
-   private boolean placeWordInGrid(String word) {
-        int orientation = random.nextInt(2); // 0 for horizontal, 1 for vertical
 
     private boolean placeWordInGrid(String word) {
         int orientation = random.nextInt(8); // Updated for 8 orientations
@@ -424,6 +422,9 @@ public class Game {
 
     public String roomID() {
         return roomId;
+    }
+    public Map<String, Boolean> getWordsPlaced() {
+        return wordsPlaced;
     }
 
     public void startGame() {

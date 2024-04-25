@@ -1,4 +1,7 @@
 package uta.cse3310;
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -35,16 +38,25 @@ public class GameTest
     g.addPlayer(p1);
     g.setPlayer1(p1);
     g.setPlayer2(p2);
-
+    
         //checkking to see if game is full, adn ready to start
     assertTrue(g.isReadyToStart());
     assertEquals(g.getCurrentNumberOfPlayers(),"2");
 
-    //check to see if words can be correctlr chosen by players
-    assertTrue(g.checkWord(p1.getUsername(), "Pagani")); // these next few words need to be changed if TXT file changes
-    g.checkWord(p1.getUsername(), "Pagani"); // josh finds word pagani
-    g.checkWord(p2.getUsername(), "Maserati"); // adam finds word Maserati
-    g.checkWord(p2.getUsername(), "Aspark"); // adam finds word Aspark
+    //insert 3 word into the words placed function
+     List<String> wordList = new ArrayList<>();
+        for (String word : g.getWordsPlaced().keySet()) {
+            // Add each word to the list
+            wordList.add(word);
+        }
+
+
+    //check to see if words can be correctly chosen by players
+    assertTrue(g.checkWord(p1.getUsername(), wordList.get(0)));// test to see if player josh can find first word in grid
+    g.checkWord(p1.getUsername(),wordList.get(0)); // josh finds first word
+    g.checkWord(p2.getUsername(), wordList.get(1)); // adam finds second word
+    g.checkWord(p2.getUsername(), wordList.get(2)); // adam finds third word
+
 
     // retrieve player scores
     String string = String.valueOf(g.getPlayerScores());
@@ -57,4 +69,4 @@ public class GameTest
     assertEquals(g.getCurrentNumberOfPlayers(),"0");
 
     }
-}
+        }
