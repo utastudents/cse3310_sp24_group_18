@@ -1,10 +1,11 @@
+package uta.cse3310;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
 import org.junit.Test;
 
-import uta.cse3310.HttpServer;
+
 
 public class HttpServerTest {
 
