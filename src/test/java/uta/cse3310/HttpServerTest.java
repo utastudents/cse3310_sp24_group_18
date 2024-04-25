@@ -1,4 +1,6 @@
 package uta.cse3310;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
@@ -27,6 +29,7 @@ public class HttpServerTest {
 
         // Check if the server is running by connecting to it
         boolean isServerRunning = isServerRunning(port);
+        assertTrue(isServerRunning);
 
 
 
