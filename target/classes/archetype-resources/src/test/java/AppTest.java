@@ -1,10 +1,13 @@
-package uta.cse3310;
+package $org.example;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class AppTest
+/**
+ * Unit test for simple App.
+ */
+public class AppTest 
     extends TestCase
 {
     /**
@@ -25,20 +28,11 @@ public class AppTest
         return new TestSuite( AppTest.class );
     }
 
+    /**
+     * Rigourous Test :-)
+     */
     public void testApp()
     {
-
-    Game g = new Game("TestLobby", "TestRoom"); // New test Room
-    Player p1 = new Player("josh", null); // new player named josh
-    Player p2 = new Player("adam", null); // new player named adam
-    Player p3 = new Player("haney", null); // new player named hane
-
-    App a = new App(0);
-    assertEquals(g.getCurrentNumberOfPlayers(), "0");
-
-    
-
-
-
+        assertTrue( true );
     }
 }

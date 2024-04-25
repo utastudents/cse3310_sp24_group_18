@@ -35,8 +35,6 @@ public class GameTest
     g.addPlayer(p1);
     g.setPlayer1(p1);
     g.setPlayer2(p2);
-    String players = String.valueOf(g.getPlayers());
-    assertEquals(players, "[uta.cse3310.Player@5f375618, uta.cse3310.Player@1810399e]");
 
         //checkking to see if game is full, adn ready to start
     assertTrue(g.isReadyToStart());
