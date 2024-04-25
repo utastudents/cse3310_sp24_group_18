@@ -1,3 +1,11 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# Ignore all .class files
+*.class
+
+# Ignore the target folder
+target/
+
+# Ignore .DS_Store (MacOS folder view options)
+.DS_Store
