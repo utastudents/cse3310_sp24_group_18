@@ -270,6 +270,7 @@ private boolean areAllWordsFound() {
     }
 
     // Attempts to place a single word in the grid randomly
+
     private boolean placeWordInGrid(String word) {
         int orientation = random.nextInt(8); // Assuming 8 possible orientations
         List<Integer[]> positions = new ArrayList<>();
@@ -469,6 +470,9 @@ private boolean areAllWordsFound() {
 
     public String roomID() {
         return roomId;
+    }
+    public Map<String, Boolean> getWordsPlaced() {
+        return wordsPlaced;
     }
 
     public void startGame() {

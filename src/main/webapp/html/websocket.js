@@ -70,7 +70,6 @@ function toggleCell(cell, value) {
 function addToSelected(word) {
   selectedWords.push(word);
 };
-
 function removeFromSelected(word) {
   const index = selectedWords.indexOf(word);
   if (index > -1) {
