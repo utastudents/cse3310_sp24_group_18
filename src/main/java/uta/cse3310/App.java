@@ -236,28 +236,35 @@ public class App extends WebSocketServer {
         }}
         
     }
+
+    private void broadcastUpdatedWords(String roomId) {
+        Game game = gameMap.get(roomId);
+        if (game != null) {
+            Gson gson = new Gson();
+            String wordsJson = gson.toJson(new ArrayList<>(game.getRemainingWords()));
+    
+            for (WebSocket conn : this.getConnections()) {
+                conn.send("update_words:" + roomId + ":" + wordsJson);
+            }
+        }
+    }
+    
     private boolean handleCheckWord(WebSocket conn, String roomId, String username, String word) {
         System.out.println("\n\nREACHED HANDLE CHECK WORD\n\n");
         Game game = gameMap.get(roomId);
         if (game != null) {
-            // Combined call to get positions and check the word
             List<Integer[]> positions = game.checkWordAndGetPositions(username, word);
             if (positions != null) {
-                // The word was found and we have positions
                 System.out.println("\n-----WORD FOUND----\n" + "WORD CHECKED : "+word);
-    
-                // Convert positions to JSON
+        
                 Gson gson = new Gson();
                 String positionsJson = gson.toJson(positions);
-    
-                // Send correct response with positions
                 conn.send("word_correct:" + word + ":" + positionsJson);
-    
+        
                 game.printWordsFoundByUser(username);  // Optionally print all words found by the user so far
-                broadcastScore(roomId);  // Broadcast updated scores after a word is found
+                broadcastUpdatedWords(roomId);  // New function to broadcast updated words list
                 return true;
             } else {
-                // The word was not found or no positions were returned
                 System.out.println("\n-----WORD INCORRECT----\n" + "WORD CHECKED : " + word);
                 conn.send("word_incorrect:" + word);
                 return false;
@@ -267,6 +274,7 @@ public class App extends WebSocketServer {
             return false;
         }
     }
+    
     
   
     public void printPlayerWordCounts() {

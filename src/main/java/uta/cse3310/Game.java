@@ -57,12 +57,21 @@ public class Game {
         return status != null && status;  // True if the word is correct and not yet marked as found
     }
 
+    public Set<String> getRemainingWords() {
+        return wordsPlaced.entrySet().stream()
+               .filter(Map.Entry::getValue)  // Only include words that are still available (not found)
+               .map(Map.Entry::getKey)
+               .collect(Collectors.toSet());
+    }
+    
+
     public List<Integer[]> checkWordAndGetPositions(String username, String word) {
         if (isWordCorrect(word)) {
             wordsPlaced.put(word, false);  // Mark the word as found
             wordsFound.add(word);
             wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
             return wordPositions.get(word);  // Return positions if the word is correct
+            
         }
         return null;  // Return null if the word is not correct
     }
@@ -160,6 +169,10 @@ public class Game {
                 if (grid[i][j] == '_') { // Only fill cells that have not been filled with a word
                     grid[i][j] = (char) ('A' + random.nextInt(26));
                 }
+                // Uncomment this and comment the upper for debug.. to see the grid without random words
+                // if (grid[i][j] == '3') { // Only fill cells that have not been filled with a word
+                //     grid[i][j] = (char) ('A' + random.nextInt(26));
+                // }
             }
         }
     }
@@ -189,8 +202,8 @@ public class Game {
         int totalCells = GRID_SIZE * GRID_SIZE;
         int wordCells = placedLetters.size(); // The set size gives us the number of unique cells with words
 
-        double density = (double) wordCells / totalCells * 100;
-        System.out.printf("Density of valid words in the grid: %.2f%%\n", density);
+        double density = (double) wordCells / totalCells;
+        System.out.printf("Density of valid words in the grid: %.5f\n", density);
     }
 
     private int getRowIncrement(int orientation, int i) {
@@ -230,25 +243,26 @@ public class Game {
     }
 
     // Attempts to place a single word in the grid randomly
-private boolean placeWordInGrid(String word) {
-    int orientation = random.nextInt(8); // Assuming 8 possible orientations
-    List<Integer[]> positions = new ArrayList<>();
-    for (int attempts = 0; attempts < 100; attempts++) {
-        int row = random.nextInt(GRID_SIZE);
-        int col = random.nextInt(GRID_SIZE);
-        if (canPlaceWord(word, row, col, orientation)) {
-            for (int i = 0; i < word.length(); i++) {
-                int newRow = row + getRowIncrement(orientation, i);
-                int newCol = col + getColIncrement(orientation, i);
-                grid[newRow][newCol] = word.charAt(i);
-                positions.add(new Integer[]{newRow, newCol});
+    private boolean placeWordInGrid(String word) {
+        int orientation = random.nextInt(8); // Assuming 8 possible orientations
+        List<Integer[]> positions = new ArrayList<>();
+        for (int attempts = 0; attempts < 100; attempts++) {
+            int row = random.nextInt(GRID_SIZE);
+            int col = random.nextInt(GRID_SIZE);
+            if (canPlaceWord(word, row, col, orientation)) {
+                for (int i = 0; i < word.length(); i++) {
+                    int newRow = row + getRowIncrement(orientation, i);
+                    int newCol = col + getColIncrement(orientation, i);
+                    grid[newRow][newCol] = word.charAt(i);
+                    positions.add(new Integer[]{newRow, newCol});
+                    placedLetters.add(newRow * GRID_SIZE + newCol); // Storing the index as a single integer
+                }
+                wordPositions.put(word, positions);
+                return true;
             }
-            wordPositions.put(word, positions);
-            return true;
         }
+        return false;
     }
-    return false;
-}
 
 
     // Checks if a word can be placed at the specified position
@@ -328,7 +342,7 @@ private boolean placeWordInGrid(String word) {
             // New method to shuffle words by picking from different segments
             allWords = structuredShuffle(loadedWords, 10); // Shuffle with desired number of segments
 
-            System.out.println("Words loaded successfully. Total words loaded: " + allWords.size());
+            System.out.println("Words loaded successfully. Total words read in words.txt: " + allWords.size());
         } catch (IOException e) {
             System.err.println("Error loading words: " + e.getMessage());
         }

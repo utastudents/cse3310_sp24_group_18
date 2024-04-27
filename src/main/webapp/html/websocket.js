@@ -286,7 +286,15 @@ function highlightWords(wordsPositions) {
   });
 }
 
-
+function updateWords(roomId, words) {
+  const wordsListHtml = words.map(word => `<li>${word}</li>`).join("");
+  const wordsElement = document.getElementById(`${roomId}_words`);
+  if (wordsElement) {
+      wordsElement.innerHTML = wordsListHtml;
+  } else {
+      console.error("No words element found for room ID:", roomId);
+  }
+}
 
 socket.onmessage = function (event) {
   const sectionToShow = event.data;
@@ -301,6 +309,12 @@ socket.onmessage = function (event) {
 
 
   switch (command) {
+    case "update_words":
+            const roomIdWords = data[1];
+            const wordsJson = data.slice(2).join(":");
+            const wordsList = JSON.parse(wordsJson);
+            updateWords(roomIdWords, wordsList);
+            break;
     
     case 'update_scores':{
       const roomId = data[1];
