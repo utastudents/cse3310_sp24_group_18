@@ -24,6 +24,9 @@ public class Game {
     private String lobbyName;
     private String roomId;
     private Chat chat;
+    private GameEventListener listener;
+    private String gameId;
+
 
     private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
@@ -37,12 +40,15 @@ public class Game {
     private Map<String, List<Integer[]>> wordPositions = new HashMap<>();
 
 
-    public Game(String lobbyName, String roomId) {
+    public Game(String lobbyName, String roomId, GameEventListener listener) {
         this.lobbyName = lobbyName;
         this.roomId = roomId;
+        this.gameId = roomId;
         this.player1 = null;
         this.player2 = null;
         this.isFinished = false;
+        this.listener = listener;
+
         this.grid = new char[GRID_SIZE][GRID_SIZE];
         this.wordsPlaced = new HashMap<>();
         loadWords(); // Load words specific to this game instance
@@ -50,6 +56,14 @@ public class Game {
         this.chat = new Chat(); // Initialize a new Chat object for this game
         startGame();
 
+    }
+
+    private void checkForWinner() {
+        if (areAllWordsFound()) {
+            if (listener != null) {
+                listener.onGameFinished(gameId);
+            }
+        }
     }
 
     public boolean isWordCorrect(String word) {
@@ -101,6 +115,19 @@ public class Game {
             System.out.println("Word: " + entry.getKey() + ", Available: " + entry.getValue());
         }
     }
+
+    public interface GameEventListener {
+        void onGameFinished(String gameId);
+    }
+    
+
+
+private boolean areAllWordsFound() {
+    // Check if all words are found by checking the size of the remaining words set
+    return getRemainingWords().isEmpty();
+}
+
+
 
     // USER SCORE
     public Map<String, Integer> getPlayerScores() {

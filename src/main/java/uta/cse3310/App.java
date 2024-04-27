@@ -11,7 +11,9 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import com.google.gson.Gson;
 
-public class App extends WebSocketServer {
+import uta.cse3310.Game.GameEventListener;
+
+public class App extends WebSocketServer implements GameEventListener {
 
     // Create an appendable map to store players
     private Map<String, Player> playerMap = new HashMap<>();
@@ -41,8 +43,6 @@ public class App extends WebSocketServer {
         }
     }
 
-
-
     // add to playermap
     private void addPlayer(Player player) {
         playerMap.put(player.getUsername(), player);
@@ -53,11 +53,30 @@ public class App extends WebSocketServer {
         }
     }
 
+    private void broadcastWinner(String message) {
+        for (WebSocket conn : this.getConnections()) {
+            conn.send("winner:" + message);
+        }
+    }
+    @Override
+    public void onGameFinished(String gameId) {
+        Game game = gameMap.get(gameId);
+        if (game != null) {
+            Map<String, Integer> scores = game.getPlayerScores();
+            String winner = scores.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
 
-        ///// --------- GRID --------- /////
+            if (winner != null) {
+                broadcastWinner(winner + " wins!");
+            }
+        }
+    }
+    
 
+    ///// --------- GRID --------- /////
 
-        
     private void broadcastGameRooms() {
         // debug
         System.out.println("broadcastGameRooms()_Broadcasting game rooms");
@@ -99,11 +118,11 @@ public class App extends WebSocketServer {
         // gameMap.put("Room4", new Game("Room4","gameroom4"));
 
         // 5 concurrent games
-        gameMap.put("gameroom1", new Game("Room1", "gameroom1"));
-        gameMap.put("gameroom2", new Game("Room2", "gameroom2"));
-        gameMap.put("gameroom3", new Game("Room3", "gameroom3"));
-        gameMap.put("gameroom4", new Game("Room4", "gameroom4"));
-        gameMap.put("gameroom5", new Game("Room5", "gameroom5"));
+        gameMap.put("gameroom1", new Game("Room1", "gameroom1",this));
+        gameMap.put("gameroom2", new Game("Room2", "gameroom2",this));
+        gameMap.put("gameroom3", new Game("Room3", "gameroom3",this));
+        gameMap.put("gameroom4", new Game("Room4", "gameroom4",this));
+        gameMap.put("gameroom5", new Game("Room5", "gameroom5",this));
         System.out.println("Game rooms initialized.");
 
     }
@@ -130,21 +149,21 @@ public class App extends WebSocketServer {
                         String gameRoomId = game.getGameRoomId(); // Get the game room ID dynamically
                         String startCommand = String.format("start_game:%s:%s:%s",
                                 gameRoomId, players.get(0).getUsername(), players.get(1).getUsername());
-    
+
                         // Send game details such as the grid and words to both players
                         game.sendGameDetails(players.get(0).getWebSocket());
                         game.sendGameDetails(players.get(1).getWebSocket());
-    
+
                         // Send the start game command to both players
                         players.get(0).getWebSocket().send(startCommand);
                         players.get(1).getWebSocket().send(startCommand);
-    
+
                         // Send the initial grid as JSON to both players
                         String gridJson = game.getGridAsJson(); // Make sure Game.java has this method
                         String gridUpdateMessage = String.format("update_grid:%s:%s", gameRoomId, gridJson);
                         players.get(0).getWebSocket().send(gridUpdateMessage);
                         players.get(1).getWebSocket().send(gridUpdateMessage);
-    
+
                         game.startGame();
                         return "redirect:" + gameRoomId; // Redirect to the specific game room
                     }
@@ -154,8 +173,6 @@ public class App extends WebSocketServer {
         }
         return "full"; // Game is full, or no game exists with the given lobby name
     }
-
-
 
     private void handleMessage(WebSocket conn, String message) {
 
@@ -184,8 +201,7 @@ public class App extends WebSocketServer {
                 conn.send("player_not_added");
                 System.out.println("Player not added: " + username);
             }
-        }
-        else if (message.startsWith("check_word:")) {
+        } else if (message.startsWith("check_word:")) {
             String[] parts = message.split(":");
             if (parts.length > 3) {
                 String roomId = parts[1];
@@ -198,7 +214,6 @@ public class App extends WebSocketServer {
                 }
             }
         }
-        
 
         ///// game rooms //////
         else if (message.startsWith("new_player:")) {
@@ -213,8 +228,7 @@ public class App extends WebSocketServer {
             // redirect command
             // System.out.println("[Adding game] Join game response: " + joinGameResponse);
             printAllGamePlayers();
-        }
-        else if (message.startsWith("check_word:")) {
+        } else if (message.startsWith("check_word:")) {
             String[] parts = message.split(":");
             if (parts.length > 3) {
                 String roomId = parts[1];
@@ -224,17 +238,17 @@ public class App extends WebSocketServer {
                 handleCheckWord(conn, roomId, username, word);
             }
 
-        // socket.send("user_left:" + username); // This will send message to
-        // websocket.js socket.onmessage and it will show screen accordingly
-        else if (message.startsWith("user_left:")) {
-            String username = message.substring(10);
-            playerMap.remove(username);
-            conn.send("user_removed");
+            // socket.send("user_left:" + username); // This will send message to
+            // websocket.js socket.onmessage and it will show screen accordingly
+            else if (message.startsWith("user_left:")) {
+                String username = message.substring(10);
+                playerMap.remove(username);
+                conn.send("user_removed");
+            } else {
+                System.out.println("NULL FUNC");
+            }
         }
-        else {
-            System.out.println("NULL FUNC");
-        }}
-        
+
     }
 
     private void broadcastUpdatedWords(String roomId) {
@@ -242,27 +256,27 @@ public class App extends WebSocketServer {
         if (game != null) {
             Gson gson = new Gson();
             String wordsJson = gson.toJson(new ArrayList<>(game.getRemainingWords()));
-    
+
             for (WebSocket conn : this.getConnections()) {
                 conn.send("update_words:" + roomId + ":" + wordsJson);
             }
         }
     }
-    
+
     private boolean handleCheckWord(WebSocket conn, String roomId, String username, String word) {
         System.out.println("\n\nREACHED HANDLE CHECK WORD\n\n");
         Game game = gameMap.get(roomId);
         if (game != null) {
             List<Integer[]> positions = game.checkWordAndGetPositions(username, word);
             if (positions != null) {
-                System.out.println("\n-----WORD FOUND----\n" + "WORD CHECKED : "+word);
-        
+                System.out.println("\n-----WORD FOUND----\n" + "WORD CHECKED : " + word);
+
                 Gson gson = new Gson();
                 String positionsJson = gson.toJson(positions);
                 conn.send("word_correct:" + word + ":" + positionsJson);
-        
-                game.printWordsFoundByUser(username);  // Optionally print all words found by the user so far
-                broadcastUpdatedWords(roomId);  // New function to broadcast updated words list
+
+                game.printWordsFoundByUser(username); // Optionally print all words found by the user so far
+                broadcastUpdatedWords(roomId); // New function to broadcast updated words list
                 return true;
             } else {
                 System.out.println("\n-----WORD INCORRECT----\n" + "WORD CHECKED : " + word);
@@ -274,20 +288,14 @@ public class App extends WebSocketServer {
             return false;
         }
     }
-    
-    
-  
+
     public void printPlayerWordCounts() {
         for (Game game : gameMap.values()) {
             System.out.println("Game Lobby: " + game.getLobbyName() + " Word Counts:");
-            game.printAllWordsAndTheirStatus(); // Assuming Game.java has this method to print each word and whether it's found
+            game.printAllWordsAndTheirStatus(); // Assuming Game.java has this method to print each word and whether
+                                                // it's found
         }
     }
-    
-    
- 
-    
-    
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
@@ -297,7 +305,8 @@ public class App extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        System.out.println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out
+                .println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
 
         // Find the username associated with the connection that caused the error
         String errorUsername = null;
@@ -313,7 +322,7 @@ public class App extends WebSocketServer {
         if (errorUsername != null) {
             playerMap.remove(errorUsername);
             connectionUserMap.remove(conn); // Clean up the connection map
-            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername+"\n\n");
+            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
             // Optionally broadcast the updated player list after removal
             broadcastPlayerList();
             System.out.println("On Disconnect : ");
@@ -345,7 +354,6 @@ public class App extends WebSocketServer {
     private Game findGameByRoomID(String roomID) {
         return gameMap.get(roomID);
     }
-
 
     // Helper method to clear players from a game
     private void clearPlayersFromGame(Game game) {
@@ -456,7 +464,7 @@ public class App extends WebSocketServer {
         if (errorUsername != null) {
             playerMap.remove(errorUsername);
             connectionUserMap.remove(conn); // Clean up the connection map
-            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername+"\n\n");
+            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
             // Optionally broadcast the updated player list after removal
             broadcastPlayerList();
             System.out.println("On Disconnect : ");
@@ -503,16 +511,14 @@ public class App extends WebSocketServer {
             Map<String, Integer> scores = game.getPlayerScores();
             Gson gson = new Gson();
             String scoresJson = gson.toJson(scores);
-            
+
             for (WebSocket conn : this.getConnections()) {
                 conn.send("update_scores:" + roomId + ":" + scoresJson);
             }
             // print scoresJson
             System.out.println("Scores JSON: " + scoresJson);
             System.out.println("\nScores broadcasted");
-        }
-        else
-        {
+        } else {
             System.out.println("Game not found");
         }
     }
