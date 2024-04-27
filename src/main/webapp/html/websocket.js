@@ -5,6 +5,11 @@ var lastSentWords = []; // This will store the last sent words for reference
 var confirmedCells = new Set(); // Stores IDs of cells confirmed as correct
 var selectedWords = []; // This will store the selected words
 
+function showGameRules() {
+  const gameRules = "Welcome to the Game!\n\nRules:\n1. Find and select words from the grid.\n2. Words can be horizontal, vertical, or diagonal.\n3. Selected words will be highlighted in cyan.\n4. Once you've selected all words, click the 'Send' button to submit them.\n5. The server will verify your selected words.\n6. Correct words will be highlighted in green.\n7. The player with the most correct words wins!\n\nGood luck and have fun!";
+  alert(gameRules);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
 });
@@ -432,6 +437,8 @@ socket.onmessage = function (event) {
     case "section1":
       showSection("section1");
       console.log("From the switch case :section1");
+      // Call the function to show game rules alert
+      showGameRules();
       break;
     case "section2":
       showSection("section2");
@@ -518,5 +525,17 @@ function showSection(sectionId) {
       words.classList.remove("hidden");
       chatArea.classList.remove("hidden");
     }
+  }
+  // Add game rules alert for section1
+  if (sectionId === "section1") {
+    const gameRules = "Welcome to the game! Here are the rules:\n\n" +
+      "- Select words by clicking on the cells in the grid.\n" +
+      "- Selected words will be highlighted in cyan.\n" +
+      "- Once you're done selecting words, click the 'Send' button.\n" +
+      "- The server will verify your selected words.\n" +
+      "- Correctly selected words will be highlighted in color you have chosen.\n" +
+      "- The player with the most correct words wins!\n\n" +
+      "-Enjoy the game !";
+    alert(gameRules);
   }
 }

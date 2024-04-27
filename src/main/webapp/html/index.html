@@ -341,5 +341,16 @@
 
     <script src="websocket.js"></script>
     <script src="navigate.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Function to show game rules alert
+          function showGameRules() {
+              alert("Welcome to the game!\n\nHere are the rules:\n1. Create game objects called 'lobby' and each game can take 2 players.\n2. Join available game rooms by clicking on the 'Join' button.\n3. Each game room can have 2 players.\n4. You have about 5 seconds for the game to start after joining a game room.");
+          }
+
+          // Call the showGameRules function when Section 1 is entered
+          document.getElementById('btnSection1').addEventListener('click', showGameRules);
+      });
+  </script>
   </body>
 </html>
