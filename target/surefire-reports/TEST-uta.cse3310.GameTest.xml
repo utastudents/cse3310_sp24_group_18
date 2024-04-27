@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="uta.cse3310.GameTest" time="5.833" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="gopherProxySet" value="false"/>
+    <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/axjh03/cse3310_sp24_group_18/target/test-classes:/Users/axjh03/cse3310_sp24_group_18/target/classes:/Users/axjh03/.m2/repository/net/freeutils/jlhttp/2.6/jlhttp-2.6.jar:/Users/axjh03/.m2/repository/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar:/Users/axjh03/.m2/repository/org/java-websocket/Java-WebSocket/1.5.4/Java-WebSocket-1.5.4.jar:/Users/axjh03/.m2/repository/org/slf4j/slf4j-api/2.0.6/slf4j-api-2.0.6.jar:/Users/axjh03/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/axjh03/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="java.vm.vendor" value="Azul Systems, Inc."/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="http://www.azul.com/"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/Users/axjh03/.sdkman/candidates/java/11.0.12-zulu/zulu-11.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/axjh03/cse3310_sp24_group_18/target/surefire/surefirebooter16231867489778216632.jar /Users/axjh03/cse3310_sp24_group_18/target/surefire 2024-04-27T13-04-57_951-jvmRun1 surefire10144975666616316669tmp surefire_08691246599961899820tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/axjh03/cse3310_sp24_group_18/target/test-classes:/Users/axjh03/cse3310_sp24_group_18/target/classes:/Users/axjh03/.m2/repository/net/freeutils/jlhttp/2.6/jlhttp-2.6.jar:/Users/axjh03/.m2/repository/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar:/Users/axjh03/.m2/repository/org/java-websocket/Java-WebSocket/1.5.4/Java-WebSocket-1.5.4.jar:/Users/axjh03/.m2/repository/org/slf4j/slf4j-api/2.0.6/slf4j-api-2.0.6.jar:/Users/axjh03/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/axjh03/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/axjh03"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2021-07-20"/>
+    <property name="java.home" value="/Users/axjh03/.sdkman/candidates/java/11.0.12-zulu/zulu-11.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/axjh03/cse3310_sp24_group_18"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="jdk.vendor.version" value="Zulu11.50+19-CA"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="/Users/axjh03/cse3310_sp24_group_18/target/surefire/surefirebooter16231867489778216632.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="11.0.12+7-LTS"/>
+    <property name="user.name" value="axjh03"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="14.4.1"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Zulu11.50+19-CA"/>
+    <property name="localRepository" value="/Users/axjh03/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="http://www.azul.com/support/"/>
+    <property name="java.io.tmpdir" value="/var/folders/q8/ghn7h1fn33j_4d4_mhfdxw1c0000gn/T/"/>
+    <property name="java.version" value="11.0.12"/>
+    <property name="user.dir" value="/Users/axjh03/cse3310_sp24_group_18"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.library.path" value="/Users/axjh03/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Azul Systems, Inc."/>
+    <property name="java.vm.version" value="11.0.12+7-LTS"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="java.class.version" value="55.0"/>
+  </properties>
+  <testcase name="testCase" classname="uta.cse3310.GameTest" time="5.83">
+    <system-out><![CDATA[Words loaded successfully. Total words read in words.txt: 8650
+Creating game with lobby name: TestLobby and room id: TestRoom
+C I D E R S E I R A U T I B O I E F A C 
+O M E U E G B W E F F O R W A R D Y L T 
+M A S G G S C O G O Y N H E D M M A P H 
+P R I A A O E H D R N A T B S A M D I G 
+L I R E S L B E E U I P P S I B D O P I 
+E J P L O I E M L M A A E P D T W D E L 
+T U R K D D U O P S G J D A G A E W Y E 
+E A U P S B Q S G C B E G I N N E R S D 
+L N S F O R P P L A I N S S W O D A H S 
+Y A T O D E V I T N E C N I C P S B S S 
+I N T E R S E C T I O N T H G E R F C U 
+S I D I F S D S H G E S A A U I L P I O 
+G C E P N A E W E N E N T N S O S A T U 
+N L T S M E S V I L C M I I Y A S R A N 
+O O S N D H D Z I E E T P D S K C A M I 
+H S U E U A A A L G N C N L O I K B E T 
+T E R T K G E L H O L H T O O Y V I H N 
+W S T T A E O L C S I W B I L Y M A T O 
+V T W M A R G N I R O B U E O P E U A C 
+T A E R T E R P J W H I C H O N G E M D 
+----------PLACED WORDS-------------
+CONTINUES MAGAZINE FORUMS CAFE SHADOWS PIPE CONTINUOUS THONGS SHUT WHICH CHANCELLOR QUEBEC TRUSTED COMPLETELY DELIGHT SURPRISED ARABIA LAMBDA CASA INTERSECTION LEAGUE PLAINS LEADS OBITUARIES SELECTION SOLID DOSAGE SHADE DAMN KYLE CLOSEST FORWARD BOOKS MATHEMATICS MARIJUANA JAPAN INCENTIVE GAIN DADDY BORING RETREAT VISITS EMPLOYEE BITE GIVES FLOYD PLEDGE SOMEHOW BEGINNERS PROF DEPTH 
+
+Total words: 51
+------------------------------------
+
+
+Density of valid words in the grid: 0.83500
+Resetting game in lobby: TestLobby
+Game reset in lobby: TestLobby
+]]></system-out>
+  </testcase>
+</testsuite>
