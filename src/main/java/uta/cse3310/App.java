@@ -55,18 +55,7 @@ public class App extends WebSocketServer {
 
 
         ///// --------- GRID --------- /////
-        private void broadcastGridUpdate(Game game) {
-            if (game != null) {
-                String gridJson = game.getGridAsJson();  // Make sure Game.java has this method
-                String roomId = game.getGameRoomId();
-                String message = String.format("update_grid:%s:%s", roomId, gridJson);
-                for (Player player : game.getPlayers()) {
-                    if (player.getWebSocket() != null && player.getWebSocket().isOpen()) {
-                        player.getWebSocket().send(message);
-                    }
-                }
-            }
-        }
+
 
         
     private void broadcastGameRooms() {
@@ -203,7 +192,7 @@ public class App extends WebSocketServer {
                 String username = parts[2];
                 String word = parts[3];
                 Game game = gameMap.get(roomId);
-                if (game != null && game.checkWord(username, word)) {
+                if (game != null && handleCheckWord(conn, roomId, username, word)) {
                     // After updating the score in checkWord, now broadcast the score
                     broadcastScore(roomId);
                 }
@@ -247,21 +236,38 @@ public class App extends WebSocketServer {
         }}
         
     }
-    private void handleCheckWord(WebSocket conn, String roomId, String username, String word) {
+    private boolean handleCheckWord(WebSocket conn, String roomId, String username, String word) {
+        System.out.println("\n\nREACHED HANDLE CHECK WORD\n\n");
         Game game = gameMap.get(roomId);
         if (game != null) {
-            boolean wordFound = game.checkWord(username, word);
-            if (wordFound) {
-                conn.send("word_found:" + word);  // Notify client that the word was found
+            // Combined call to get positions and check the word
+            List<Integer[]> positions = game.checkWordAndGetPositions(username, word);
+            if (positions != null) {
+                // The word was found and we have positions
+                System.out.println("\n-----WORD FOUND----\n" + "WORD CHECKED : "+word);
+    
+                // Convert positions to JSON
+                Gson gson = new Gson();
+                String positionsJson = gson.toJson(positions);
+    
+                // Send correct response with positions
+                conn.send("word_correct:" + word + ":" + positionsJson);
+    
                 game.printWordsFoundByUser(username);  // Optionally print all words found by the user so far
                 broadcastScore(roomId);  // Broadcast updated scores after a word is found
+                return true;
             } else {
-                conn.send("word_not_found:" + word);  // Notify client that the word was not found or already marked
+                // The word was not found or no positions were returned
+                System.out.println("\n-----WORD INCORRECT----\n" + "WORD CHECKED : " + word);
+                conn.send("word_incorrect:" + word);
+                return false;
             }
         } else {
             conn.send("error:Game not found");
+            return false;
         }
     }
+    
   
     public void printPlayerWordCounts() {
         for (Game game : gameMap.values()) {
@@ -332,24 +338,6 @@ public class App extends WebSocketServer {
         return gameMap.get(roomID);
     }
 
-    private void clearPlayerStates(Game game) {
-        if (game.getPlayer1() != null) {
-            removePlayer(game.getPlayer1());
-        }
-        if (game.getPlayer2() != null) {
-            removePlayer(game.getPlayer2());
-        }
-        System.out.println("Cleared players from the reset game.");
-    }
-
-    // Call this method to remove player and ensure all states are synchronized
-    private void removePlayer(Player player) {
-        playerMap.remove(player.getUsername());
-        WebSocket conn = player.getWebSocket();
-        if (conn != null && conn.isOpen()) {
-            conn.close(); // Optionally close the connection or notify the player
-        }
-    }
 
     // Helper method to clear players from a game
     private void clearPlayersFromGame(Game game) {

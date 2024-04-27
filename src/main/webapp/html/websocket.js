@@ -1,6 +1,7 @@
 // const socket = new WebSocket("ws://localhost:9118");
 serverUrl = "ws://" + window.location.hostname + ":9118";
 const socket = new WebSocket(serverUrl);
+var lastSentWords = [];  // This will store the last sent words for reference
 
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
@@ -77,15 +78,17 @@ function sendWords(roomId) {
   if (usernameSpan) {
     const username = usernameSpan.textContent;
     if (selectedWords.length > 0) {
-      const message =
-        "check_word:" + roomId + ":" + username + ":" + selectedWords.join("");
+      const message = "check_word:" + roomId + ":" + username + ":" + selectedWords.join("");
+      lastSentWords = selectedWords.slice(); // Copy of currently selected words
       socket.send(message);
-      selectedWords = []; // Clear the selected words after sending
+      selectedWords = []; // Optionally clear the selected words array immediately
     }
   } else {
     console.error("Username display element not found");
   }
 }
+
+
 
 function updateGrid(roomId, gridJson) {
   let gridData = JSON.parse(gridJson);
@@ -260,6 +263,32 @@ function extractJson(jsonPart) {
   return json;
 }
 
+
+function clearSelection(words) {
+  console.log("Reached clearselection()\n")
+  words.forEach(word => {
+    document.querySelectorAll(".grid-cell").forEach(cell => {
+      if (cell.textContent === word) {
+        cell.style.backgroundColor = ""; // Reset background color
+      }
+    });
+  });
+}
+
+
+function highlightWords(words) {
+  console.log("Reached highlightWords()\n")
+  words.forEach(word => {
+    document.querySelectorAll(".grid-cell").forEach(cell => {
+      if (cell.textContent === word) {
+        cell.style.backgroundColor = "green"; // Change to a success color
+      }
+    });
+  });
+}
+
+
+
 socket.onmessage = function (event) {
   const sectionToShow = event.data;
   // Use a switch case to determine which section to show
@@ -291,20 +320,20 @@ socket.onmessage = function (event) {
       updateLeaderboard(roomId, scores);
       break;
     }
-
-    case "words_found": {
-      const roomId = data[1];
-      const wordsContent = data.slice(2).join(":");
-      const words = wordsContent.split(",");
-      console.log("Words found: " + words.join(", "));
-      updateWordsDisplay(roomId, words);
+    case "word_correct":
+      console.log("Word is correct: " + content);
+      positions.forEach(pos => {
+            let cell = document.getElementById(`cell_${pos[0]}_${pos[1]}`);
+            cell.style.backgroundColor = "green";
+        });
+      highlightWords(lastSentWords);
       break;
-    }
 
-    case "word_not_found": {
-      console.log("Word not found: " + data[1]);
+    case "word_incorrect":
+      console.log("Word is incorrect: " + content);
+      clearSelection(lastSentWords);
+      lastSentWords = []; 
       break;
-    }
 
     case "update_grid":
       const roomId = data[1];
