@@ -1,53 +1,51 @@
 package uta.cse3310;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
-import org.junit.Test;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
+public class HttpServerTest extends TestCase {
 
-public class HttpServerTest {
+        /**
+     * Create the test case
+     *
+     * @param testName name of the test case
+     */
 
-    @Test
-    public void testStart() throws IOException, InterruptedException {
+    public HttpServerTest(String testName) {
+        super(testName);
+    }
+
+    /**
+     * @return the suite of tests being tested
+     */
+
+    public static Test suite() {
+        return new TestSuite(HttpServerTest.class);
+    }
+
+    
+    public void testStart() {
         // Create a HttpServer
         int port = 8080;
         String dirname = "src/main/webapp/html";
         HttpServer httpServer = new HttpServer(port, dirname);
 
-        // Start the server in a separate thread
-        Thread serverThread = new Thread(() -> {
-            httpServer.start();
-        });
-        serverThread.start();
-
-        // Wait for the server to start (give it some time)
-        Thread.sleep(1000);
-
-        // Check if the server is running by connecting to it
-        boolean isServerRunning = isServerRunning(port);
-        assertTrue(isServerRunning);
-
-
-
-        // Print the result or throw an exception based on the server's running status
-        if (isServerRunning) {
-            System.out.println("Server started successfully.");
-        } else {
-            throw new AssertionError("Server failed to start.");
-        }
+        httpServer.start();
+        
+        assertTrue(isServerRunning(8080));
     }
-
+    
     private boolean isServerRunning(int port) {
-        try (SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress("localhost", port))) {
-            // If the connection is successful, the server is running
-            return true;
+        try (SocketChannel socketChannel = SocketChannel.open()) {
+            socketChannel.connect(new InetSocketAddress("localhost", port));
+            return true; // Server is running
         } catch (IOException e) {
-            // If an exception occurs, the server is not running
-            return false;
+            return false; // Server is not running
         }
     }
 }
