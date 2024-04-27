@@ -24,6 +24,9 @@ public class Game {
     private String lobbyName;
     private String roomId;
     private Chat chat;
+    private GameEventListener listener;
+    private String gameId;
+
 
     private static final int GRID_SIZE = 20;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
@@ -32,16 +35,20 @@ public class Game {
     private Set<Integer> placedLetters = new HashSet<>();
     private static Random random = new Random();
 
-    // Maintain the original naming convention
     private ArrayList<String> wordsFound = new ArrayList<String>(); // Create an ArrayList object
     private Map<String, List<String>> wordsFoundByPlayer = new HashMap<>();
+    private Map<String, List<Integer[]>> wordPositions = new HashMap<>();
 
-    public Game(String lobbyName, String roomId) {
+
+    public Game(String lobbyName, String roomId, GameEventListener listener) {
         this.lobbyName = lobbyName;
         this.roomId = roomId;
+        this.gameId = roomId;
         this.player1 = null;
         this.player2 = null;
         this.isFinished = false;
+        this.listener = listener;
+
         this.grid = new char[GRID_SIZE][GRID_SIZE];
         this.wordsPlaced = new HashMap<>();
         loadWords(); // Load words specific to this game instance
@@ -51,21 +58,52 @@ public class Game {
 
     }
 
-    public boolean checkWord(String username, String word) {
-        Boolean foundStatus = wordsPlaced.get(word);
-        if (foundStatus != null && foundStatus) { // Check if the word exists and is set to true (available to be found)
-            wordsPlaced.put(word, false); // Mark the word as found by setting it to false
-            wordsFound.add(word); // Optionally maintain a list of all found words
-            wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
-            System.out.println(username + " found the word: " + word);
-            // print the list
-            printWordsFoundByUser(username);
-            return true;
-        } else {
-            System.out.println("Word not found or already marked as found: " + word);
-            return false;
+    private void checkForWinner() {
+        if (areAllWordsFound()) {
+            if (listener != null) {
+                listener.onGameFinished(gameId);
+            }
         }
     }
+
+    public boolean isWordCorrect(String word) {
+        Boolean status = wordsPlaced.get(word);
+        return status != null && status;  // True if the word is correct and not yet marked as found
+    }
+
+    public Set<String> getRemainingWords() {
+        return wordsPlaced.entrySet().stream()
+               .filter(Map.Entry::getValue)  // Only include words that are still available (not found)
+               .map(Map.Entry::getKey)
+               .collect(Collectors.toSet());
+    }
+    
+
+    public List<Integer[]> checkWordAndGetPositions(String username, String word) {
+        if (isWordCorrect(word)) {
+            wordsPlaced.put(word, false);  // Mark the word as found
+            wordsFound.add(word);
+            wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
+            return wordPositions.get(word);  // Return positions if the word is correct
+            
+        }
+        return null;  // Return null if the word is not correct
+    }
+    
+    
+    
+
+    public boolean checkWord(String username, String word) {
+        if (isWordCorrect(word)) { // Use the new method to check word correctness
+            wordsPlaced.put(word, false);  // Mark the word as found
+            wordsFound.add(word);
+            wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
+            List<Integer[]> positions = wordPositions.get(word);
+            return true;
+        }
+        return false;
+    }
+    
 
     public void printWordsFoundByUser(String username) {
         List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
@@ -77,6 +115,19 @@ public class Game {
             System.out.println("Word: " + entry.getKey() + ", Available: " + entry.getValue());
         }
     }
+
+    public interface GameEventListener {
+        void onGameFinished(String gameId);
+    }
+    
+
+
+private boolean areAllWordsFound() {
+    // Check if all words are found by checking the size of the remaining words set
+    return getRemainingWords().isEmpty();
+}
+
+
 
     // USER SCORE
     public Map<String, Integer> getPlayerScores() {
@@ -119,30 +170,19 @@ public class Game {
     public Chat getChat() {
         return chat;
     }
-
     public void sendGameDetails(WebSocket conn) {
         Gson gson = new Gson();
-        // String gridJson = getGridAsJson(); // Get JSON representation of the game
-        // grid
-        List<String> placedWords = new ArrayList<>(wordsPlaced.keySet()); // Get list of placed words
-        String wordsJson = gson.toJson(placedWords); // Convert placed words list to JSON
-
-        System.out.println("Sending game details to client: " + conn.getRemoteSocketAddress());
+        String gridJson = getGridAsJson();  // Serialize the grid to JSON
+        String wordsJson = gson.toJson(new ArrayList<>(wordsPlaced.keySet()));
+    
         try {
-            // conn.send("update_grid:" + this.roomId + ":" + gridJson);
-            System.out.println("Sent!");
+            conn.send("update_grid:" + roomId + ":" + gridJson);  // Send grid
+            conn.send("update_words:" + roomId + ":" + wordsJson);  // Send words
         } catch (Exception e) {
-            System.out.println("Error sending grid to client: " + e.getMessage());
-        }
-
-        System.out.println("Sending words to client: " + conn.getRemoteSocketAddress());
-        try {
-            conn.send("update_words:" + this.roomId + ":" + wordsJson);
-            System.out.println("Sent!");
-        } catch (Exception e) {
-            System.out.println("Error sending words to client: " + e.getMessage());
+            System.err.println("Error sending game details: " + e.getMessage());
         }
     }
+    
 
     private void initializeGrid() {
         for (int i = 0; i < GRID_SIZE; i++) {
@@ -156,6 +196,10 @@ public class Game {
                 if (grid[i][j] == '_') { // Only fill cells that have not been filled with a word
                     grid[i][j] = (char) ('A' + random.nextInt(26));
                 }
+                // Uncomment this and comment the upper for debug.. to see the grid without random words
+                // if (grid[i][j] == '3') { // Only fill cells that have not been filled with a word
+                //     grid[i][j] = (char) ('A' + random.nextInt(26));
+                // }
             }
         }
     }
@@ -185,8 +229,8 @@ public class Game {
         int totalCells = GRID_SIZE * GRID_SIZE;
         int wordCells = placedLetters.size(); // The set size gives us the number of unique cells with words
 
-        double density = (double) wordCells / totalCells * 100;
-        System.out.printf("Density of valid words in the grid: %.2f%%\n", density);
+        double density = (double) wordCells / totalCells;
+        System.out.printf("Density of valid words in the grid: %.5f\n", density);
     }
 
     private int getRowIncrement(int orientation, int i) {
@@ -226,9 +270,9 @@ public class Game {
     }
 
     // Attempts to place a single word in the grid randomly
-
     private boolean placeWordInGrid(String word) {
-        int orientation = random.nextInt(8); // Updated for 8 orientations
+        int orientation = random.nextInt(8); // Assuming 8 possible orientations
+        List<Integer[]> positions = new ArrayList<>();
         for (int attempts = 0; attempts < 100; attempts++) {
             int row = random.nextInt(GRID_SIZE);
             int col = random.nextInt(GRID_SIZE);
@@ -237,13 +281,16 @@ public class Game {
                     int newRow = row + getRowIncrement(orientation, i);
                     int newCol = col + getColIncrement(orientation, i);
                     grid[newRow][newCol] = word.charAt(i);
-                    placedLetters.add(newRow * GRID_SIZE + newCol); // Track positions
+                    positions.add(new Integer[]{newRow, newCol});
+                    placedLetters.add(newRow * GRID_SIZE + newCol); // Storing the index as a single integer
                 }
+                wordPositions.put(word, positions);
                 return true;
             }
         }
         return false;
     }
+
 
     // Checks if a word can be placed at the specified position
     private boolean canPlaceWord(String word, int row, int col, int orientation) {
@@ -322,7 +369,7 @@ public class Game {
             // New method to shuffle words by picking from different segments
             allWords = structuredShuffle(loadedWords, 10); // Shuffle with desired number of segments
 
-            System.out.println("Words loaded successfully. Total words loaded: " + allWords.size());
+            System.out.println("Words loaded successfully. Total words read in words.txt: " + allWords.size());
         } catch (IOException e) {
             System.err.println("Error loading words: " + e.getMessage());
         }
@@ -422,9 +469,6 @@ public class Game {
 
     public String roomID() {
         return roomId;
-    }
-    public Map<String, Boolean> getWordsPlaced() {
-        return wordsPlaced;
     }
 
     public void startGame() {

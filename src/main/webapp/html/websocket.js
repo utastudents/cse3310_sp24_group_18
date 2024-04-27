@@ -1,6 +1,9 @@
 // const socket = new WebSocket("ws://localhost:9118");
 serverUrl = "ws://" + window.location.hostname + ":9118";
 const socket = new WebSocket(serverUrl);
+var lastSentWords = []; // This will store the last sent words for reference
+var confirmedCells = new Set(); // Stores IDs of cells confirmed as correct
+var selectedWords = []; // This will store the selected words
 
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
@@ -51,19 +54,22 @@ function addSendButtonListener(roomId) {
 }
 
 function toggleCell(cell, value) {
-  if (cell.style.backgroundColor === "cyan") {
-    cell.style.backgroundColor = ""; // Change to your default or previous color
-    removeFromSelected(value); // Function to remove from selected words
-  } else {
-    cell.style.backgroundColor = "cyan"; // Change to your highlight color
-    addToSelected(value); // Function to add to selected words
+  let cellId = cell.id;
+  if (!confirmedCells.has(cellId)) {
+    // Only toggle if not confirmed as correct
+    if (cell.style.backgroundColor === "cyan") {
+      cell.style.backgroundColor = "";
+      removeFromSelected(value);
+    } else {
+      cell.style.backgroundColor = "cyan";
+      addToSelected(value);
+    }
   }
 }
-var selectedWords = []; // This will store the selected words
 
 function addToSelected(word) {
   selectedWords.push(word);
-}
+};
 
 function removeFromSelected(word) {
   const index = selectedWords.indexOf(word);
@@ -79,8 +85,9 @@ function sendWords(roomId) {
     if (selectedWords.length > 0) {
       const message =
         "check_word:" + roomId + ":" + username + ":" + selectedWords.join("");
+      lastSentWords = selectedWords.slice(); // Copy of currently selected words
       socket.send(message);
-      selectedWords = []; // Clear the selected words after sending
+      selectedWords = []; // Optionally clear the selected words array immediately
     }
   } else {
     console.error("Username display element not found");
@@ -226,8 +233,10 @@ function appendChatMessage(roomId, message) {
 
 // leader board
 function updateLeaderboard(roomId, scores) {
-  const tbody = document.getElementById(roomId + "_leaderboard_table").getElementsByTagName('tbody')[0];
-  tbody.innerHTML = ''; // Clear existing rows
+  const tbody = document
+    .getElementById(roomId + "_leaderboard_table")
+    .getElementsByTagName("tbody")[0];
+  tbody.innerHTML = ""; // Clear existing rows
 
   Object.entries(scores).forEach(([player, score]) => {
     const row = tbody.insertRow();
@@ -243,13 +252,13 @@ function updateLeaderboard(roomId, scores) {
 
 function extractJson(jsonPart) {
   let braceCount = 0;
-  let json = '';
-  
+  let json = "";
+
   for (let i = 0; i < jsonPart.length; i++) {
     json += jsonPart[i];
-    if (jsonPart[i] === '{') {
+    if (jsonPart[i] === "{") {
       braceCount++;
-    } else if (jsonPart[i] === '}') {
+    } else if (jsonPart[i] === "}") {
       braceCount--;
       if (braceCount === 0) {
         break; // When brace count returns to 0, we've captured a complete JSON object
@@ -258,6 +267,33 @@ function extractJson(jsonPart) {
   }
 
   return json;
+}
+
+function clearSelection() {
+  document.querySelectorAll(".grid-cell").forEach((cell) => {
+    if (!confirmedCells.has(cell.id)) {
+      // Only clear non-confirmed cells
+      cell.style.backgroundColor = "";
+    }
+  });
+}
+
+function highlightWords(wordsPositions) {
+  wordsPositions.forEach((pos) => {
+    let cell = document.getElementById(`cell_${pos[0]}_${pos[1]}`);
+    cell.style.backgroundColor = "green";
+    confirmedCells.add(cell.id); // Add to confirmed list
+  });
+}
+
+function updateWords(roomId, words) {
+  const wordsListHtml = words.map((word) => `<li>${word}</li>`).join("");
+  const wordsElement = document.getElementById(`${roomId}_words`);
+  if (wordsElement) {
+    wordsElement.innerHTML = wordsListHtml;
+  } else {
+    console.error("No words element found for room ID:", roomId);
+  }
 }
 
 socket.onmessage = function (event) {
@@ -271,18 +307,22 @@ socket.onmessage = function (event) {
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
   let jsonPart = data.slice(2).join(":"); // Join the remaining parts that might contain JSON data
 
-
   switch (command) {
-    
-    case 'update_scores':{
+    case "update_words":
+      const roomIdWords = data[1];
+      const wordsJson = data.slice(2).join(":");
+      const wordsList = JSON.parse(wordsJson);
+      updateWords(roomIdWords, wordsList);
+      break;
+
+    case "update_scores": {
       const roomId = data[1];
-  
-      console.log("CONTENT:\n"+content)
+
+      console.log("CONTENT:\n" + content);
       const json = extractJson(jsonPart);
-      console.log("JSON:\n"+json)
-      const scores = JSON.parse(json); 
-      
-      
+      console.log("JSON:\n" + json);
+      const scores = JSON.parse(json);
+
       console.log("\n\n-- JSON --\n\n" + json);
       console.log("\n\n-- SCORE UPDATE REQUEST --\n\n");
       console.log("Updating scores for room:", roomId);
@@ -291,20 +331,16 @@ socket.onmessage = function (event) {
       updateLeaderboard(roomId, scores);
       break;
     }
-
-    case "words_found": {
-      const roomId = data[1];
-      const wordsContent = data.slice(2).join(":");
-      const words = wordsContent.split(",");
-      console.log("Words found: " + words.join(", "));
-      updateWordsDisplay(roomId, words);
+    case "word_correct":
+      console.log("Word is correct: " + content);
+      let positions = JSON.parse(data[2]); // Assuming positions are passed as JSON
+      highlightWords(positions);
       break;
-    }
 
-    case "word_not_found": {
-      console.log("Word not found: " + data[1]);
+    case "word_incorrect":
+      console.log("Word is incorrect: " + content);
+      clearSelection(); // Now only clears unconfirmed selection
       break;
-    }
 
     case "update_grid":
       const roomId = data[1];
@@ -332,6 +368,10 @@ socket.onmessage = function (event) {
         "[switch: command (update_players)] Received command:",
         command
       );
+      break;
+
+    case "winner":
+      alert(data[1] + " wins!"); // Alert user who wins
       break;
 
     case "update_gameRooms":
