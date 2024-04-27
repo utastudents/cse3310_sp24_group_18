@@ -5,12 +5,24 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import uta.cse3310.Game.GameEventListener;
 
 /**
  * Unit test for simple App.
  */
 public class GameTest
         extends TestCase {
+
+            class MockGameEventListener implements GameEventListener {
+                boolean onGameFinishedCalled = false;
+        
+                @Override
+                public void onGameFinished(String gameId) {
+                    onGameFinishedCalled = true;
+                }
+            }
+
+            
     /**
      * Create the test case
      *
@@ -28,8 +40,9 @@ public class GameTest
     }
 
     public void testCase(){
+    MockGameEventListener mockListener = new MockGameEventListener();
 
-    Game g = new Game("TestLobby", "TestRoom"); // New test Room
+    Game g = new Game("TestLobby", "TestRoom", mockListener); // New test Room
     Player p1 = new Player("josh", null); // new player named josh
     Player p2 = new Player("adam", null); // new player named adam
 

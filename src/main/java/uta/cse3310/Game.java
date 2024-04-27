@@ -525,4 +525,7 @@ private boolean areAllWordsFound() {
     public Player[] getPlayers_chat() {
         return new Player[] { player1, player2 };
     }
+    public Map<String, Boolean> getWordsPlaced() {
+        return wordsPlaced;
+    }
 }
