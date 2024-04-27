@@ -2,6 +2,9 @@
 serverUrl = "ws://" + window.location.hostname + ":9118";
 const socket = new WebSocket(serverUrl);
 var lastSentWords = [];  // This will store the last sent words for reference
+var confirmedCells = new Set();  // Stores IDs of cells confirmed as correct
+var selectedWords = []; // This will store the selected words
+
 
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
@@ -52,15 +55,17 @@ function addSendButtonListener(roomId) {
 }
 
 function toggleCell(cell, value) {
-  if (cell.style.backgroundColor === "cyan") {
-    cell.style.backgroundColor = ""; // Change to your default or previous color
-    removeFromSelected(value); // Function to remove from selected words
-  } else {
-    cell.style.backgroundColor = "cyan"; // Change to your highlight color
-    addToSelected(value); // Function to add to selected words
+  let cellId = cell.id;
+  if (!confirmedCells.has(cellId)) {  // Only toggle if not confirmed as correct
+    if (cell.style.backgroundColor === "cyan") {
+      cell.style.backgroundColor = "";
+      removeFromSelected(value);
+    } else {
+      cell.style.backgroundColor = "cyan";
+      addToSelected(value);
+    }
   }
 }
-var selectedWords = []; // This will store the selected words
 
 function addToSelected(word) {
   selectedWords.push(word);
@@ -264,26 +269,20 @@ function extractJson(jsonPart) {
 }
 
 
-function clearSelection(words) {
-  console.log("Reached clearselection()\n")
-  words.forEach(word => {
-    document.querySelectorAll(".grid-cell").forEach(cell => {
-      if (cell.textContent === word) {
-        cell.style.backgroundColor = ""; // Reset background color
-      }
-    });
+function clearSelection() {
+  document.querySelectorAll(".grid-cell").forEach(cell => {
+    if (!confirmedCells.has(cell.id)) {  // Only clear non-confirmed cells
+      cell.style.backgroundColor = "";
+    }
   });
 }
 
 
-function highlightWords(words) {
-  console.log("Reached highlightWords()\n")
-  words.forEach(word => {
-    document.querySelectorAll(".grid-cell").forEach(cell => {
-      if (cell.textContent === word) {
-        cell.style.backgroundColor = "green"; // Change to a success color
-      }
-    });
+function highlightWords(wordsPositions) {
+  wordsPositions.forEach(pos => {
+    let cell = document.getElementById(`cell_${pos[0]}_${pos[1]}`);
+    cell.style.backgroundColor = "green";
+    confirmedCells.add(cell.id);  // Add to confirmed list
   });
 }
 
@@ -322,17 +321,13 @@ socket.onmessage = function (event) {
     }
     case "word_correct":
       console.log("Word is correct: " + content);
-      positions.forEach(pos => {
-            let cell = document.getElementById(`cell_${pos[0]}_${pos[1]}`);
-            cell.style.backgroundColor = "green";
-        });
-      highlightWords(lastSentWords);
+      let positions = JSON.parse(data[2]);  // Assuming positions are passed as JSON
+      highlightWords(positions);
       break;
 
     case "word_incorrect":
       console.log("Word is incorrect: " + content);
-      clearSelection(lastSentWords);
-      lastSentWords = []; 
+      clearSelection();  // Now only clears unconfirmed selection
       break;
 
     case "update_grid":
