@@ -6,7 +6,7 @@ var confirmedCells = new Set(); // Stores IDs of cells confirmed as correct
 var selectedWords = []; // This will store the selected words
 
 function showGameRules() {
-  const gameRules = "Welcome to the Game!\n\nRules:\n1. Find and select words from the grid.\n2. Words can be horizontal, vertical, or diagonal.\n3. Selected words will be highlighted in cyan.\n4. Once you've selected all words, click the 'Send' button to submit them.\n5. The server will verify your selected words.\n6. Correct words will be highlighted in green.\n7. The player with the most correct words wins!\n\nGood luck and have fun!";
+  const gameRules = "Welcome to the Game!\n\nHere's how to play:\n1. Search the grid and sequentially select the letters to form words. You can select each letter in any direction: horizontal, vertical, or diagonal.\n2. As you select letters, they will be highlighted in cyan to indicate your current selection.\n3. After you have selected all letters for a word, click the 'Check Selection' button to submit your word for verification.\n4. If the word is correct, it will turn green on the grid. If it's incorrect, the selection will fade away, allowing you to try again.\n5. Each correct word remains highlighted in green.\n6. Aim to find and correctly identify more words than your opponents to win the game.\n\nBest of luck, and enjoy the challenge!";
   alert(gameRules);
 }
 
@@ -136,6 +136,7 @@ function showGameRoom(roomId, player, opponent) {
   document.getElementById(roomId + "_player").textContent = player;
   document.getElementById(roomId + "_opponent").textContent = opponent;
   showSection(roomId); // Shows the appropriate game room
+  showGameRules();
 }
 
 function updateGameTable(gameRooms) {
@@ -160,15 +161,6 @@ function updateGameTable(gameRooms) {
     cellJoin.appendChild(joinButton);
   });
 }
-
-// function toggleGridVisibility(roomId) {
-//   const gridElement = document.getElementById(`${roomId}_grid`);
-//   if (gridElement) {
-//     gridElement.classList.toggle("hidden");
-//   } else {
-//     console.error("No grid element found for room ID:", roomId);
-//   }
-// }
 
 function updateWords(roomId, words) {
   const wordsListHtml = words.map((word) => `<li>${word}</li>`).join("");
@@ -438,7 +430,6 @@ socket.onmessage = function (event) {
       showSection("section1");
       console.log("From the switch case :section1");
       // Call the function to show game rules alert
-      showGameRules();
       break;
     case "section2":
       showSection("section2");
@@ -453,30 +444,28 @@ socket.onmessage = function (event) {
     case "gameroom1":
       showSection("gameroom1");
       console.log("From the switch case :gameroom1");
-      // Add any additional logic for gameroom1 button clicks here
       break;
 
     case "gameroom2":
       console.log("From the switch case :gameroom2");
       showSection("gameroom2");
-      // Add any additional logic for gameroom2 button clicks here
       break;
 
     case "gameroom3":
       console.log("From the switch case :gameroom3");
       showSection("gameroom3");
-      // Add any additional logic for gameroom3 button clicks here
       break;
 
     case "gameroom4":
       console.log("From the switch case :gameroom4");
       showSection("gameroom4");
-      // Add any additional logic for gameroom4 button clicks here
       break;
 
-    // case "gamerrom"
+    case "gameroom5":
+      console.log("From the switch case :gameroom5");
+      showSection("gameroom5");
+      break;
 
-    // if new player added then console.log player and username
     case "player_added":
       const player = event.data;
       console.log("New player added: ", player);
@@ -525,17 +514,4 @@ function showSection(sectionId) {
       words.classList.remove("hidden");
       chatArea.classList.remove("hidden");
     }
-  }
-  // Add game rules alert for section1
-  if (sectionId === "section1") {
-    const gameRules = "Welcome to the game! Here are the rules:\n\n" +
-      "- Select words by clicking on the cells in the grid.\n" +
-      "- Selected words will be highlighted in cyan.\n" +
-      "- Once you're done selecting words, click the 'Send' button.\n" +
-      "- The server will verify your selected words.\n" +
-      "- Correctly selected words will be highlighted in color you have chosen.\n" +
-      "- The player with the most correct words wins!\n\n" +
-      "-Enjoy the game !";
-    alert(gameRules);
-  }
-}
+  }}
