@@ -4,27 +4,35 @@
   padding: 20px; /* Add padding */
   max-width: 800px; /* Set maximum width */
   margin: 0 auto; /* Center the container */
-  background-color: #f9f9f9; /* Set background color */
+  background-color:rgb(243, 229, 219); /* Set background color */
   border-radius: 15px; /* Round the corners of the container */
   box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Add shadow for better appearance */
+  margin-top: 5%;
+  font-family: cursive;
+  
 }
+
+
 
 /* Style for paragraphs */
 #section1 p {
   margin-bottom: 15px; /* Add space between paragraphs */
   font-size: 16px; /* Set font size */
-  color: #333; /* Set text color */
+  color: #333333; /* Set text color */
+  
 }
 
 /* Style for the container of currently logged-in user */
 #section1 #currentUser {
   margin-bottom: 15px; /* Add space below the container */
+  
 }
 
 /* Style for the currently logged-in username */
 #section1 .currentUsername {
   font-weight: bold; /* Make the username bold */
   color: #007bff; /* Set text color */
+  
 }
 
 /* Style for the lobby page title */
@@ -72,4 +80,27 @@
 /* Hover effect for the Join button */
 #section1 #gameTable .joinButton:hover {
   background-color: #0056b3; /* Darken the background color on hover */
+}
+
+
+/* logout button in lobby */
+.over_and_out{
+  background-color: #007bff; /* Red */
+  border: none;
+  font-family: cursive;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+  
+
+}
+
+.over_and_out:hover {
+  background-color: #0056b3; /* Darker red */
 }

@@ -1,177 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Dynamic Sections by WebSocket</title>
-    <style>
-      .hidden {
-        display: none;
-      }
-    </style>
-  </head>
-  <link rel="stylesheet" href="body.css" />
-  <link rel="stylesheet" href="login_form.css" />
-  <link rel="stylesheet" href="lobby.css" />
-  <link rel="stylesheet" href="chat.css" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="grid.css" />
-  <link rel="stylesheet" href="leaderboard.css" />
-  <body>
-    <div id="section0">
-      <div id="loginSection" class="login-background">
-        <div class="login-container">
-          <div id="currentUser">
-            Welcome, <span class="currentUsername"></span>
-          </div>
-          <p>This is the Login Page</p>
-      
-          <form id="loginForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required="">
-            <button type="submit" id="UsernameInput">Login</button>
-          </form>
-          <div class="button-group">
-            <button id="btnSection0">Logout</button>
-            <button id="btnSection1">Section 1</button>
-            <button id="btnSection2">Section 2</button>
-            <button id="btnSection3">Section 3</button>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic Sections by WebSocket</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<link rel="stylesheet" href="body.css" />
+<link rel="stylesheet" href="login_form.css" />
+<link rel="stylesheet" href="lobby.css" />
+<link rel="stylesheet" href="chat.css" />
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="grid.css" />
+<link rel="stylesheet" href="leaderboard.css" />
+
+<body>
+  <div id="section0">
+    <div id="loginSection" class="login-background">
+      <div class="login-container">
+        <div id="currentUser">
+          Welcome, <span class="currentUsername"></span>
         </div>
+        
+
+        <form id="loginForm">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required="" placeholder="Enter Username...">
+          <button type="submit" id="UsernameInput">Login</button>
+        </form>
+        <!-- <div class="button-group">
+          <button id="btnSection0">Logout</button>
+          <button id="btnSection1">Section 1</button>
+          <button id="btnSection2">Section 2</button>
+          <button id="btnSection3">Section 3</button>
+        </div> -->
       </div>
-      
     </div>
 
-    <div id="section1" class="hidden">
-      <div id="currentUser">
-        Your Username :  <span class="currentUsername"></span>
-      </div>
-      <p>This is the lobby page</p>
-      <p>
-        Here you can Create game objects called as lobby and each game can take
-        2 players
-      </p>
+  </div>
 
-      <button id="resetGame">Reset Game</button>
-      <p>Please give about 5 seconds for the game to </p>
+  <div id="section1" class="hidden">
+    <div id="currentUser">
+      Your Username : <span class="currentUsername"></span>
+    </div>
 
-      <h3>Player's Online List :</h3>
-      <ul id="playerList"></ul>
-      <!-- Player list container -->
+    <button id="resetGame">Reset Game</button>
+    <p>Please give about 5 seconds for the game to start... </p>
 
-      <!-- 
+    <h3>Player's Online List :</h3>
+    <ul id="playerList"></ul>
+    <!-- Player list container -->
+
+    <!-- 
     Join Game Table 
     It will list the game rooms on the column1, number of players joined Eg : (1/2) on column2 and Join button on column3
      -->
 
-      <table id="gameTable">
-        <thead>
-          <tr>
-            <th>Game Room</th>
-            <th>Players</th>
-            <th>Join</th>
-          </tr>
-        </thead>
-        <tbody id="gameTableBody"></tbody>
-      </table>
+    <table id="gameTable">
+      <thead>
+        <tr>
+          <th>Game Room</th>
+          <th>Players</th>
+          <th>Join</th>
+        </tr>
+      </thead>
+      <tbody id="gameTableBody"></tbody>
+    </table>
 
-      <button id="btnSection0_sec1">Logout</button>
-      <button id="btnSection1_sec1">Section 1</button>
-      <button id="btnSection2_sec1">Section 2</button>
-      <button id="btnSection3_sec1">Section 3</button>
+    <button id="btnSection0_sec1" class="over_and_out">Logout</button>
+    <!-- <button id="btnSection1_sec1">Section 1</button>
+    <button id="btnSection2_sec1">Section 2</button>
+    <button id="btnSection3_sec1">Section 3</button> 
 
-      <button id="Section1_gameroom1_enter_bttn">Enter Gameroom 1</button>
-      <button id="Section1_gameroom2_enter_bttn">Enter Gameroom 2</button>
-      <button id="Section1_gameroom3_enter_bttn">Enter Gameroom 3</button>
-      <button id="Section1_gameroom4_enter_bttn">Enter Gameroom 4</button>
-      <button id="Section1_gameroom5_enter_bttn">Enter Gameroom 4</button>
+    <button id="Section1_gameroom1_enter_bttn">Enter Gameroom 1</button>
+    <button id="Section1_gameroom2_enter_bttn">Enter Gameroom 2</button>
+    <button id="Section1_gameroom3_enter_bttn">Enter Gameroom 3</button>
+    <button id="Section1_gameroom4_enter_bttn">Enter Gameroom 4</button>
+    <button id="Section1_gameroom5_enter_bttn">Enter Gameroom 4</button> -->
+  </div>
+
+  <div id="section2" class="hidden">
+    <div id="currentUser">
+      Your Username : <span class="currentUsername"></span>
     </div>
+    <p>Section 2 Content</p>
 
-    <div id="section2" class="hidden">
-      <div id="currentUser">
-        Your Username :  <span class="currentUsername"></span>
-      </div>
-      <p>Section 2 Content</p>
+    <button id="btnSection0_sec2" class="over_and_out">Logout</button>
+    <button id="btnSection1_sec2">Section 1</button>
+    <button id="btnSection2_sec2">Section 2</button>
+    <button id="btnSection3_sec2">Section 3</button>
+    <button id="Section2_gameroom1_enter_bttn">Enter Gameroom 1</button>
+    <button id="Section2_gameroom2_enter_bttn">Enter Gameroom 2</button>
+    <button id="Section2_gameroom3_enter_bttn">Enter Gameroom 3</button>
+    <button id="Section2_gameroom4_enter_bttn">Enter Gameroom 4</button>
+    <button id="Section2_gameroom5_enter_bttn">Enter Gameroom 4</button>
+  </div>
 
-      <button id="btnSection0_sec2">Logout</button>
-      <button id="btnSection1_sec2">Section 1</button>
-      <button id="btnSection2_sec2">Section 2</button>
-      <button id="btnSection3_sec2">Section 3</button>
-      <button id="Section2_gameroom1_enter_bttn">Enter Gameroom 1</button>
-      <button id="Section2_gameroom2_enter_bttn">Enter Gameroom 2</button>
-      <button id="Section2_gameroom3_enter_bttn">Enter Gameroom 3</button>
-      <button id="Section2_gameroom4_enter_bttn">Enter Gameroom 4</button>
-      <button id="Section2_gameroom5_enter_bttn">Enter Gameroom 4</button>
+  <div id="section3" class="hidden">
+    <div id="currentUser">
+      Your Username : <span class="currentUsername"></span>
     </div>
+    <p>Section 3 Content</p>
 
-    <div id="section3" class="hidden">
-      <div id="currentUser">
-        Your Username :  <span class="currentUsername"></span>
-      </div>
-      <p>Section 3 Content</p>
+    <button id="btnSection0_sec3" class="over_and_out">Logout</button>
+    <button id="btnSection1_sec3">Section 1</button>
+    <button id="btnSection2_sec3">Section 2</button>
+    <button id="btnSection3_sec3">Section 3</button>
+    <button id="Section3_gameroom1_enter_bttn">Enter Gameroom 1</button>
+    <button id="Section3_gameroom2_enter_bttn">Enter Gameroom 2</button>
+    <button id="Section3_gameroom3_enter_bttn">Enter Gameroom 3</button>
+    <button id="Section3_gameroom4_enter_bttn">Enter Gameroom 4</button>
+    <button id="Section3_gameroom5_enter_bttn">Enter Gameroom 4</button>
+  </div>
 
-      <button id="btnSection0_sec3">Logout</button>
-      <button id="btnSection1_sec3">Section 1</button>
-      <button id="btnSection2_sec3">Section 2</button>
-      <button id="btnSection3_sec3">Section 3</button>
-      <button id="Section3_gameroom1_enter_bttn">Enter Gameroom 1</button>
-      <button id="Section3_gameroom2_enter_bttn">Enter Gameroom 2</button>
-      <button id="Section3_gameroom3_enter_bttn">Enter Gameroom 3</button>
-      <button id="Section3_gameroom4_enter_bttn">Enter Gameroom 4</button>
-      <button id="Section3_gameroom5_enter_bttn">Enter Gameroom 4</button>
-    </div>
-
+  <div id="the_main"> <!-- making the whole game room one div -->
     <!--GAME ROOM 1-->
-    <div id="gameroom1" class="hidden game-room">
-      <h1>Game Room 1</h1>
-      <p>Player1: <span id="gameroom1_player"></span></p>
-      <p>Player2: <span id="gameroom1_opponent"></span></p>
-    
+    <div id="gameroom1" class="hidden">
+      <h1 class="for_title">Game Room 1</h1>
+      <p class="for_title">Player1: <span id="gameroom1_player"></span></p>
+      <p class="for_title">Player2: <span id="gameroom1_opponent"></span></p>
+
 
       <div>
         <label for="player1-color-gameroom1">Player 1 Color:</label>
-        <select id="player1-color-gameroom1">
-            <option value="#ff0000">Red</option>
-            <option value="#0000ff">Blue</option>
-            <option value="#008000">Green</option>
-            <option value="#ffff00">Yellow</option>
-            <option value="#ffa500">Orange</option>
-            <option value="#800080">Purple</option>
-            <option value="#000000">Black</option>
+        <select id="player1-color-gameroom1" class="Player1">
+          <option value="#ff0000">Red</option>
+          <option value="#0000ff">Blue</option>
+          <option value="#008000">Green</option>
+          <option value="#ffff00">Yellow</option>
+          <option value="#ffa500">Orange</option>
+          <option value="#800080">Purple</option>
+          <option value="#000000">Black</option>
         </select>
 
         <label for="player2-color-gameroom1">Player 2 Color:</label>
-        <select id="player2-color-gameroom1">
-            <option value="#0000ff">Blue</option>
-            <option value="#ff0000">Red</option>
-            <option value="#008000">Green</option>
-            <option value="#ffff00">Yellow</option>
-            <option value="#ffa500">Orange</option>
-            <option value="#800080">Purple</option>
-            <option value="#000000">Black</option>
+        <select id="player2-color-gameroom1" class="PLayer2">
+          <option value="#0000ff">Blue</option>
+          <option value="#ff0000">Red</option>
+          <option value="#008000">Green</option>
+          <option value="#ffff00">Yellow</option>
+          <option value="#ffa500">Orange</option>
+          <option value="#800080">Purple</option>
+          <option value="#000000">Black</option>
         </select>
-    </div>
+      </div>
 
       <div id="gameroom1_grid" class="grid-container">
         <!-- The game grid will go here -->
       </div>
-      <button id="gameroom1_send">Check Selection</button>
-      <p>Remaining Words in the grid</p>
+      <button id="gameroom1_send" class="checkester">Check Selection</button>
       <ul id="gameroom1_words">
         <!-- Found words will go here -->
       </ul>
 
       <table id="gameroom1_leaderboard_table">
         <thead>
-            <tr>
-                <th>Player</th>
-                <th>Score</th>
-            </tr>
+          <tr>
+            <th>Player</th>
+            <th>Score</th>
+          </tr>
         </thead>
         <tbody>
-            <!-- Dynamic rows will be added here -->
+          <!-- Dynamic rows will be added here -->
         </tbody>
-    </table>
-    
+      </table>
+
       <!-- Chat feature -->
       <div class="chat-container">
         <div class="chat-header">
@@ -183,37 +180,64 @@
         <input type="text" id="gameroom1_chat_input" class="chat-input" placeholder="Type a message..." />
         <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom1')">Send</button>
       </div>
-    
+
       <button id="gameroom1_exit_bttn" class="exit-game-btn">Exit Game</button>
     </div>
 
     <!--GAME ROOM 2-->
     <div id="gameroom2" class="hidden">
-      <h1>Game Room 2</h1>
-      <p>Player1: <span id="gameroom2_player"></span></p>
-      <p>player2: <span id="gameroom2_opponent"></span></p>
+      <h1 class="for_title">Game Room 2</h1>
+      <p >Player1: <span id="gameroom2_player"></span></p>
+      <p >player2: <span id="gameroom2_opponent"></span></p>
 
-      <div id="gameroom2_grid"></div>
-      <button id="gameroom2_send">Check Selection</button>
-      <p>Remaining Words in the grid</p>
+      <div>
+        <label for="player1-color-gameroom1">Player 1 Color:</label>
+        <select id="player1-color-gameroom1" class="Player1">
+          <option value="#ff0000">Red</option>
+          <option value="#0000ff">Blue</option>
+          <option value="#008000">Green</option>
+          <option value="#ffff00">Yellow</option>
+          <option value="#ffa500">Orange</option>
+          <option value="#800080">Purple</option>
+          <option value="#000000">Black</option>
+        </select>
 
-      <ul id="gameroom2_words"></ul>
+        <label for="player2-color-gameroom1">Player 2 Color:</label>
+        <select id="player2-color-gameroom1" class="PLayer2">
+          <option value="#0000ff">Blue</option>
+          <option value="#ff0000">Red</option>
+          <option value="#008000">Green</option>
+          <option value="#ffff00">Yellow</option>
+          <option value="#ffa500">Orange</option>
+          <option value="#800080">Purple</option>
+          <option value="#000000">Black</option>
+        </select>
+      </div>
+
+      <div id="gameroom2_grid" class="grid-container">
+        <!-- The game grid will go here -->
+      </div>
+      <button id="gameroom2_send" class="checkester">Check Selection</button>
+
+      <ul id="gameroom2_words">
+        <!-- Found words will go here -->
+      </ul>
 
       <table id="gameroom2_leaderboard_table">
         <thead>
-            <tr>
-                <th>Player</th>
-                <th>Score</th>
-            </tr>
+          <tr>
+            <th>Player</th>
+            <th>Score</th>
+          </tr>
         </thead>
         <tbody>
-            <!-- Dynamic rows will be added here -->
+          <!-- Dynamic rows will be added here -->
         </tbody>
-    </table>
+      </table>
 
       <div class="chat-container">
         <div class="chat-header">
-          <span>CHAT BOX</span></span>
+          <span>CHAT BOX</span>
         </div>
         <div id="gameroom2_chat" class="message-area">
           <!-- Chat messages will appear here -->
@@ -223,134 +247,206 @@
       </div>
       <button id="gameroom2_exit_bttn" class="exit-game-btn">Exit Game</button>
     </div>
+  </div>
+
+
+  <!--GAME ROOM 3-->
+  <div id="gameroom3" class="hidden">
+    <h1 class="for_title">Game Room 3</h1>
+    <p >Player1: <span id="gameroom3_player"></span></p>
+    <p >Player2: <span id="gameroom3_opponent"></span></p>
+
+    <div>
+      <label for="player1-color-gameroom1">Player 1 Color:</label>
+      <select id="player1-color-gameroom1" class="Player1">
+        <option value="#ff0000">Red</option>
+        <option value="#0000ff">Blue</option>
+        <option value="#008000">Green</option>
+        <option value="#ffff00">Yellow</option>
+        <option value="#ffa500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#000000">Black</option>
+      </select>
+
+      <label for="player2-color-gameroom1">Player 2 Color:</label>
+      <select id="player2-color-gameroom1" class="PLayer2">
+        <option value="#0000ff">Blue</option>
+        <option value="#ff0000">Red</option>
+        <option value="#008000">Green</option>
+        <option value="#ffff00">Yellow</option>
+        <option value="#ffa500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#000000">Black</option>
+      </select>
     </div>
 
+    <div id="gameroom3_grid" class="grid-container">
+      <!-- The game grid will go here -->
+    </div>
+    <button id="gameroom3_send" class="checkester">Check Selection</button>
 
-    <!--GAME ROOM 3-->
-    <div id="gameroom3" class="hidden">
-      <h1>Game Room 3</h1>
-      <p>Player1: <span id="gameroom3_player"></span></p>
-      <p>Player2: <span id="gameroom3_opponent"></span></p>
+    <ul id="gameroom3_words">
+      <!-- Found words will go here -->
+    </ul>
 
-      <div id="gameroom3_grid"></div>
-      <button id="gameroom3_send">Check Selection</button>
-      <p>Remaining Words in the grid</p>
-
-      <ul id="gameroom3_words"></ul>
-
-      <table id="gameroom3_leaderboard_table">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Dynamic rows will be added here -->
-        </tbody>
+    <table id="gameroom3_leaderboard_table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows will be added here -->
+      </tbody>
     </table>
 
-      <div class="chat-container">
-        <div class="chat-header">
-          <span>CHAT BOX</span></span>
-        </div>
-        <div id="gameroom3_chat" class="message-area">
-          <!-- Chat messages will appear here -->
-        </div>
-        <input type="text" id="gameroom3_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom3')">Send</button>
+    <div class="chat-container">
+      <div class="chat-header">
+        <span>CHAT BOX</span>
       </div>
-
-      <button id="gameroom3_exit_bttn">Exit Game</button>
+      <div id="gameroom3_chat" class="message-area">
+        <!-- Chat messages will appear here -->
+      </div>
+      <input type="text" id="gameroom3_chat_input" class="chat-input" placeholder="Type a message..." />
+      <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom3')">Send</button>
     </div>
 
-    <!-------GAME ROOM 4--------->
-    <div id="gameroom4" class="hidden">
-      <h1>Game Room 4</h1>
-      <p>Player1: <span id="gameroom4_player"></span></p>
-      <p>Player2: <span id="gameroom4_opponent"></span></p>
+    <button id="gameroom3_exit_bttn" class="exit-game-btn">Exit Game</button>
+  </div>
 
-      <div id="gameroom4_grid"></div>
-      <button id="gameroom4_send">Check Selection</button>
-      <p>Remaining Words in the grid</p>
+  <!-------GAME ROOM 4--------->
+  <div id="gameroom4" class="hidden">
+    <h1 class="for_title">Game Room 4</h1>
+    <p ">Payer1: <span id="gameroom4_player"></span></p>
+    <p >Player2: <span id="gameroom4_opponent"></span></p>
 
-      <ul id="gameroom4_words"></ul>
+    <div>
+      <label for="player1-color-gameroom1">Player 1 Color:</label>
+      <select id="player1-color-gameroom1" class="Player1">
+        <option value="#ff0000">Red</option>
+        <option value="#0000ff">Blue</option>
+        <option value="#008000">Green</option>
+        <option value="#ffff00">Yellow</option>
+        <option value="#ffa500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#000000">Black</option>
+      </select>
 
-      <table id="gameroom4_leaderboard_table">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Dynamic rows will be added here -->
-        </tbody>
+      <label for="player2-color-gameroom1">Player 2 Color:</label>
+      <select id="player2-color-gameroom1" class="PLayer2">
+        <option value="#0000ff">Blue</option>
+        <option value="#ff0000">Red</option>
+        <option value="#008000">Green</option>
+        <option value="#ffff00">Yellow</option>
+        <option value="#ffa500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#000000">Black</option>
+      </select>
+    </div>
+
+    <div id="gameroom4_grid" class="grid-container">
+      <!-- The game grid will go here -->
+    </div>
+    <button id="gameroom4_send" class="checkester">Check Selection</button>
+
+    <ul id="gameroom4_words">
+      <!-- Found words will go here -->
+    </ul>
+
+    <table id="gameroom4_leaderboard_table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows will be added here -->
+      </tbody>
     </table>
 
-      <div class="chat-container">
-        <div class="chat-header">
-          <span>CHAT BOX</span></span>
-        </div>
-        <div id="gameroom4_chat" class="message-area">
-          <!-- Chat messages will appear here -->
-        </div>
-        <input type="text" id="gameroom4_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom4')">Send</button>
+    <div class="chat-container">
+      <div class="chat-header">
+        <span>CHAT BOX</span>
       </div>
-      <button id="gameroom4_exit_bttn">Exit Game</button>
+      <div id="gameroom4_chat" class="message-area">
+        <!-- Chat messages will appear here -->
+      </div>
+      <input type="text" id="gameroom4_chat_input" class="chat-input" placeholder="Type a message..." />
+      <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom4')">Send</button>
+    </div>
+    <button id="gameroom4_exit_bttn" class="exit-game-btn">Exit Game</button>
+  </div>
+
+  <!--GAME ROOM 5-->
+
+  <div id="gameroom5" class="hidden">
+    <h1 class="for_title">Game Room 5</h1>
+    <p >Player1: <span id="gameroom5_player"></span></p>
+    <p >Player2: <span id="gameroom5_opponent"></span></p>
+
+    <div>
+      <label for="player1-color-gameroom1">Player 1 Color:</label>
+      <select id="player1-color-gameroom1" class="Player1">
+        <option value="#ff0000">Red</option>
+        <option value="#0000ff">Blue</option>
+        <option value="#008000">Green</option>
+        <option value="#ffff00">Yellow</option>
+        <option value="#ffa500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#000000">Black</option>
+      </select>
+
+      <label for="player2-color-gameroom1">Player 2 Color:</label>
+      <select id="player2-color-gameroom1" class="PLayer2">
+        <option value="#0000ff">Blue</option>
+        <option value="#ff0000">Red</option>
+        <option value="#008000">Green</option>
+        <option value="#ffff00">Yellow</option>
+        <option value="#ffa500">Orange</option>
+        <option value="#800080">Purple</option>
+        <option value="#000000">Black</option>
+      </select>
     </div>
 
-    <!--GAME ROOM 5-->
+    <div id="gameroom5_grid" class="grid-container">
+      <!-- The game grid will go here -->
+    </div>
+    <button id="gameroom5_send" class="checkester">Check Selection</button>
 
-    <div id="gameroom5" class="hidden">
-      <h1>Game Room 5</h1>
-      <p>Player1: <span id="gameroom5_player"></span></p>
-      <p>Player2: <span id="gameroom5_opponent"></span></p>
+    <ul id="gameroom5_words">
+      <!-- Found words will go here -->
+    </ul>
 
-      <div id="gameroom5_grid"></div>
-      <button id="gameroom5_send">Check Selection</button>
-      <p>Remaining Words in the grid</p>
-
-      <ul id="gameroom5_words"></ul>
-
-      <table id="gameroom5_leaderboard_table">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Dynamic rows will be added here -->
-        </tbody>
+    <table id="gameroom5_leaderboard_table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic rows will be added here -->
+      </tbody>
     </table>
 
-      <div class="chat-container">
-        <div class="chat-header">
-          <span>CHAT BOX</span></span>
-        </div>
-        <div id="gameroom5_chat" class="message-area">
-          <!-- Chat messages will appear here -->
-        </div>
-        <input type="text" id="gameroom5_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom5')">Send</button>
+    <div class="chat-container">
+      <div class="chat-header">
+        <span>CHAT BOX</span>
       </div>
-      <button id="gameroom5_exit_bttn">Exit Game</button>
+      <div id="gameroom5_chat" class="message-area">
+        <!-- Chat messages will appear here -->
+      </div>
+      <input type="text" id="gameroom5_chat_input" class="chat-input" placeholder="Type a message..." />
+      <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom5')">Send</button>
     </div>
+    <button id="gameroom5_exit_bttn" class="exit-game-btn">Exit Game</button>
+  </div>
+  </div>
 
-    <script src="websocket.js"></script>
-    <script src="navigate.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to show game rules alert
-            function showGameRules() {
-                alert("Welcome to the game!\n\nHere are the rules:\n1. Create game objects called 'lobby' and each game can take 2 players.\n2. Join available game rooms by clicking on the 'Join' button.\n3. Each game room can have 2 players.\n4. You have about 5 seconds for the game to start after joining a game room.");
-            }
+  <script src="websocket.js"></script>
+  <script src="navigate.js"></script>
+</body>
 
-            // Call the showGameRules function when Section 1 is entered
-            document.getElementById('btnSection1').addEventListener('click', showGameRules);
-        });
-    </script>
-  </body>
 </html>

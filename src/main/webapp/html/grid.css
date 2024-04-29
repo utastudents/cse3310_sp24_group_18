@@ -4,6 +4,26 @@
     background-color: #f44336; /* Red */
 }
 
+/* The check selection button! */
+.checkester{
+    background-color: #f44336; /* Red */
+    border: none;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    
+
+}
+.checkester:hover {
+    background-color: #d32f2f; /* Darker red */
+}
+
 .exit-game-btn:hover {
     background-color: #d32f2f; /* Darker red */
 }
@@ -11,7 +31,7 @@
 /* Game grid styling */
 .game-grid {
     border-collapse: collapse;
-    width: 100%;
+    width: 150%;
     max-width: 600px; /* Limits the size of the grid */
     margin: auto; /* Center the grid horizontally */
 }
@@ -19,6 +39,8 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }  
+
+
 
 .game-grid td {
     border: 1px solid #ddd; /* Light grey border */
@@ -35,10 +57,13 @@
 
 /* Styles for grid container if any specific styling is needed */
 .grid-container {
-    padding: 20px;
+    padding: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow around grid container */
-    background-color: #ffffff; /* White background */
+    background-color: #ece4e4; /* White background */
     border-radius: 8px; /* Rounded corners */
+    float: left;
+    width: 40%;
+    padding-top: 10px;
 }
 
 /* Hide elements initially hidden and show them later via JavaScript */

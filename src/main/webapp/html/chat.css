@@ -7,10 +7,14 @@
   width: 300px; /* Adjust as needed */
   margin: 0 auto;
   padding: 10px;
+  max-height: 400px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   position: relative; /* For absolute positioning of children */
   border-radius: 10px; /* Rounded corners */
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation for hover effect */
+  overflow-y: auto;
+  float: right;
+  
 }
 
 .chat-container:hover {
