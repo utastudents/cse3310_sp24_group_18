@@ -154,6 +154,7 @@ private boolean areAllWordsFound() {
         this.wordsPlaced.clear();
         initializeGrid();
         placeWords();
+        fillRemainingCells();
         System.out.println("Game reset in lobby: " + lobbyName);
 
     }
