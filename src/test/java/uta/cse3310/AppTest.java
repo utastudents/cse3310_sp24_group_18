@@ -24,7 +24,5 @@ public class AppTest extends TestCase {
 
     //     // Test case 2: Ensure gameMap is empty initially
     //     assertTrue(app.getGameMap().isEmpty());
-
-    //     // You can add more test cases here to test various functionalities of the App class
     }
 }

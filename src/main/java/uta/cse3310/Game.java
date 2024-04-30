@@ -212,7 +212,7 @@ private boolean areAllWordsFound() {
                 if (grid[i][j] == '_') { // Only fill cells that have not been filled with a word
                     grid[i][j] = (char) ('A' + random.nextInt(26));
                 }
-                // Uncomment this and comment the upper for debug.. to see the grid without random words
+                // For Saad working on Test, Uncomment this and comment the upper for debug.. to see the grid without random words
                 // if (grid[i][j] == '3') { // Only fill cells that have not been filled with a word
                 //     grid[i][j] = (char) ('A' + random.nextInt(26));
                 // }
@@ -287,7 +287,7 @@ private boolean areAllWordsFound() {
 
     // Attempts to place a single word in the grid randomly
     private boolean placeWordInGrid(String word) {
-        int orientation = random.nextInt(8); // Assuming 8 possible orientations
+        int orientation = random.nextInt(8); 
         List<Integer[]> positions = new ArrayList<>();
         for (int attempts = 0; attempts < 100; attempts++) {
             int row = random.nextInt(GRID_SIZE);
@@ -330,12 +330,6 @@ private boolean areAllWordsFound() {
         }
     }
 
-    // uses the concept of binary division by recursively splitting the list of
-    // words into halves, and then sub-halves, to select words uniformly from
-    // various sections. It starts by dividing the list into two equal segments,
-    // picking words from each, then further splits each segment again into smaller
-    // segments, continuing this binary division until selections have been made
-    // across all possible divisions.
 
     // ensures a balanced and random selection from all parts of the list
     private List<String> structuredShuffle(List<String> words, int segments) {

@@ -159,7 +159,7 @@ public class App extends WebSocketServer implements GameEventListener {
                         players.get(1).getWebSocket().send(startCommand);
 
                         // Send the initial grid as JSON to both players
-                        String gridJson = game.getGridAsJson(); // Make sure Game.java has this method
+                        String gridJson = game.getGridAsJson(); 
                         String gridUpdateMessage = String.format("update_grid:%s:%s", gameRoomId, gridJson);
                         players.get(0).getWebSocket().send(gridUpdateMessage);
                         players.get(1).getWebSocket().send(gridUpdateMessage);
@@ -275,7 +275,7 @@ public class App extends WebSocketServer implements GameEventListener {
                 String positionsJson = gson.toJson(positions);
                 conn.send("word_correct:" + word + ":" + positionsJson);
 
-                game.printWordsFoundByUser(username); // Optionally print all words found by the user so far
+                game.printWordsFoundByUser(username);
                 broadcastUpdatedWords(roomId); // New function to broadcast updated words list
                 return true;
             } else {
@@ -292,8 +292,8 @@ public class App extends WebSocketServer implements GameEventListener {
     public void printPlayerWordCounts() {
         for (Game game : gameMap.values()) {
             System.out.println("Game Lobby: " + game.getLobbyName() + " Word Counts:");
-            game.printAllWordsAndTheirStatus(); // Assuming Game.java has this method to print each word and whether
-                                                // it's found
+            game.printAllWordsAndTheirStatus(); 
+                                               
         }
     }
 
@@ -323,7 +323,6 @@ public class App extends WebSocketServer implements GameEventListener {
             playerMap.remove(errorUsername);
             connectionUserMap.remove(conn); // Clean up the connection map
             System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
-            // Optionally broadcast the updated player list after removal
             broadcastPlayerList();
             System.out.println("On Disconnect : ");
             ;
@@ -340,7 +339,7 @@ public class App extends WebSocketServer implements GameEventListener {
         Game game = findGameByRoomID(roomID);
         if (game != null) {
             // Retrieve the players from the game room
-            Player[] players = game.getPlayers_chat(); // Assuming you have a method to retrieve players
+            Player[] players = game.getPlayers_chat(); 
             for (Player player : players) {
                 if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
                     player.getWebSocket().send("chat_update:" + roomID + ":" + message);
@@ -465,7 +464,6 @@ public class App extends WebSocketServer implements GameEventListener {
             playerMap.remove(errorUsername);
             connectionUserMap.remove(conn); // Clean up the connection map
             System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
-            // Optionally broadcast the updated player list after removal
             broadcastPlayerList();
             System.out.println("On Disconnect : ");
             ;

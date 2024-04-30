@@ -461,17 +461,14 @@ socket.onmessage = function (event) {
     case "section1":
       showSection("section1");
       console.log("From the switch case :section1");
-      // Call the function to show game rules alert
       break;
     case "section2":
       showSection("section2");
       console.log("From the switch case :section2");
-      // Add any additional logic for section2 button clicks here
       break;
     case "section3":
       showSection("section3");
       console.log("From the switch case :section3");
-      // Add any additional logic for section3 button clicks here
       break;
     case "gameroom1":
       showSection("gameroom1");
@@ -520,8 +517,7 @@ socket.onclose = function (event) {
 };
 
 function showSection(sectionId) {
-  console.log("Showing section:", sectionId); // Debug: Log which section is being shown
-  // Hide all sections
+  console.log("Showing section:", sectionId); 
   document
     .querySelectorAll("div[id^='section'], div[id^='gameroom']")
     .forEach((div) => {
@@ -539,7 +535,7 @@ function showSection(sectionId) {
     console.error("No section found with ID:", sectionId);
   }
 
-  // If the section is a game room, also remove the hidden class from its grid, word list, and chat area
+  // If the section is a game room, also removes the hidden class from its grid, word list, and chat area.. preety smart right?
   if (sectionId.startsWith("gameroom")) {
     const grid = document.getElementById(sectionId + "_grid");
     const words = document.getElementById(sectionId + "_words");
