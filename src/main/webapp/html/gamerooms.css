@@ -1,0 +1,111 @@
+#gameroom1_words {
+    color: black; /* Black text */
+    list-style: none; /* Removes default list styling */
+    padding: 15px; /* Padding around the text */
+    display: grid; /* Using CSS Grid to layout list items */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column size based on content */
+    gap: 10px; /* Space between grid items */
+    margin: 20px auto; /* Top and bottom margin, auto horizontally centers the list */
+    font-family: Arial, sans-serif; /* Font styling */
+    font-size: 16px; /* Adjust font size as needed */
+    text-align: center; /* Center-align text */
+    max-width: 600px; /* Maximum width of the container */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Shadow for better visibility */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 10px; /* Rounded corners for the container */
+    overflow: hidden; /* Hides any overflow */
+}
+
+#gameroom1_words li {
+    padding: 5px; /* Padding within each list item */
+}
+
+#gameroom2_words {
+    color: black; /* Black text */
+    list-style: none; /* Removes default list styling */
+    padding: 15px; /* Padding around the text */
+    display: grid; /* Using CSS Grid to layout list items */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column size based on content */
+    gap: 10px; /* Space between grid items */
+    margin: 20px auto; /* Top and bottom margin, auto horizontally centers the list */
+    font-family: Arial, sans-serif; /* Font styling */
+    font-size: 16px; /* Adjust font size as needed */
+    text-align: center; /* Center-align text */
+    max-width: 600px; /* Maximum width of the container */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Shadow for better visibility */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 10px; /* Rounded corners for the container */
+    overflow: hidden; /* Hides any overflow */
+}
+
+#gameroom2_words li {
+    padding: 5px; /* Padding within each list item */
+}
+
+#gameroom3_words {
+    color: black; /* Black text */
+    list-style: none; /* Removes default list styling */
+    padding: 15px; /* Padding around the text */
+    display: grid; /* Using CSS Grid to layout list items */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column size based on content */
+    gap: 10px; /* Space between grid items */
+    margin: 20px auto; /* Top and bottom margin, auto horizontally centers the list */
+    font-family: Arial, sans-serif; /* Font styling */
+    font-size: 16px; /* Adjust font size as needed */
+    text-align: center; /* Center-align text */
+    max-width: 600px; /* Maximum width of the container */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Shadow for better visibility */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 10px; /* Rounded corners for the container */
+    overflow: hidden; /* Hides any overflow */
+}
+
+#gameroom3_words li {
+    padding: 5px; /* Padding within each list item */
+}
+#gameroom4_words {
+    color: black; /* Black text */
+    list-style: none; /* Removes default list styling */
+    padding: 15px; /* Padding around the text */
+    display: grid; /* Using CSS Grid to layout list items */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column size based on content */
+    gap: 10px; /* Space between grid items */
+    margin: 20px auto; /* Top and bottom margin, auto horizontally centers the list */
+    font-family: Arial, sans-serif; /* Font styling */
+    font-size: 16px; /* Adjust font size as needed */
+    text-align: center; /* Center-align text */
+    max-width: 600px; /* Maximum width of the container */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Shadow for better visibility */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 10px; /* Rounded corners for the container */
+    overflow: hidden; /* Hides any overflow */
+}
+
+#gameroom4_words li {
+    padding: 5px; /* Padding within each list item */
+}
+
+#gameroom5_words {
+    color: black; /* Black text */
+    list-style: none; /* Removes default list styling */
+    padding: 15px; /* Padding around the text */
+    display: grid; /* Using CSS Grid to layout list items */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Adjust column size based on content */
+    gap: 10px; /* Space between grid items */
+    margin: 20px auto; /* Top and bottom margin, auto horizontally centers the list */
+    font-family: Arial, sans-serif; /* Font styling */
+    font-size: 16px; /* Adjust font size as needed */
+    text-align: center; /* Center-align text */
+    max-width: 600px; /* Maximum width of the container */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Shadow for better visibility */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 10px; /* Rounded corners for the container */
+    overflow: hidden; /* Hides any overflow */
+}
+
+#gameroom5_words li {
+    padding: 5px; /* Padding within each list item */
+}
+
+
+

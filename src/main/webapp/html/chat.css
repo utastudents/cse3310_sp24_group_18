@@ -70,9 +70,9 @@
 
 /* Send Button Styling */
 .send-btn,
-.send-selection-btn,
-.exit-game-btn {
+.send-selection-btn{
   width: calc(100% - 20px); /* Adjust width to account for padding */
+  max-width: 200px; /* Set a maximum width for the button */
   padding: 10px;
   margin-top: 10px;
   cursor: pointer;
@@ -82,20 +82,16 @@
   transition: all 0.3s ease; /* Animate all changes smoothly */
 }
 
-/* Exit Chat Button Styling */
-.exit-chat-btn {
-  padding: 5px 10px;
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  border-radius: 15px; /* Rounded corners */
+.exit-game-btn {
+  width: calc(100% - 20px); /* Adjust width to account for padding */
+  max-width: 200px; /* Set a maximum width for the button */
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #D8401F;
   cursor: pointer;
-  position: absolute; /* Positioning relative to the chat-container */
-  right: 10px;
-  top: 5px;
-  transition: background-color 0.3s ease; /* Smooth background transition */
+  border: none;
+  border-radius: 20px; /* More pronounced rounded edges for buttons */
+  font-weight: bold;
+  transition: all 0.3s ease; /* Animate all changes smoothly */
 }
 
-.exit-chat-btn:hover {
-  background-color: #c9302c;
-}

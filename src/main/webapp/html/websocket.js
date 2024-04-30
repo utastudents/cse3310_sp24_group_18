@@ -37,6 +37,7 @@ function setupEventListeners() {
       socket.send("reset_game:" + "gameroom3");
       socket.send("reset_game:" + "gameroom4");
       socket.send("reset_game:" + "gameroom5");
+      alert("Games are being reset and new grid will be generated with all players associated with them removed!\nPlease wait till all player count becomes 0/2\nIt will take 5 seconds (1 second each)\nClick 'OK' to view latest changes.")
     });
   }
 }
@@ -276,6 +277,9 @@ function clearSelection() {
 }
 
 function highlightWords(wordsPositions) {
+  // Clear previously confirmed cells
+  confirmedCells.clear();
+
   wordsPositions.forEach((pos) => {
     let cell = document.getElementById(`cell_${pos[0]}_${pos[1]}`);
     cell.style.backgroundColor = "green";
@@ -493,7 +497,10 @@ function showSection(sectionId) {
   document
     .querySelectorAll("div[id^='section'], div[id^='gameroom']")
     .forEach((div) => {
-      div.classList.add("hidden");
+
+      if (!div.id.endsWith('_words_container')) {
+        div.classList.add("hidden");
+      }
     });
 
   // Show the current section
@@ -509,6 +516,7 @@ function showSection(sectionId) {
     const grid = document.getElementById(sectionId + "_grid");
     const words = document.getElementById(sectionId + "_words");
     const chatArea = document.getElementById(sectionId + "_chat");
+
     if (grid && words && chatArea) {
       grid.classList.remove("hidden");
       words.classList.remove("hidden");
