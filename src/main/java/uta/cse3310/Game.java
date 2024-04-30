@@ -84,10 +84,25 @@ public class Game {
             wordsPlaced.put(word, false);  // Mark the word as found
             wordsFound.add(word);
             wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
-            return wordPositions.get(word);  // Return positions if the word is correct
-            
+    
+            List<Integer[]> positions = wordPositions.get(word);
+            // Add logging here to debug positions
+            if (positions != null) {
+                System.out.println("Word found: " + word);
+                System.out.print("Positions: ");
+                for (Integer[] pos : positions) {
+                    System.out.print(Arrays.toString(pos) + " ");
+                }
+                System.out.println();  // New line for clear logging
+            } else {
+                System.out.println("Positions not found for word: " + word);
+            }
+    
+            return positions;  // Return positions if the word is correct
+        } else {
+            System.out.println("Word incorrect or not found: " + word);
+            return null;  // Return null if the word is not correct
         }
-        return null;  // Return null if the word is not correct
     }
     
     

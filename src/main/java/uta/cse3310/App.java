@@ -164,7 +164,7 @@ public class App extends WebSocketServer implements GameEventListener {
                         players.get(0).getWebSocket().send(gridUpdateMessage);
                         players.get(1).getWebSocket().send(gridUpdateMessage);
 
-                        game.startGame();
+                        // game.startGame();
                         return "redirect:" + gameRoomId; // Redirect to the specific game room
                     }
                 }

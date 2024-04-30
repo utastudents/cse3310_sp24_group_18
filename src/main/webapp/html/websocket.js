@@ -276,16 +276,43 @@ function clearSelection() {
   });
 }
 
-function highlightWords(wordsPositions) {
-  // Clear previously confirmed cells
+
+function highlightWords(wordsPositions, isPermanent = false) {
+  // Initialize the sets if they are not already defined
+  if (typeof confirmedCells === 'undefined') {
+    window.confirmedCells = new Set(); // Temporary highlights
+  }
+  if (typeof permanentConfirmedCells === 'undefined') {
+    window.permanentConfirmedCells = new Set(); // Permanent highlights
+  }
+
+  // Clear temporary highlights that are not permanent
+  confirmedCells.forEach(cellId => {
+    if (!permanentConfirmedCells.has(cellId)) {
+      const cell = document.getElementById(cellId);
+      if (cell) {
+        cell.style.backgroundColor = ""; // Reset the background color
+      }
+    }
+  });
   confirmedCells.clear();
 
-  wordsPositions.forEach((pos) => {
-    let cell = document.getElementById(`cell_${pos[0]}_${pos[1]}`);
-    cell.style.backgroundColor = "green";
-    confirmedCells.add(cell.id); // Add to confirmed list
+  // Highlight new words
+  wordsPositions.forEach(pos => {
+    const cellId = `cell_${pos[0]}_${pos[1]}`;
+    const cell = document.getElementById(cellId);
+    if (cell) { // Check if cell actually exists
+      if (isPermanent) {
+        cell.style.backgroundColor = "green"; // Use a different color for permanent if needed
+        permanentConfirmedCells.add(cellId); // Add to permanent list
+      } else if (!permanentConfirmedCells.has(cellId)) {
+        cell.style.backgroundColor = "lightgreen"; // Temporary color
+        confirmedCells.add(cellId); // Add to temporary list
+      }
+    }
   });
 }
+
 
 function updateWords(roomId, words) {
   const wordsListHtml = words.map((word) => `<li>${word}</li>`).join("");
@@ -335,7 +362,8 @@ socket.onmessage = function (event) {
     case "word_correct":
       console.log("Word is correct: " + content);
       let positions = JSON.parse(data[2]); // Assuming positions are passed as JSON
-      highlightWords(positions);
+      highlightWords(positions, true);
+      console.log(positions)
       break;
 
     case "word_incorrect":

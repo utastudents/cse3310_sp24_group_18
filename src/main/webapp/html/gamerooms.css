@@ -108,4 +108,17 @@
 }
 
 
+/* Container for grid and chat */
+.grid-chat-container {
+    display: flex; /* Use flexbox for layout */
+}
 
+/* Styling for game grid */
+.grid-container {
+    flex: 1; /* Take up remaining space */
+}
+
+.chat-container {
+    flex: 0 0 30%; /* Take up 30% of the container width, and don't allow it to grow or shrink */
+    margin-left: 20px; /* Add space between grid and chat */
+}
