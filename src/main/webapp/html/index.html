@@ -199,31 +199,33 @@
         </tbody>
       </table>
 
-      <div id="gameroom2_grid" class="grid-container">
-        <!-- The game grid will go here -->
+
+      <div id="gird_and_chat_container" class="grid-chat-container">
+        <div id="gameroom2_grid" class="grid-container">
+          <!-- The game grid will go here -->
+        </div>
+        <!-- Chat feature -->
+        <div class="chat-container">
+          <div class="chat-header">
+            <span>CHAT BOX</span>
+          </div>
+          <div id="gameroom2_chat" class="message-area">
+            <!-- Chat messages will appear here -->
+          </div>
+          <input type="text" id="gameroom2_chat_input" class="chat-input" placeholder="Type a message..." />
+          <button id="gameroom2_send_msg" class="send-btn" onclick="sendChatMessage('gameroom2')">Send</button>
+        </div>
+
       </div>
       <button id="gameroom2_send" class="checkester">Check Selection</button>
       <button id="gameroom2_exit_bttn" class="exit-game-btn">Exit Game</button>
 
-
-      <ul id="gameroom2_words">
-        <!-- Found words will go here -->
-      </ul>
-
-
-      <div class="chat-container">
-        <div class="chat-header">
-          <span>CHAT BOX</span>
-        </div>
-        <div id="gameroom2_chat" class="message-area">
-          <!-- Chat messages will appear here -->
-        </div>
-        <input type="text" id="gameroom2_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom2_send_msg" class="send-btn" onclick="sendChatMessage('gameroom2')">Send</button>
+      <div id="gameroom2_words_container">
+        <ul id="gameroom2_words">
+          <!-- Found words will go here -->
+        </ul>
       </div>
     </div>
-
-
     <!--GAME ROOM 3-->
     <div id="gameroom3" class="hidden">
       <h1 class="for_title">Game Room 3</h1>
@@ -266,29 +268,31 @@
         </tbody>
       </table>
 
-      <div id="gameroom3_grid" class="grid-container">
-        <!-- The game grid will go here -->
+      <div id="gird_and_chat_container" class="grid-chat-container">
+        <div id="gameroom3_grid" class="grid-container">
+          <!-- The game grid will go here -->
+        </div>
+        <!-- Chat feature -->
+        <div class="chat-container">
+          <div class="chat-header">
+            <span>CHAT BOX</span>
+          </div>
+          <div id="gameroom3_chat" class="message-area">
+            <!-- Chat messages will appear here -->
+          </div>
+          <input type="text" id="gameroom3_chat_input" class="chat-input" placeholder="Type a message..." />
+          <button id="gameroom3_send_msg" class="send-btn" onclick="sendChatMessage('gameroom3')">Send</button>
+        </div>
+
       </div>
       <button id="gameroom3_send" class="checkester">Check Selection</button>
       <button id="gameroom3_exit_bttn" class="exit-game-btn">Exit Game</button>
 
-      <ul id="gameroom3_words">
-        <!-- Found words will go here -->
-      </ul>
-
-
-
-      <div class="chat-container">
-        <div class="chat-header">
-          <span>CHAT BOX</span>
-        </div>
-        <div id="gameroom3_chat" class="message-area">
-          <!-- Chat messages will appear here -->
-        </div>
-        <input type="text" id="gameroom3_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom3')">Send</button>
+      <div id="gameroom3_words_container">
+        <ul id="gameroom3_words">
+          <!-- Found words will go here -->
+        </ul>
       </div>
-
     </div>
 
     <!-------GAME ROOM 4--------->
@@ -296,12 +300,29 @@
       <h1>Game Room 4</h1>
       <p>Player1: <span id="gameroom4_player"></span></p>
       <p>Player2: <span id="gameroom4_opponent"></span></p>
+      <div>
+        <label for="player1-color-gameroom1">Player 1 Color:</label>
+        <select id="player1-color-gameroom1" class="Player1">
+          <option value="#ff0000">Red</option>
+          <option value="#0000ff">Blue</option>
+          <option value="#008000">Green</option>
+          <option value="#ffff00">Yellow</option>
+          <option value="#ffa500">Orange</option>
+          <option value="#800080">Purple</option>
+          <option value="#000000">Black</option>
+        </select>
 
-      <div id="gameroom4_grid"></div>
-      <button id="gameroom4_send">Check Selection</button>
-      <p>Remaining Words in the grid</p>
-
-      <ul id="gameroom4_words"></ul>
+        <label for="player2-color-gameroom1">Player 2 Color:</label>
+        <select id="player2-color-gameroom1" class="PLayer2">
+          <option value="#0000ff">Blue</option>
+          <option value="#ff0000">Red</option>
+          <option value="#008000">Green</option>
+          <option value="#ffff00">Yellow</option>
+          <option value="#ffa500">Orange</option>
+          <option value="#800080">Purple</option>
+          <option value="#000000">Black</option>
+        </select>
+      </div>
 
       <table id="gameroom4_leaderboard_table">
         <thead>
@@ -315,18 +336,32 @@
         </tbody>
     </table>
 
+    <div id="gird_and_chat_container" class="grid-chat-container">
+      <div id="gameroom4_grid" class="grid-container">
+        <!-- The game grid will go here -->
+      </div>
+      <!-- Chat feature -->
       <div class="chat-container">
         <div class="chat-header">
-          <span>CHAT BOX</span></span>
+          <span>CHAT BOX</span>
         </div>
         <div id="gameroom4_chat" class="message-area">
           <!-- Chat messages will appear here -->
         </div>
         <input type="text" id="gameroom4_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom4')">Send</button>
+        <button id="gameroom4_send_msg" class="send-btn" onclick="sendChatMessage('gameroom4')">Send</button>
       </div>
-      <button id="gameroom4_exit_bttn">Exit Game</button>
+
     </div>
+    <button id="gameroom4_send" class="checkester">Check Selection</button>
+    <button id="gameroom4_exit_bttn" class="exit-game-btn">Exit Game</button>
+
+    <div id="gameroom4_words_container">
+      <ul id="gameroom4_words">
+        <!-- Found words will go here -->
+      </ul>
+    </div>
+  </div>
 
     <!--GAME ROOM 5-->
 
@@ -371,28 +406,31 @@
         </tbody>
       </table>
 
-      <div id="gameroom5_grid" class="grid-container">
-        <!-- The game grid will go here -->
+      
+      <div id="gird_and_chat_container" class="grid-chat-container">
+        <div id="gameroom5_grid" class="grid-container">
+          <!-- The game grid will go here -->
+        </div>
+        <!-- Chat feature -->
+        <div class="chat-container">
+          <div class="chat-header">
+            <span>CHAT BOX</span>
+          </div>
+          <div id="gameroom5_chat" class="message-area">
+            <!-- Chat messages will appear here -->
+          </div>
+          <input type="text" id="gameroom5_chat_input" class="chat-input" placeholder="Type a message..." />
+          <button id="gameroom5_send_msg" class="send-btn" onclick="sendChatMessage('gameroom5')">Send</button>
+        </div>
+
       </div>
       <button id="gameroom5_send" class="checkester">Check Selection</button>
       <button id="gameroom5_exit_bttn" class="exit-game-btn">Exit Game</button>
 
-
-      <ul id="gameroom5_words">
-        <!-- Found words will go here -->
-      </ul>
-
-
-
-      <div class="chat-container">
-        <div class="chat-header">
-          <span>CHAT BOX</span>
-        </div>
-        <div id="gameroom5_chat" class="message-area">
-          <!-- Chat messages will appear here -->
-        </div>
-        <input type="text" id="gameroom5_chat_input" class="chat-input" placeholder="Type a message..." />
-        <button id="gameroom1_send_msg" class="send-btn" onclick="sendChatMessage('gameroom5')">Send</button>
+      <div id="gameroom5_words_container">
+        <ul id="gameroom5_words">
+          <!-- Found words will go here -->
+        </ul>
       </div>
     </div>
   </div>
