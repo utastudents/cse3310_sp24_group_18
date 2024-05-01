@@ -64,7 +64,7 @@ function toggleCell(cell, value) {
   if (!confirmedCells.has(cellId)) {
     // Only toggle if not confirmed as correct
     if (cell.style.backgroundColor === "cyan") {
-      cell.style.backgroundColor = "green";
+      cell.style.backgroundColor = "";
       removeFromSelected(value);
     } else {
       cell.style.backgroundColor = "cyan";
@@ -295,19 +295,37 @@ function updateWords(roomId, words) {
     console.error("No words element found for room ID:", roomId);
   }
 }
+function updateHighlightedCells(roomId, word, positions) {
+  console.log(`Updating highlighted cells for word: ${word} in room: ${roomId}`);
+  positions.forEach(pos => {
+    const cellId = `cell_${pos[0]}_${pos[1]}`;
+    const cell = document.getElementById(cellId);
+    if (cell) {
+      cell.style.backgroundColor = 'green';  // Highlight the cell
+    }
+    confirmedCells.add(cell.id); // Add to confirmed list
+  });
+}
+
 
 socket.onmessage = function (event) {
   const sectionToShow = event.data;
   // Use a switch case to determine which section to show
 
   console.log("Received message:", event.data);
-
   const data = event.data.split(":");
   const command = data[0];
   const content = data.slice(1).join(":"); // Ensure all content after the first colon is included
   let jsonPart = data.slice(2).join(":"); // Join the remaining parts that might contain JSON data
 
   switch (command) {
+    case "update_highlight":
+      const roomIdHighlight = data[1];
+      const word = data[2];
+      let positions = JSON.parse(data[2]);
+      updateHighlightedCells(roomIdHighlight, word, positions);
+      break;
+    
     case "update_words":
       const roomIdWords = data[1];
       const wordsJson = data.slice(2).join(":");
@@ -333,7 +351,7 @@ socket.onmessage = function (event) {
     }
     case "word_correct":
       console.log("Word is correct: " + content);
-      let positions = JSON.parse(data[2]); // Assuming positions are passed as JSON
+      //let positions = JSON.parse(data[2]); // Assuming positions are passed as JSON
       highlightWords(positions, true);
       console.log(positions)
       break;

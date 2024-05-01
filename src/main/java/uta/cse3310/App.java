@@ -263,6 +263,22 @@ public class App extends WebSocketServer implements GameEventListener {
         }
     }
 
+    // Method in App.java to broadcast highlighted cells
+public void broadcastHighlightUpdate(String roomId, String word, List<Integer[]> positions) {
+    Gson gson = new Gson();
+    String positionsJson = gson.toJson(positions);
+
+    Game game = gameMap.get(roomId);
+    if (game != null) {
+        for (Player player : game.getPlayers()) {
+            if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
+                player.getWebSocket().send("update_highlight:" + word + ":" + positionsJson);
+            }
+        }
+    }
+}
+
+
     private boolean handleCheckWord(WebSocket conn, String roomId, String username, String word) {
         System.out.println("\n\nREACHED HANDLE CHECK WORD\n\n");
         Game game = gameMap.get(roomId);
@@ -277,6 +293,8 @@ public class App extends WebSocketServer implements GameEventListener {
 
                 game.printWordsFoundByUser(username);
                 broadcastUpdatedWords(roomId); // New function to broadcast updated words list
+                broadcastHighlightUpdate(roomId, word, positions);
+
                 return true;
             } else {
                 System.out.println("\n-----WORD INCORRECT----\n" + "WORD CHECKED : " + word);
