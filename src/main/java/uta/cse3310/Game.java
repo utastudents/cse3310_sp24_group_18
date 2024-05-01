@@ -28,7 +28,7 @@ public class Game {
     private String gameId;
 
 
-    private static final int GRID_SIZE = 20;
+    private static final int GRID_SIZE = 25;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsPlaced;
