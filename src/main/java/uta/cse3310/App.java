@@ -78,36 +78,44 @@ public class App extends WebSocketServer implements GameEventListener {
     ///// --------- GRID --------- /////
 
     private void broadcastGameRooms() {
-        // debug
+        // Debug statement to log the broadcasting of game rooms
         System.out.println("broadcastGameRooms()_Broadcasting game rooms");
         List<Map<String, String>> gameRoomsInfo = new ArrayList<>();
-
+    
         // Iterate through all game rooms to gather their information
         for (Map.Entry<String, Game> entry : gameMap.entrySet()) {
             Map<String, String> roomInfo = new HashMap<>();
-            roomInfo.put("name", entry.getKey()); // Room name (lobby name)
             Game game = entry.getValue();
-            // The number of players is obtained and formatted as a string like "1/2" or
-            // "2/2"
+    
+            // Add room name and player count
+            roomInfo.put("name", entry.getKey()); // Room name (lobby name)
             String players = game.getCurrentNumberOfPlayers() + "/2";
-            roomInfo.put("players", players);
-            gameRoomsInfo.add(roomInfo); // Add the room info to the list
-
-            // debug
-            System.out.println("Room: " + entry.getKey() + " Players: " + players);
+            roomInfo.put("players", players);   
+    
+            // Include grid generation time in the info
+            double gridTime = game.getGridGenerationTime();
+            String formattedGridTime = String.format("%.4f", gridTime);
+            roomInfo.put("gridGenerationTime", formattedGridTime + " seconds");  // Append " seconds" for clarity
+    
+            // Add the room info to the list for broadcasting
+            gameRoomsInfo.add(roomInfo);
+    
+            // Debug statement to show room details
+            System.out.println("Room: " + entry.getKey() + " Players: " + players + " Grid Time: " + game.getGridGenerationTime());
         }
-
+    
+        // Convert the list of maps to a JSON string
         Gson gson = new Gson();
-        String gameRoomsJson = gson.toJson(gameRoomsInfo); // Convert the list of maps to JSON string
-
+        String gameRoomsJson = gson.toJson(gameRoomsInfo);
+    
         // Broadcast the game rooms JSON string to all connected clients
         for (WebSocket conn : this.getConnections()) {
             conn.send("update_gameRooms:" + gameRoomsJson);
-            // debug
+            // Debug statement to confirm broadcasting to client
             System.out.println("\n[App.java broadcastGameRooms()]\nBroadcasting game rooms to client");
         }
     }
-
+    
     // --------------------------- GAMES ---------------------------
     // Initialize Games
     private void initializeGameRooms() {

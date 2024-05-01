@@ -26,6 +26,7 @@ public class Game {
     private Chat chat;
     private GameEventListener listener;
     private String gameId;
+    private long gridGenerationTime; // Added to measure the time to generate the grid
 
 
     private static final int GRID_SIZE = 25;
@@ -481,11 +482,18 @@ private boolean areAllWordsFound() {
         return roomId;
     }
 
+    public long getGridGenerationTime() {
+        return gridGenerationTime; // Getter for grid generation time
+    }
+
     public void startGame() {
+        long startTime = System.currentTimeMillis(); // Start timing
         initializeGrid(); // first fill with dashes
         placeWords(); // then place words
         fillRemainingCells(); // then fill the dahses with the remaining letters
+        gridGenerationTime = (long) ((System.currentTimeMillis() - startTime) / 1000.0); // Calculate elapsed time in seconds       
         printGrid();
+        System.out.println("\nGrid generated in " + gridGenerationTime + " seconds");
         printWords();
         calculateWordDensity();
     }

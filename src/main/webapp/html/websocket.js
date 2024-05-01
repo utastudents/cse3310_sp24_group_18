@@ -149,9 +149,13 @@ function updateGameTable(gameRooms) {
     let cellRoom = row.insertCell(0);
     let cellPlayers = row.insertCell(1);
     let cellJoin = row.insertCell(2);
+    let cellGridTime = row.insertCell(3);  // Cell for grid generation time
+
 
     cellRoom.textContent = room.name;
     cellPlayers.textContent = room.players;
+    cellGridTime.textContent = room.gridGenerationTime + " seconds";  // Display grid generation time in milliseconds
+
 
     let joinButton = document.createElement("button");
     joinButton.textContent = "Join";
