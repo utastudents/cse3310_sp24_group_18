@@ -324,37 +324,7 @@ public class App extends WebSocketServer implements GameEventListener {
         conn.send("section0");
     }
 
-    @Override
-    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        System.out
-                .println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
-
-        // Find the username associated with the connection that caused the error
-        String errorUsername = null;
-        for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
-            Player player = entry.getValue();
-            if (player.getWebSocket() != null && player.getWebSocket().equals(conn)) {
-                errorUsername = entry.getKey();
-                break;
-            }
-        }
-
-        // If a username was found, remove that player from the map
-        if (errorUsername != null) {
-            playerMap.remove(errorUsername);
-            connectionUserMap.remove(conn); // Clean up the connection map
-            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
-            broadcastPlayerList();
-            System.out.println("On Disconnect : ");
-            ;
-            broadcastGameRooms();
-        }
-
-        System.out.println("On Error : ");
-        ;
-        broadcastGameRooms();
-
-    }
+    
 
     private void broadcastChatMessage(String roomID, String message) {
         Game game = findGameByRoomID(roomID);
@@ -467,8 +437,9 @@ public class App extends WebSocketServer implements GameEventListener {
     }
 
     @Override
-    public void onError(WebSocket conn, Exception ex) {
-        System.err.println("WebSocket error: " + ex.getMessage());
+    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+        System.out
+                .println("WebSocket connection closed: " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
 
         // Find the username associated with the connection that caused the error
         String errorUsername = null;
@@ -484,19 +455,72 @@ public class App extends WebSocketServer implements GameEventListener {
         if (errorUsername != null) {
             playerMap.remove(errorUsername);
             connectionUserMap.remove(conn); // Clean up the connection map
+            handlePlayerDisconnection(conn);
             System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
             broadcastPlayerList();
             System.out.println("On Disconnect : ");
             ;
             broadcastGameRooms();
         }
-
         System.out.println("On Error : ");
         ;
         broadcastGameRooms();
 
     }
 
+    @Override
+    public void onError(WebSocket conn, Exception ex) {
+        System.err.println("WebSocket error: " + ex.getMessage());
+    
+        // Find the username associated with the connection that caused the error
+        String errorUsername = null;
+        for (Map.Entry<String, Player> entry : playerMap.entrySet()) {
+            Player player = entry.getValue();
+            if (player.getWebSocket() != null && player.getWebSocket().equals(conn)) {
+                errorUsername = entry.getKey();
+                break;
+            }
+        }
+    
+        // If a username was found, remove that player from the map
+        if (errorUsername != null) {
+            playerMap.remove(errorUsername);
+            connectionUserMap.remove(conn); // Clean up the connection map
+            handlePlayerDisconnection(conn);
+            System.out.println("\n--PLAYER REMOVED--\nPlayer removed (Tab Closed): " + errorUsername + "\n\n");
+            broadcastPlayerList();
+            System.out.println("On Disconnect : ");
+            ;
+            broadcastGameRooms();
+        }
+    
+        System.out.println("On Error : ");
+        ;
+        broadcastGameRooms();
+    
+    }
+    
+    private void handlePlayerDisconnection(WebSocket conn) {
+        String username = connectionUserMap.remove(conn);
+        if (username != null && playerMap.containsKey(username)) {
+            Player player = playerMap.remove(username);
+            removePlayerFromGame(player);
+            System.out.println("Player " + username + " has been removed due to disconnection.");
+        }
+    }
+private void removePlayerFromGame(Player player) {
+    for (Game game : gameMap.values()) {
+        if (game.getPlayer1() != null && game.getPlayer1().equals(player)) {
+            game.setPlayer1(null);
+            System.out.println("Player1 (" + player.getUsername() + ") removed from Game Room: " + game.getGameRoomId());
+        }
+        if (game.getPlayer2() != null && game.getPlayer2().equals(player)) {
+            game.setPlayer2(null);
+            System.out.println("Player2 (" + player.getUsername() + ") removed from Game Room: " + game.getGameRoomId());
+        }
+    }
+}
+    
     @Override
     public void onStart() {
         System.out.println("WebSocket server started successfully");
