@@ -58,22 +58,22 @@ public class App extends WebSocketServer implements GameEventListener {
             conn.send("winner:" + message);
         }
     }
+
     @Override
     public void onGameFinished(String gameId) {
         Game game = gameMap.get(gameId);
         if (game != null) {
             Map<String, Integer> scores = game.getPlayerScores();
             String winner = scores.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse(null);
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse(null);
 
             if (winner != null) {
                 broadcastWinner(winner + " wins!");
             }
         }
     }
-    
 
     ///// --------- GRID --------- /////
 
@@ -118,11 +118,11 @@ public class App extends WebSocketServer implements GameEventListener {
         // gameMap.put("Room4", new Game("Room4","gameroom4"));
 
         // 5 concurrent games
-        gameMap.put("gameroom1", new Game("Room1", "gameroom1",this));
-        gameMap.put("gameroom2", new Game("Room2", "gameroom2",this));
-        gameMap.put("gameroom3", new Game("Room3", "gameroom3",this));
-        gameMap.put("gameroom4", new Game("Room4", "gameroom4",this));
-        gameMap.put("gameroom5", new Game("Room5", "gameroom5",this));
+        gameMap.put("gameroom1", new Game("Room1", "gameroom1", this));
+        gameMap.put("gameroom2", new Game("Room2", "gameroom2", this));
+        gameMap.put("gameroom3", new Game("Room3", "gameroom3", this));
+        gameMap.put("gameroom4", new Game("Room4", "gameroom4", this));
+        gameMap.put("gameroom5", new Game("Room5", "gameroom5", this));
         System.out.println("Game rooms initialized.");
 
     }
@@ -159,7 +159,7 @@ public class App extends WebSocketServer implements GameEventListener {
                         players.get(1).getWebSocket().send(startCommand);
 
                         // Send the initial grid as JSON to both players
-                        String gridJson = game.getGridAsJson(); 
+                        String gridJson = game.getGridAsJson();
                         String gridUpdateMessage = String.format("update_grid:%s:%s", gameRoomId, gridJson);
                         players.get(0).getWebSocket().send(gridUpdateMessage);
                         players.get(1).getWebSocket().send(gridUpdateMessage);
@@ -177,29 +177,25 @@ public class App extends WebSocketServer implements GameEventListener {
     private void handleMessage(WebSocket conn, String message) {
 
         if (message.startsWith("new_player:")) {
-            String username = message.substring(11);
-            Player player = new Player(username, conn);
-            // append to playerMap with try catch
-            try {
-                addPlayer(player); // Store new player information in playerMap
-                addPlayer(username, conn); // Store new player information in connectionUserMap
-                // conn.send("player_added");
-                // conn.send("player_added:" + username); // This will send message to
-                // websocket.js socket.onmessage and it will show screen accordingly
-
-                // send updated player list to all clients
-                broadcastGameRooms();
-                broadcastPlayerList();
-
-                conn.send("set_username:" + username); // Use "set_username" to set the username for the client
-                System.out.println("New player added: " + player.getUsername());
-
-                conn.send("player_added:" + username);
-                System.out.println("[from conn.send] New player added: " + player.getUsername());
-
-            } catch (Exception e) {
-                conn.send("player_not_added");
-                System.out.println("Player not added: " + username);
+            String username = message.substring("new_player:".length());
+            // Check if username already exists in the player map
+            if (playerMap.containsKey(username)) {
+                conn.send("username_exists"); // Notify the client that the username already exists
+                System.out.println("Username already exists: " + username);
+            } else {
+                // Create a new player and add to the game
+                Player player = new Player(username, conn);
+                try {
+                    playerMap.put(username, player); // Store new player information in playerMap
+                    connectionUserMap.put(conn, username); // Map the connection to the username
+                    broadcastGameRooms(); // Update the game rooms for all clients
+                    broadcastPlayerList(); // Update the player list for all clients
+                    conn.send("player_added:" + username); // Notify the client that the player was added successfully
+                    System.out.println("New player added: " + username);
+                } catch (Exception e) {
+                    conn.send("player_not_added"); // Send error if the addition failed
+                    System.out.println("Error adding player: " + username + "; " + e.getMessage());
+                }
             }
         } else if (message.startsWith("check_word:")) {
             String[] parts = message.split(":");
@@ -264,20 +260,19 @@ public class App extends WebSocketServer implements GameEventListener {
     }
 
     // Method in App.java to broadcast highlighted cells
-public void broadcastHighlightUpdate(String roomId, String word, List<Integer[]> positions) {
-    Gson gson = new Gson();
-    String positionsJson = gson.toJson(positions);
+    public void broadcastHighlightUpdate(String roomId, String word, List<Integer[]> positions) {
+        Gson gson = new Gson();
+        String positionsJson = gson.toJson(positions);
 
-    Game game = gameMap.get(roomId);
-    if (game != null) {
-        for (Player player : game.getPlayers()) {
-            if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
-                player.getWebSocket().send("update_highlight:" + word + ":" + positionsJson);
+        Game game = gameMap.get(roomId);
+        if (game != null) {
+            for (Player player : game.getPlayers()) {
+                if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
+                    player.getWebSocket().send("update_highlight:" + word + ":" + positionsJson);
+                }
             }
         }
     }
-}
-
 
     private boolean handleCheckWord(WebSocket conn, String roomId, String username, String word) {
         System.out.println("\n\nREACHED HANDLE CHECK WORD\n\n");
@@ -310,8 +305,8 @@ public void broadcastHighlightUpdate(String roomId, String word, List<Integer[]>
     public void printPlayerWordCounts() {
         for (Game game : gameMap.values()) {
             System.out.println("Game Lobby: " + game.getLobbyName() + " Word Counts:");
-            game.printAllWordsAndTheirStatus(); 
-                                               
+            game.printAllWordsAndTheirStatus();
+
         }
     }
 
@@ -357,7 +352,7 @@ public void broadcastHighlightUpdate(String roomId, String word, List<Integer[]>
         Game game = findGameByRoomID(roomID);
         if (game != null) {
             // Retrieve the players from the game room
-            Player[] players = game.getPlayers_chat(); 
+            Player[] players = game.getPlayers_chat();
             for (Player player : players) {
                 if (player != null && player.getWebSocket() != null && player.getWebSocket().isOpen()) {
                     player.getWebSocket().send("chat_update:" + roomID + ":" + message);

@@ -325,7 +325,12 @@ socket.onmessage = function (event) {
       let positions = JSON.parse(data[2]);
       updateHighlightedCells(roomIdHighlight, word, positions);
       break;
-    
+
+      case "username_exists":
+        alert("This username already exists. Please try a different one.");
+        showSection("section0");
+        break;
+
     case "update_words":
       const roomIdWords = data[1];
       const wordsJson = data.slice(2).join(":");
