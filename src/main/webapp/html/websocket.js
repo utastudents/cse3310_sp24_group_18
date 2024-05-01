@@ -12,7 +12,17 @@ function showGameRules() {
 
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
+  fetchVersionAndUpdateTitle();
 });
+
+function fetchVersionAndUpdateTitle() {
+  fetch('/api/version')
+    .then(response => response.text())
+    .then(version => {
+        document.title = `${version}`;  
+    })
+    .catch(error => console.error('Failed to fetch version:', error));
+}
 
 function setupEventListeners() {
   // Login form submission event

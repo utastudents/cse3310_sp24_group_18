@@ -1,15 +1,35 @@
-.leaderboard {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  padding: 10px;
-  margin-top: 20px;
+#gameroom1_leaderboard_table,
+#gameroom2_leaderboard_table,
+#gameroom3_leaderboard_table,
+#gameroom4_leaderboard_table,
+#gameroom5_leaderboard_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-.leaderboard h2 {
-  font-size: 1.5em;
-  color: #333;
+#gameroom1_leaderboard_table th, #gameroom1_leaderboard_table td,
+#gameroom2_leaderboard_table th, #gameroom2_leaderboard_table td,
+#gameroom3_leaderboard_table th, #gameroom3_leaderboard_table td,
+#gameroom4_leaderboard_table th, #gameroom4_leaderboard_table td,
+#gameroom5_leaderboard_table th, #gameroom5_leaderboard_table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
 }
 
-.leaderboard ol {
-  padding-left: 20px;
+#gameroom1_leaderboard_table th,
+#gameroom2_leaderboard_table th,
+#gameroom3_leaderboard_table th,
+#gameroom4_leaderboard_table th,
+#gameroom5_leaderboard_table th {
+    background-color: #f2f2f2;
+}
+
+#gameroom1_leaderboard_table tr:nth-child(even), 
+#gameroom2_leaderboard_table tr:nth-child(even),
+#gameroom3_leaderboard_table tr:nth-child(even),
+#gameroom4_leaderboard_table tr:nth-child(even),
+#gameroom5_leaderboard_table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
