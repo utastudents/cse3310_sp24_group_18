@@ -24,5 +24,18 @@ public class AppTest extends TestCase {
 
     //     // Test case 2: Ensure gameMap is empty initially
     //     assertTrue(app.getGameMap().isEmpty());
+
+        App A = new App(8070);
+
+        Player P = new Player("abcd", null);
+        P.setInGameScore(0);
+        P.incrementScore();
+        assertTrue(P.getInGameScore() != 0);
+
+        Chat C = new Chat();
+        String message = "Yo";
+        C.addMessage(message);
+        assertTrue(C.getMessages().contains(message));
+
     }
-}
+}    
