@@ -1,4 +1,5 @@
 package uta.cse3310;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,7 +29,6 @@ public class Game {
     private String gameId;
     private long gridGenerationTime; // Added to measure the time to generate the grid
 
-
     private static final int GRID_SIZE = 25;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
@@ -39,7 +39,6 @@ public class Game {
     private ArrayList<String> wordsFound = new ArrayList<String>(); // Create an ArrayList object
     private Map<String, List<String>> wordsFoundByPlayer = new HashMap<>();
     private Map<String, List<Integer[]>> wordPositions = new HashMap<>();
-
 
     public Game(String lobbyName, String roomId, GameEventListener listener) {
         this.lobbyName = lobbyName;
@@ -69,23 +68,22 @@ public class Game {
 
     public boolean isWordCorrect(String word) {
         Boolean status = wordsPlaced.get(word);
-        return status != null && status;  // True if the word is correct and not yet marked as found
+        return status != null && status; // True if the word is correct and not yet marked as found
     }
 
     public Set<String> getRemainingWords() {
         return wordsPlaced.entrySet().stream()
-               .filter(Map.Entry::getValue)  // Only include words that are still available (not found)
-               .map(Map.Entry::getKey)
-               .collect(Collectors.toSet());
+                .filter(Map.Entry::getValue) // Only include words that are still available (not found)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
-    
 
     public List<Integer[]> checkWordAndGetPositions(String username, String word) {
         if (isWordCorrect(word)) {
-            wordsPlaced.put(word, false);  // Mark the word as found
+            wordsPlaced.put(word, false); // Mark the word as found
             wordsFound.add(word);
             wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
-    
+
             List<Integer[]> positions = wordPositions.get(word);
             // Add logging here to debug positions
             if (positions != null) {
@@ -94,24 +92,21 @@ public class Game {
                 for (Integer[] pos : positions) {
                     System.out.print(Arrays.toString(pos) + " ");
                 }
-                System.out.println();  // New line for clear logging
+                System.out.println(); // New line for clear logging
             } else {
                 System.out.println("Positions not found for word: " + word);
             }
-    
-            return positions;  // Return positions if the word is correct
+
+            return positions; // Return positions if the word is correct
         } else {
             System.out.println("Word incorrect or not found: " + word);
-            return null;  // Return null if the word is not correct
+            return null; // Return null if the word is not correct
         }
     }
-    
-    
-    
 
     public boolean checkWord(String username, String word) {
         if (isWordCorrect(word)) { // Use the new method to check word correctness
-            wordsPlaced.put(word, false);  // Mark the word as found
+            wordsPlaced.put(word, false); // Mark the word as found
             wordsFound.add(word);
             wordsFoundByPlayer.computeIfAbsent(username, k -> new ArrayList<>()).add(word);
             List<Integer[]> positions = wordPositions.get(word);
@@ -119,7 +114,6 @@ public class Game {
         }
         return false;
     }
-    
 
     public void printWordsFoundByUser(String username) {
         List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
@@ -135,15 +129,11 @@ public class Game {
     public interface GameEventListener {
         void onGameFinished(String gameId);
     }
-    
 
-
-private boolean areAllWordsFound() {
-    // Check if all words are found by checking the size of the remaining words set
-    return getRemainingWords().isEmpty();
-}
-
-
+    private boolean areAllWordsFound() {
+        // Check if all words are found by checking the size of the remaining words set
+        return getRemainingWords().isEmpty();
+    }
 
     // USER SCORE
     public Map<String, Integer> getPlayerScores() {
@@ -187,19 +177,19 @@ private boolean areAllWordsFound() {
     public Chat getChat() {
         return chat;
     }
+
     public void sendGameDetails(WebSocket conn) {
         Gson gson = new Gson();
-        String gridJson = getGridAsJson();  // Serialize the grid to JSON
+        String gridJson = getGridAsJson(); // Serialize the grid to JSON
         String wordsJson = gson.toJson(new ArrayList<>(wordsPlaced.keySet()));
-    
+
         try {
-            conn.send("update_grid:" + roomId + ":" + gridJson);  // Send grid
-            conn.send("update_words:" + roomId + ":" + wordsJson);  // Send words
+            conn.send("update_grid:" + roomId + ":" + gridJson); // Send grid
+            conn.send("update_words:" + roomId + ":" + wordsJson); // Send words
         } catch (Exception e) {
             System.err.println("Error sending game details: " + e.getMessage());
         }
     }
-    
 
     private void initializeGrid() {
         for (int i = 0; i < GRID_SIZE; i++) {
@@ -213,9 +203,11 @@ private boolean areAllWordsFound() {
                 if (grid[i][j] == '_') { // Only fill cells that have not been filled with a word
                     grid[i][j] = (char) ('A' + random.nextInt(26));
                 }
-                // For Saad working on Test, Uncomment this and comment the upper for debug.. to see the grid without random words
-                // if (grid[i][j] == '3') { // Only fill cells that have not been filled with a word
-                //     grid[i][j] = (char) ('A' + random.nextInt(26));
+                // For Saad working on Test, Uncomment this and comment the upper for debug.. to
+                // see the grid without random words
+                // if (grid[i][j] == '3') { // Only fill cells that have not been filled with a
+                // word
+                // grid[i][j] = (char) ('A' + random.nextInt(26));
                 // }
             }
         }
@@ -288,7 +280,7 @@ private boolean areAllWordsFound() {
 
     // Attempts to place a single word in the grid randomly
     private boolean placeWordInGrid(String word) {
-        int orientation = random.nextInt(8); 
+        int orientation = random.nextInt(8);
         List<Integer[]> positions = new ArrayList<>();
         for (int attempts = 0; attempts < 100; attempts++) {
             int row = random.nextInt(GRID_SIZE);
@@ -298,7 +290,7 @@ private boolean areAllWordsFound() {
                     int newRow = row + getRowIncrement(orientation, i);
                     int newCol = col + getColIncrement(orientation, i);
                     grid[newRow][newCol] = word.charAt(i);
-                    positions.add(new Integer[]{newRow, newCol});
+                    positions.add(new Integer[] { newRow, newCol });
                     placedLetters.add(newRow * GRID_SIZE + newCol); // Storing the index as a single integer
                 }
                 wordPositions.put(word, positions);
@@ -307,7 +299,6 @@ private boolean areAllWordsFound() {
         }
         return false;
     }
-
 
     // Checks if a word can be placed at the specified position
     private boolean canPlaceWord(String word, int row, int col, int orientation) {
@@ -330,7 +321,6 @@ private boolean areAllWordsFound() {
             System.out.println();
         }
     }
-
 
     // ensures a balanced and random selection from all parts of the list
     private List<String> structuredShuffle(List<String> words, int segments) {
@@ -433,6 +423,9 @@ private boolean areAllWordsFound() {
             player1 = player;
             return true; // Player added successfully
         } else if (player2 == null) {
+            if (player1.getUsername().equals(player.getUsername())) {
+                return false; // Prevent adding a player with the same username as player1
+            }
             player2 = player;
             return true; // Player added successfully
         } else {
@@ -491,7 +484,8 @@ private boolean areAllWordsFound() {
         initializeGrid(); // first fill with dashes
         placeWords(); // then place words
         fillRemainingCells(); // then fill the dahses with the remaining letters
-        gridGenerationTime = (long) ((System.currentTimeMillis() - startTime) / 1000.0); // Calculate elapsed time in seconds       
+        gridGenerationTime = (long) ((System.currentTimeMillis() - startTime) / 1000.0); // Calculate elapsed time in
+                                                                                         // seconds
         printGrid();
         System.out.println("\nGrid generated in " + gridGenerationTime + " seconds");
         printWords();
@@ -543,6 +537,7 @@ private boolean areAllWordsFound() {
     public Player[] getPlayers_chat() {
         return new Player[] { player1, player2 };
     }
+
     public Map<String, Boolean> getWordsPlaced() {
         return wordsPlaced;
     }
