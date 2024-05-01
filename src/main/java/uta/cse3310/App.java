@@ -95,7 +95,7 @@ public class App extends WebSocketServer implements GameEventListener {
             // Include grid generation time in the info
             double gridTime = game.getGridGenerationTime();
             String formattedGridTime = String.format("%.4f", gridTime);
-            roomInfo.put("gridGenerationTime", formattedGridTime + " seconds");  // Append " seconds" for clarity
+            roomInfo.put("gridGenerationTime", formattedGridTime);  // Append " seconds" for clarity
     
             // Add the room info to the list for broadcasting
             gameRoomsInfo.add(roomInfo);
