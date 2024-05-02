@@ -570,6 +570,33 @@ private void removePlayerFromGame(Player player) {
         }
     }
 
+    public Map getGameMap()
+    {
+        return gameMap;
+    }
+    public void setGameMap(Map gameMap)
+    {
+        this.gameMap = gameMap;
+    }
+
+    public Map getPlayerMap()
+    {
+        return playerMap;
+    }
+    public void setPlayerMap(Map playerMap)
+    {
+        this.playerMap = playerMap;
+    }
+
+    public Map getConnectionUserMap()
+    {
+        return connectionUserMap;
+    }
+    public void setConnectionUserMap(Map connectionUserMap)
+    {
+        this.connectionUserMap = connectionUserMap;
+    }
+
     public static void main(String[] args) {
         int httpPort = 9018;
         String httpPortEnv = System.getenv("HTTP_PORT");
