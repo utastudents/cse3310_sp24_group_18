@@ -1,4 +1,4 @@
-package uta.cse3310;
+ackage uta.cse3310;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,28 +45,42 @@ public class GameTest
     Game g = new Game("TestLobby", "TestRoom", mockListener); // New test Room
     Player p1 = new Player("josh", null); // new player named josh
     Player p2 = new Player("adam", null); // new player named adam
-
-        //adding players to game
+    
+    //adding players to game
     g.addPlayer(p1);
     g.addPlayer(p1);
     g.setPlayer1(p1);
     g.setPlayer2(p2);
     
-        //checkking to see if game is full, adn ready to start
+    //checking to see if game is full, and ready to start
     assertTrue(g.isReadyToStart());
     assertEquals(g.getCurrentNumberOfPlayers(),"2");
 
+    //start game
+    g.startGame();
+
+    //check grid generation time
+    long time= g.getGridGenerationTime();
+    assertEquals(time, 1);
     //insert 3 word into the words placed function
      List<String> wordList = new ArrayList<>();
         for (String word : g.getWordsPlaced().keySet()) {
             // Add each word to the list
             wordList.add(word);
         }
+    //calclate word density
+    double density = g.calculateWordDensity();
+    boolean validDensity = false;
+    if (density >= 0.80) validDensity = true;
+    assertTrue(validDensity);
 
+    //check if placed words can correctly be traced
+    assertTrue(g.isWordCorrect(wordList.get(0)));
 
     //check to see if words can be correctly chosen by players
     assertTrue(g.checkWord(p1.getUsername(), wordList.get(0)));// test to see if player josh can find first word in grid
     g.checkWord(p1.getUsername(),wordList.get(0)); // josh finds first word
+    assertFalse(g.checkWord(p1.getUsername(), wordList.get(0)));
     g.checkWord(p2.getUsername(), wordList.get(1)); // adam finds second word
     g.checkWord(p2.getUsername(), wordList.get(2)); // adam finds third word
 
