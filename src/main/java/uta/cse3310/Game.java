@@ -29,7 +29,7 @@ public class Game {
     private String gameId;
     private long gridGenerationTime; // Added to measure the time to generate the grid
 
-    private static final int GRID_SIZE = 25;
+    private static final int GRID_SIZE = 10;
     private static List<String> allWords = new ArrayList<>(); // List of all words in the game
     private char[][] grid; // The grid of the game
     private Map<String, Boolean> wordsPlaced;
@@ -115,7 +115,6 @@ public class Game {
         }
         return false;
     }
-
     public void printWordsFoundByUser(String username) {
         List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
         System.out.println(username + " has found: " + foundWords);
