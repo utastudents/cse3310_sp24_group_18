@@ -42,7 +42,7 @@ public class AppTest extends TestCase {
         assertTrue(P.getUsername() != null);
         assertTrue(P.getGamesWon() != 0);
         assertTrue(P.getInGameScore() == 1); // checks if score has been
-
+        
         // Chat testing
         Chat C = new Chat();
         String message = "Yo";
