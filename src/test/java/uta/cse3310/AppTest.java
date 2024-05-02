@@ -32,6 +32,9 @@ public class AppTest extends TestCase {
         Player P = new Player("abcd", null);
         P.setInGameScore(0);
         P.incrementScore();
+        P.setColorChoice("Blue");
+        P.setGamesWon(1);
+        assertTrue(P.getGamesWon() != 0);
         assertTrue(P.getInGameScore() != 0);
 
         // Chat testing
