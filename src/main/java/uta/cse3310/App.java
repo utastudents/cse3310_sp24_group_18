@@ -569,8 +569,17 @@ private void removePlayerFromGame(Player player) {
             System.out.println("Game not found");
         }
     }
-    
 
+    public Map getGameMap()
+    {
+        return gameMap;
+    }
+
+    public void setGameMap(Map gameMap)
+    {
+        this.gameMap = gameMap;
+    }
+    
     public static void main(String[] args) {
         int httpPort = 9018;
         String httpPortEnv = System.getenv("HTTP_PORT");
