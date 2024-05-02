@@ -57,6 +57,7 @@ public class Game {
         startGame();
 
     }
+    
 
     private void checkForWinner() {
         if (areAllWordsFound()) {
@@ -487,9 +488,9 @@ public class Game {
         gridGenerationTime = (long) ((System.currentTimeMillis() - startTime) / 1000.0); // Calculate elapsed time in
                                                                                          // seconds
         printGrid();
-        System.out.println("\nGrid generated in " + gridGenerationTime + " seconds");
         printWords();
-        calculateWordDensity();
+        printGameHealth();
+        System.out.println("\n\n\n");
     }
 
     public String getCurrentNumberOfPlayers() {
@@ -541,4 +542,66 @@ public class Game {
     public Map<String, Boolean> getWordsPlaced() {
         return wordsPlaced;
     }
+
+    public void printGameHealth() {
+        calculateWordDensity();  // Already implemented to print grid density
+    
+        Map<Integer, Integer> orientationCounts = new HashMap<>();
+        int totalWords = 0;
+        for (List<Integer[]> positions : wordPositions.values()) {
+            Integer[] firstPos = positions.get(0);
+            Integer[] lastPos = positions.get(positions.size() - 1);
+            int orientation = determineOrientation(firstPos, lastPos);
+            orientationCounts.put(orientation, orientationCounts.getOrDefault(orientation, 0) + 1);
+            totalWords++;
+        }
+    
+        // Print orientation frequencies
+        System.out.printf("Horizontal Orientation: %.17f\n", 
+            (double) (orientationCounts.getOrDefault(0, 0) + orientationCounts.getOrDefault(2, 0)) / totalWords);
+        System.out.printf("VerticalUp Orientation: %.17f\n", 
+            (double) orientationCounts.getOrDefault(3, 0) / totalWords);
+        System.out.printf("VerticalDown Orientation: %.17f\n", 
+            (double) orientationCounts.getOrDefault(1, 0) / totalWords);
+        System.out.printf("DiagonalUp Orientation: %.17f\n", 
+            (double) (orientationCounts.getOrDefault(4, 0) + orientationCounts.getOrDefault(6, 0)) / totalWords);
+        System.out.printf("DiagonalDown Orientation: %.17f\n", 
+            (double) (orientationCounts.getOrDefault(5, 0) + orientationCounts.getOrDefault(7, 0)) / totalWords);
+    
+        // Calculate frequency of letters
+        int[] letterCounts = new int[26];
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                letterCounts[grid[i][j] - 'A']++;
+            }
+        }
+    
+        System.out.print("Random Letter Frequency (A-Z): ");
+        for (int count : letterCounts) {
+            System.out.print(count + ",");
+        }
+        System.out.println();
+    
+        // Print the board formation time
+        System.out.println("Grid Generation Time: " + getGridGenerationTime() + " s");
+    
+    }
+    
+    private int determineOrientation(Integer[] firstPos, Integer[] lastPos) {
+        // Calculate orientation based on position change
+        int rowDiff = lastPos[0] - firstPos[0];
+        int colDiff = lastPos[1] - firstPos[1];
+        if (rowDiff == 0 && colDiff > 0) return 0; // Horizontal right
+        if (rowDiff > 0 && colDiff == 0) return 1; // Vertical down
+        if (rowDiff == 0 && colDiff < 0) return 2; // Horizontal left
+        if (rowDiff < 0 && colDiff == 0) return 3; // Vertical up
+        if (rowDiff < 0 && colDiff < 0) return 4; // Diagonal left up
+        if (rowDiff > 0 && colDiff < 0) return 5; // Diagonal left down
+        if (rowDiff < 0 && colDiff > 0) return 6; // Diagonal right up
+        if (rowDiff > 0 && colDiff > 0) return 7; // Diagonal right down
+        return -1; // Should not occur
+    }
+    
+
+    
 }

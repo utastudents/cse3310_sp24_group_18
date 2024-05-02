@@ -26,6 +26,7 @@ public class App extends WebSocketServer implements GameEventListener {
         super(new InetSocketAddress(port));
         initializeGameRooms();
     }
+    
 
     // Player List
     private void broadcastPlayerList() {
@@ -500,6 +501,7 @@ public class App extends WebSocketServer implements GameEventListener {
     
     }
     
+    
     private void handlePlayerDisconnection(WebSocket conn) {
         String username = connectionUserMap.remove(conn);
         if (username != null && playerMap.containsKey(username)) {
@@ -565,6 +567,7 @@ private void removePlayerFromGame(Player player) {
             System.out.println("Game not found");
         }
     }
+    
 
     public static void main(String[] args) {
         int httpPort = 9018;
