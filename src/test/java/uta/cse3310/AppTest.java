@@ -4,6 +4,8 @@ package uta.cse3310;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.java_websocket.WebSocket;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
 
 public class AppTest extends TestCase {
@@ -24,10 +26,12 @@ public class AppTest extends TestCase {
 
     //     // Test case 2: Ensure gameMap is empty initially
     //     assertTrue(app.getGameMap().isEmpty());
-
+    
         // App Testing
         App A = new App(8070);
-        assertTrue(A.gameMap.size() == 5);
+        assertTrue(A.getGameMap().size() == 5);
+        assertTrue(A.getPlayerMap().size() == 0);
+        assertTrue(A.getConnectionUserMap().isEmpty());
 
         // Player testing
         Player P = new Player("abcd", null);
@@ -35,8 +39,9 @@ public class AppTest extends TestCase {
         P.incrementScore();
         P.setColorChoice("Blue");
         P.setGamesWon(1);
+        assertTrue(P.getUsername() != null);
         assertTrue(P.getGamesWon() != 0);
-        assertTrue(P.getInGameScore() != 0);
+        assertTrue(P.getInGameScore() == 1); // checks if score has been
 
         // Chat testing
         Chat C = new Chat();

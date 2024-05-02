@@ -18,7 +18,7 @@ public class App extends WebSocketServer implements GameEventListener {
     // Create an appendable map to store players
     private Map<String, Player> playerMap = new HashMap<>();
     // Create an appendable map to store games
-    public Map<String, Game> gameMap = new HashMap<>();
+    private Map<String, Game> gameMap = new HashMap<>();
     // Create a map to store the connection and the username
     private Map<WebSocket, String> connectionUserMap = new HashMap<>();
 
@@ -570,16 +570,6 @@ private void removePlayerFromGame(Player player) {
         }
     }
 
-    public Map getGameMap()
-    {
-        return gameMap;
-    }
-
-    public void setGameMap(Map gameMap)
-    {
-        this.gameMap = gameMap;
-    }
-    
     public static void main(String[] args) {
         int httpPort = 9018;
         String httpPortEnv = System.getenv("HTTP_PORT");
