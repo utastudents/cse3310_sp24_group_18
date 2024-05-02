@@ -27,6 +27,7 @@ public class AppTest extends TestCase {
 
         // App Testing
         App A = new App(8070);
+        assertTrue(A.gameMap.size() == 5);
 
         // Player testing
         Player P = new Player("abcd", null);
