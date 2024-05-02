@@ -115,6 +115,7 @@ public class Game {
         }
         return false;
     }
+
     public void printWordsFoundByUser(String username) {
         List<String> foundWords = wordsFoundByPlayer.getOrDefault(username, new ArrayList<>());
         System.out.println(username + " has found: " + foundWords);
@@ -234,15 +235,16 @@ public class Game {
         // }
     }
 
-    public void calculateWordDensity() {
+    public double calculateWordDensity() {
         int totalCells = GRID_SIZE * GRID_SIZE;
         int wordCells = placedLetters.size(); // The set size gives us the number of unique cells with words
 
         double density = (double) wordCells / totalCells;
         System.out.printf("Density of valid words in the grid: %.5f\n", density);
+        return density;
     }
 
-    private int getRowIncrement(int orientation, int i) {
+    public int getRowIncrement(int orientation, int i) {
         switch (orientation) {
             case 0: // Horizontal right
             case 2: // Horizontal left
@@ -260,7 +262,7 @@ public class Game {
         }
     }
 
-    private int getColIncrement(int orientation, int i) {
+    public int getColIncrement(int orientation, int i) {
         switch (orientation) {
             case 0: // Horizontal right
             case 7: // Diagonal right down
@@ -279,7 +281,7 @@ public class Game {
     }
 
     // Attempts to place a single word in the grid randomly
-    private boolean placeWordInGrid(String word) {
+    public boolean placeWordInGrid(String word) {
         int orientation = random.nextInt(8);
         List<Integer[]> positions = new ArrayList<>();
         for (int attempts = 0; attempts < 100; attempts++) {
